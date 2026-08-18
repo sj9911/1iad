@@ -11,7 +11,7 @@ export function CopyButton({ text }: { text: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 1500);
       }}
-      className="rounded-full bg-foreground px-4 py-1.5 text-xs font-medium text-white transition-colors duration-150 hover:bg-black focus-visible:outline-2 focus-visible:outline-accent active:scale-95"
+      className="rounded-full bg-foreground px-4 py-1.5 text-xs font-medium text-background transition-[opacity,transform] duration-150 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-accent active:scale-95"
     >
       {copied ? "Copied" : "Copy"}
     </button>

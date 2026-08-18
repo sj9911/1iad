@@ -1,6 +1,7 @@
 // 0.5s: frosted glass pill floating over Apple-gray, STIX serif H1 left, big "№ 001" right
 import Link from "next/link";
 import { interactions } from "@/interactions/registry";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 function Socials() {
   return (
@@ -35,11 +36,13 @@ export default function Home() {
 
   return (
     <main className="mx-auto max-w-5xl px-6 pb-24 pt-4">
-      <div className="sticky top-4 z-10 mx-auto flex w-fit items-center gap-4 rounded-full border border-hairline bg-white/70 px-6 py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] backdrop-blur-xl">
+      <div className="sticky top-4 z-10 mx-auto flex w-fit items-center gap-4 rounded-full border border-hairline bg-white/70 px-6 py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] backdrop-blur-xl transition-colors duration-300 dark:bg-[#1d1d1f]/70">
         <span className="font-serif text-lg italic">OIAD</span>
         <span className="h-4 w-px bg-hairline" />
         <span className="text-sm text-muted">by Sunny Joshi</span>
         <Socials />
+        <span className="h-4 w-px bg-hairline" />
+        <ThemeToggle />
       </div>
 
       <header className="flex flex-wrap items-end justify-between gap-8 pb-16 pt-16 sm:pt-24">
@@ -64,7 +67,7 @@ export default function Home() {
         {interactions.map(({ slug, day, title, Component }) => (
           <div
             key={slug}
-            className="group overflow-hidden rounded-[28px] border border-hairline bg-surface transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]"
+            className="group overflow-hidden rounded-[28px] border border-hairline bg-surface transition-[transform,box-shadow,background-color] duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)]"
           >
             <div className="flex aspect-[4/3] items-center justify-center px-10">
               <Component />

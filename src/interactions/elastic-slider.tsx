@@ -130,10 +130,10 @@ export function ElasticSlider() {
             ref={trackRef}
             animate={{ height: dragging ? 14 : 8 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className="relative w-full overflow-hidden rounded-full bg-black/10"
+            className="relative w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/15"
           >
             <div
-              className="absolute inset-y-0 left-0 rounded-full bg-neutral-900"
+              className="absolute inset-y-0 left-0 rounded-full bg-neutral-900 dark:bg-neutral-100"
               style={{ width: `${value}%` }}
             />
           </motion.div>

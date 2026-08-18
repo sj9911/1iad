@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { interactions } from "@/interactions/registry";
 import { SITE_URL } from "@/interactions/meta";
 import { CopyButton } from "@/components/copy-button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function generateStaticParams() {
   return interactions.map(({ slug }) => ({ slug }));
@@ -33,7 +34,7 @@ export default async function DayPage({
         className="relative flex min-h-[85svh] flex-col items-center justify-center bg-surface px-6"
         style={{
           backgroundImage:
-            "radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px)",
+            "radial-gradient(circle, var(--dot) 1px, transparent 1px)",
           backgroundSize: "18px 18px",
         }}
       >
@@ -43,9 +44,10 @@ export default async function DayPage({
         >
           OIAD
         </Link>
-        <p className="absolute right-8 top-8 text-sm text-muted">
-          Day {item.day}
-        </p>
+        <div className="absolute right-8 top-8 flex items-center gap-4">
+          <p className="text-sm text-muted">Day {item.day}</p>
+          <ThemeToggle />
+        </div>
 
         <item.Component />
 

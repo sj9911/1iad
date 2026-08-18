@@ -67,7 +67,7 @@ export function LikeButton() {
       onClick={toggle}
       aria-pressed={liked}
       aria-label={liked ? "Unlike" : "Like"}
-      className="group flex select-none items-center gap-3 rounded-full px-5 py-3 outline-none transition-colors duration-150 hover:bg-black/[0.04] focus-visible:ring-2 focus-visible:ring-[#ff2d55]/40"
+      className="group flex select-none items-center gap-3 rounded-full px-5 py-3 outline-none transition-colors duration-150 hover:bg-black/[0.04] focus-visible:ring-2 focus-visible:ring-[#ff2d55]/40 dark:hover:bg-white/[0.06]"
     >
       <span className="relative flex items-center justify-center">
         {/* ring flash */}
