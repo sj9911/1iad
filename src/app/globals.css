@@ -2,6 +2,13 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@font-face {
+  font-family: "Departure Mono";
+  src: url("/fonts/DepartureMono-Regular.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 /* Apple HIG palette — apple.com's actual values, not approximations */
 :root {
   --background: #f5f5f7;
@@ -30,8 +37,8 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-hairline: var(--hairline);
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
-    Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Departure Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono: "Departure Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 html {
@@ -41,7 +48,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: "Departure Mono", ui-monospace, "SF Mono", Menlo, monospace;
   -webkit-font-smoothing: antialiased;
   transition:
     background-color 0.4s ease,
