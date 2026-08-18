@@ -52,7 +52,7 @@ export default function Home() {
             open source, yours to copy. Built in public.
           </p>
         </div>
-        <div className="space-y-1 pb-1 text-right text-lg leading-relaxed text-muted">
+        <div className="pb-1 text-right text-lg leading-relaxed text-muted">
           <p>
             {interactions.length} interaction{interactions.length > 1 && "s"}
           </p>
