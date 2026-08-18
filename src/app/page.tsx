@@ -47,7 +47,7 @@ export default function Home() {
 
       <header className="flex flex-wrap items-end justify-between gap-8 pb-16 pt-16 sm:pt-24">
         <div>
-          <h1 className="mt-3 max-w-2xl text-[3.36rem] font-semibold leading-[1.02] tracking-tight sm:text-[5.04rem]">
+          <h1 className="mt-3 max-w-2xl text-[3.36rem] font-semibold leading-[0.95] tracking-tight sm:text-[5.04rem]">
             One interaction a&nbsp;day.
           </h1>
           <p className="mt-3 max-w-md text-lg leading-relaxed text-muted">
