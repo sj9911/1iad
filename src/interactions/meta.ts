@@ -24,6 +24,17 @@ export const interactionsMeta: InteractionMeta[] = [
     dependencies: ["motion"],
     file: "elastic-slider.tsx",
   },
+  {
+    slug: "like-button",
+    day: 2,
+    date: "2026-08-19",
+    title: "Like Button",
+    description:
+      "A heart that pops with a spring, a ring flash, a burst of particles, and a satisfying pop sound.",
+    hint: "Tap the heart. Sound on.",
+    dependencies: ["motion"],
+    file: "like-button.tsx",
+  },
 ];
 
 export const SITE_URL =
