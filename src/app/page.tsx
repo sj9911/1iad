@@ -37,7 +37,7 @@ export default function Home() {
   return (
     <main className="mx-auto max-w-5xl px-6 pb-24 pt-4">
       <div className="sticky top-4 z-10 mx-auto flex w-fit items-center gap-4 rounded-full border border-hairline bg-white/70 px-6 py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] backdrop-blur-xl transition-colors duration-300 dark:bg-[#1d1d1f]/70">
-        <span className="font-serif text-lg italic">OIAD</span>
+        <span className="text-lg font-semibold tracking-tight">OIAD</span>
         <span className="h-4 w-px bg-hairline" />
         <span className="text-sm text-muted">by Sunny Joshi</span>
         <Socials />

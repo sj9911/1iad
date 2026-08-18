@@ -40,7 +40,7 @@ export default async function DayPage({
       >
         <Link
           href="/"
-          className="absolute left-8 top-8 font-serif text-lg italic text-muted transition-colors duration-150 hover:text-foreground"
+          className="absolute left-8 top-8 text-lg font-semibold tracking-tight text-muted transition-colors duration-150 hover:text-foreground"
         >
           OIAD
         </Link>
@@ -52,14 +52,14 @@ export default async function DayPage({
         <item.Component />
 
         <div className="absolute bottom-10 text-center">
-          <h1 className="font-serif text-3xl tracking-tight">{item.title}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">{item.title}</h1>
           <p className="mt-1.5 text-base text-muted">{item.hint}</p>
         </div>
       </section>
 
       {/* Below the fold: take it home */}
       <section className="mx-auto max-w-3xl px-6 py-20">
-        <h2 className="font-serif text-3xl tracking-tight">Make it yours</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Make it yours</h2>
         <p className="mt-3 max-w-xl leading-relaxed text-muted">
           {item.description} One self-contained file. Paste it into any React
           + Tailwind project, or let your AI agent install it:

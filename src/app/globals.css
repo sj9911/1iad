@@ -30,7 +30,6 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-hairline: var(--hairline);
-  --font-serif: var(--font-stix), "STIX Two Text", Georgia, serif;
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
 }

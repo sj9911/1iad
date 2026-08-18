@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
-import { STIX_Two_Text } from "next/font/google";
 import "./globals.css";
-
-const stix = STIX_Two_Text({
-  subsets: ["latin"],
-  variable: "--font-stix",
-});
 
 export const metadata: Metadata = {
   title: "OIAD — One Interaction A Day",
@@ -20,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${stix.variable} antialiased`}>
+      <body className="antialiased">
         <script
           dangerouslySetInnerHTML={{
             __html: `try{const t=localStorage.theme;if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}`,
