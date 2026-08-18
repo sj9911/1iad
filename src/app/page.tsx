@@ -56,8 +56,7 @@ export default function Home() {
           <p>
             {interactions.length} interaction{interactions.length > 1 && "s"}
           </p>
-          <p>open source</p>
-          <p>MIT</p>
+          <p>open source · MIT</p>
         </div>
       </header>
 
