@@ -7,6 +7,7 @@ import { interactions } from "@/interactions/registry";
 import { SITE_URL } from "@/interactions/meta";
 import { CopyButton } from "@/components/copy-button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Logo } from "@/components/logo";
 
 export function generateStaticParams() {
   return interactions.map(({ slug }) => ({ slug }));
@@ -40,8 +41,9 @@ export default async function DayPage({
       >
         <Link
           href="/"
-          className="absolute left-8 top-8 text-lg font-semibold tracking-tight text-muted transition-colors duration-150 hover:text-foreground"
+          className="absolute left-8 top-8 flex items-center gap-2.5 text-lg font-semibold tracking-tight text-muted transition-colors duration-150 hover:text-foreground"
         >
+          <Logo className="h-[18px] w-auto" />
           OIAD
         </Link>
         <div className="absolute right-8 top-8 flex items-center gap-4">
