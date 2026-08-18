@@ -29,7 +29,14 @@ export default async function DayPage({
   return (
     <main>
       {/* The stage — record this section as-is */}
-      <section className="relative flex min-h-[85svh] flex-col items-center justify-center bg-surface px-6">
+      <section
+        className="relative flex min-h-[85svh] flex-col items-center justify-center bg-surface px-6"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px)",
+          backgroundSize: "18px 18px",
+        }}
+      >
         <Link
           href="/"
           className="absolute left-8 top-8 font-serif text-lg italic text-muted transition-colors duration-150 hover:text-foreground"
@@ -43,8 +50,8 @@ export default async function DayPage({
         <item.Component />
 
         <div className="absolute bottom-10 text-center">
-          <h1 className="font-serif text-2xl tracking-tight">{item.title}</h1>
-          <p className="mt-1 text-sm text-muted">{item.hint}</p>
+          <h1 className="font-serif text-3xl tracking-tight">{item.title}</h1>
+          <p className="mt-1.5 text-base text-muted">{item.hint}</p>
         </div>
       </section>
 
@@ -52,7 +59,7 @@ export default async function DayPage({
       <section className="mx-auto max-w-3xl px-6 py-20">
         <h2 className="font-serif text-3xl tracking-tight">Make it yours</h2>
         <p className="mt-3 max-w-xl leading-relaxed text-muted">
-          {item.description} One self-contained file — paste it into any React
+          {item.description} One self-contained file. Paste it into any React
           + Tailwind project, or let your AI agent install it:
         </p>
 

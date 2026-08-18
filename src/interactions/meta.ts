@@ -20,7 +20,7 @@ export const interactionsMeta: InteractionMeta[] = [
     title: "Elastic Slider",
     description:
       "An iOS-style slider that stretches past its ends and springs back, with a rising tick sound every 10 steps.",
-    hint: "Drag it — then keep dragging past the end. Sound on.",
+    hint: "Drag it, then keep dragging past the end. Sound on.",
     dependencies: ["motion"],
     file: "elastic-slider.tsx",
   },
