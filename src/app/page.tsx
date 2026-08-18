@@ -33,6 +33,7 @@ function Socials() {
 
 export default function Home() {
   const dayCount = String(interactions.length).padStart(3, "0");
+  const latest = interactions[interactions.length - 1];
 
   return (
     <main className="mx-auto max-w-5xl px-6 pb-24 pt-4">
@@ -54,10 +55,15 @@ export default function Home() {
           </p>
         </div>
         <div className="pb-1 text-right">
-          <p className="font-serif text-6xl tracking-tight text-foreground sm:text-7xl">
-            <span className="italic">№</span>&thinsp;{dayCount}
+          <p className="text-xs uppercase tracking-[0.15em] text-muted">
+            Today · Day {dayCount}
           </p>
-          <p className="mt-1 text-sm text-muted">days, counting</p>
+          <Link
+            href={`/day/${latest.slug}`}
+            className="mt-1.5 inline-block font-serif text-xl italic tracking-tight transition-colors duration-150 hover:text-accent"
+          >
+            {latest.title} →
+          </Link>
         </div>
       </header>
 
