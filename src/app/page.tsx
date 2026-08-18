@@ -51,12 +51,13 @@ export default function Home() {
 
       <header className="flex flex-wrap items-end justify-between gap-8 pb-16 pt-16 sm:pt-24">
         <div>
-          <h1 className="mt-3 max-w-2xl text-[3.36rem] font-semibold leading-[0.95] tracking-tight sm:text-[5.04rem]">
+          <h1 className="mt-3 max-w-2xl text-[2.69rem] font-semibold uppercase leading-[0.95] tracking-tight sm:text-[4.03rem]">
             One interaction a&nbsp;day.
           </h1>
-          <p className="mt-3 max-w-md text-lg leading-relaxed text-muted">
-            A tiny, Apple-grade UI interaction every day. Live on this page,
-            open source, yours to copy. Built in public.
+          <p className="mt-3 max-w-lg text-lg leading-relaxed text-muted">
+            OIAD is a free, open-source collection of animated React
+            interactions, built daily in public. Browse them in action below
+            and install any component with the shadcn CLI.
           </p>
         </div>
         <div className="pb-1 text-right text-lg leading-relaxed text-muted">
