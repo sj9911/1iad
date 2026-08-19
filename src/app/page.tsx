@@ -52,7 +52,11 @@ export default function Home() {
       <header className="flex flex-wrap items-end justify-between gap-8 pb-16 pt-16 sm:pt-24">
         <div>
           <h1 className="mt-3 max-w-2xl text-[2.69rem] font-semibold uppercase leading-[0.95] tracking-tight sm:text-[4.03rem]">
-            One interaction a&nbsp;day.
+            One
+            <br />
+            Interaction
+            <br />
+            A&nbsp;Day
           </h1>
           <p className="mt-3 max-w-lg text-lg leading-relaxed text-muted">
             OIAD is a free, open-source collection of animated React
