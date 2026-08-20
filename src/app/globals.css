@@ -49,6 +49,28 @@ html {
   font-family: var(--font-bricolage), system-ui, sans-serif;
 }
 
+/* lub-dub: two quick pulses, then rest for the remainder of the cycle */
+@keyframes oiad-heartbeat {
+  0% { transform: scale(1); }
+  12% { transform: scale(1.22); }
+  24% { transform: scale(1); }
+  36% { transform: scale(1.14); }
+  50% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+.oiad-heartbeat {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: oiad-heartbeat 1.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oiad-heartbeat {
+    animation: none;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
