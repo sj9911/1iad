@@ -66,8 +66,27 @@ function GlassLayers() {
     </span>
   );
 }
-// liquid birth: playful bounce in, snappy no-bounce system-response out
-const GOO_SPRING = { type: "spring", duration: 0.9, bounce: 0.18 } as const;
+function BadgeButton({
+  badges,
+  onClick,
+}: {
+  badges: { viewBox: string; inner: string };
+  onClick: (e: React.MouseEvent) => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="OIAD badges"
+      className="relative flex h-[50px] items-center rounded-xl px-3.5 transition-colors duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.09] [&_.oiad-gear]:cursor-pointer [&_.oiad-heartbtn]:cursor-pointer"
+    >
+      <svg
+        viewBox={badges.viewBox}
+        className="h-[25px] w-auto"
+        dangerouslySetInnerHTML={{ __html: badges.inner }}
+      />
+    </button>
+  );
+}
 
 const SPARKS = [
   { angle: 20, dist: 22, size: 5 },
@@ -92,10 +111,11 @@ function Cell({
 } & React.ComponentProps<typeof motion.button>) {
   return (
     <motion.button
+      layout
       whileTap={{ scale: 0.88 }}
       transition={SPRING}
       onMouseEnter={onHover}
-      className="relative flex h-11 items-center gap-1.5 rounded-xl px-3 text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      className="relative flex h-[50px] items-center gap-2 rounded-xl px-3.5 text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent"
       {...rest}
     >
       {hovered && (
@@ -115,9 +135,11 @@ export type NavBadges = { viewBox: string; inner: string };
 export function FloatingNav({
   stars,
   badges,
+  debugPhase,
 }: {
   stars: number | null;
   badges?: NavBadges;
+  debugPhase?: "hidden" | "inside" | "detached";
 }) {
   const [hovered, setHovered] = React.useState<number | null>(null);
   const [info, setInfo] = React.useState(false);
@@ -125,24 +147,27 @@ export function FloatingNav({
   const [scrolled, setScrolled] = React.useState(false);
   const gearAngle = React.useRef(0);
   const reduced = useReducedMotion();
-  const birth = reduced
-    ? {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0 },
-        transition: { duration: 0.2 },
-      }
-    : {
-        initial: { x: 90, scale: 0.4, opacity: 0 },
-        animate: { x: 0, scale: 1, opacity: 1 },
-        exit: {
-          x: 90,
-          scale: 0.45,
-          opacity: 0,
-          transition: { type: "spring", duration: 0.8, bounce: 0 } as const,
-        },
-        transition: { type: "spring", duration: 0.9, bounce: 0.2 } as const,
-      };
+  const MORPH = reduced
+    ? ({ duration: 0 } as const)
+    : ({ type: "spring", duration: 0.55, bounce: 0.2 } as const);
+
+  // hidden -> inside (dock widens to include the badges) -> detached (own pill)
+  const [phase, setPhase] = React.useState<"hidden" | "inside" | "detached">(
+    "hidden",
+  );
+  React.useEffect(() => {
+    if (debugPhase) return;
+    let t: ReturnType<typeof setTimeout>;
+    if (scrolled) {
+      setPhase((prev) => (prev === "detached" ? prev : "inside"));
+      t = setTimeout(() => setPhase("detached"), 750);
+    } else {
+      setPhase((prev) => (prev === "hidden" ? prev : "inside"));
+      t = setTimeout(() => setPhase("hidden"), 500);
+    }
+    return () => clearTimeout(t);
+  }, [scrolled, debugPhase]);
+  const livePhase = debugPhase ?? phase;
 
   React.useEffect(() => {
     setDark(document.documentElement.classList.contains("dark"));
@@ -187,7 +212,7 @@ export function FloatingNav({
 
   return (
     <nav
-      className="fixed bottom-6 left-1/2 z-50 origin-bottom -translate-x-1/2 scale-[1.15]"
+      className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
       onMouseLeave={() => setHovered(null)}
     >
       <AnimatePresence>
@@ -221,33 +246,20 @@ export function FloatingNav({
 
       <div className="relative">
         <div className="relative flex items-center gap-3.5">
-        {/* badge pill content, born out of the dock like a droplet */}
-        <AnimatePresence>
-          {scrolled && badges && (
-            <motion.div
-              layout
-              key="badges"
-              {...birth}
-              className="relative z-10 rounded-2xl border border-hairline bg-surface p-1.5"
-            >
-              <button
-                onClick={badgesClick}
-                aria-label="OIAD badges"
-                className="relative flex h-11 items-center rounded-xl px-3 transition-colors duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.09] [&_.oiad-gear]:cursor-pointer [&_.oiad-heartbtn]:cursor-pointer"
-              >
-                <svg
-                  viewBox={badges.viewBox}
-                  className="h-[22px] w-auto"
-                  dangerouslySetInnerHTML={{ __html: badges.inner }}
-                />
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* detached: the badge unit as its own pill */}
+        {livePhase === "detached" && badges && (
+          <motion.div
+            layoutId="oiad-badge-unit"
+            transition={MORPH}
+            className="relative z-10 rounded-2xl border border-hairline bg-surface p-1.5"
+          >
+            <BadgeButton badges={badges} onClick={badgesClick} />
+          </motion.div>
+        )}
 
         <motion.div
           layout
-          transition={GOO_SPRING}
+          transition={MORPH}
           className="relative flex items-center gap-1 rounded-2xl border border-hairline p-1.5"
         >
           <GlassLayers />
@@ -255,13 +267,29 @@ export function FloatingNav({
             aria-hidden="true"
             className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
           />
+        <AnimatePresence initial={false}>
+          {livePhase === "inside" && badges && (
+            <motion.div
+              key="badge-inside"
+              layoutId="oiad-badge-unit"
+              transition={MORPH}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.15 } }}
+              className="relative flex items-center"
+            >
+              <BadgeButton badges={badges} onClick={badgesClick} />
+              <span className="mx-1 h-4 w-px shrink-0 bg-hairline" />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <Cell
           hovered={hovered === 0}
           onHover={() => setHovered(0)}
           aria-label="OIAD on GitHub"
           onClick={() => window.open("https://github.com/sj9911/oiad", "_blank")}
         >
-          <span className="relative flex size-[18px] items-center justify-center">
+          <span className="relative flex size-[21px] items-center justify-center">
             {/* github mark blurs away on hover */}
             <motion.span
               animate={
@@ -272,7 +300,7 @@ export function FloatingNav({
               transition={SPRING}
               className="flex"
             >
-              <HugeiconsIcon icon={GithubIcon} size={18} strokeWidth={2} aria-hidden="true" />
+              <HugeiconsIcon icon={GithubIcon} size={21} strokeWidth={2} aria-hidden="true" />
             </motion.span>
             {/* golden star blurs in */}
             <motion.span
@@ -285,7 +313,7 @@ export function FloatingNav({
               className="absolute inset-0 flex items-center justify-center text-[#CA8A04] dark:text-[#FBBF24]"
             >
               <span className="flex [filter:drop-shadow(0_0_5px_rgba(202,138,4,0.6))] dark:[filter:drop-shadow(0_0_5px_rgba(251,191,36,0.9))]">
-                <HugeiconsIcon icon={StarIcon} size={17} strokeWidth={1.5} className="[&_path]:fill-current" aria-hidden="true" />
+                <HugeiconsIcon icon={StarIcon} size={20} strokeWidth={1.5} className="[&_path]:fill-current" aria-hidden="true" />
               </span>
             </motion.span>
             {/* one-shot sparkle burst */}
@@ -333,7 +361,7 @@ export function FloatingNav({
           aria-expanded={info}
           onClick={() => setInfo((v) => !v)}
         >
-          <HugeiconsIcon icon={InformationCircleIcon} size={18} strokeWidth={2} aria-hidden="true" />
+          <HugeiconsIcon icon={InformationCircleIcon} size={21} strokeWidth={2} aria-hidden="true" />
         </Cell>
 
         <Cell
@@ -352,9 +380,9 @@ export function FloatingNav({
               className="flex"
             >
               {dark ? (
-                <HugeiconsIcon icon={Moon02Icon} size={18} strokeWidth={2} aria-hidden="true" />
+                <HugeiconsIcon icon={Moon02Icon} size={21} strokeWidth={2} aria-hidden="true" />
               ) : (
-                <HugeiconsIcon icon={Sun03Icon} size={18} strokeWidth={2} aria-hidden="true" />
+                <HugeiconsIcon icon={Sun03Icon} size={21} strokeWidth={2} aria-hidden="true" />
               )}
             </motion.span>
           </AnimatePresence>
