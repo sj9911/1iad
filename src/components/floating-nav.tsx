@@ -248,14 +248,11 @@ export function FloatingNav({
   }
 
   return (
-    <motion.nav
+    <nav
       // flexbox centering, not translate: a CSS transform on this ancestor
       // corrupts the dock's FLIP layout measurements (dock jumps to center
       // instead of gliding when the pill unmounts)
       className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center"
-      // re-center within the viewport left over next to the DayShell sidebar
-      animate={{ left: day && dayOpen ? "40vw" : "0vw" }}
-      transition={MORPH}
       onMouseLeave={() => setHovered(null)}
     >
       <div className="pointer-events-auto relative">
@@ -489,6 +486,6 @@ export function FloatingNav({
         </LayoutGroup>
       </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 }
