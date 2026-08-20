@@ -41,19 +41,19 @@ export default async function DayPage({
       >
         <Link
           href="/"
-          className="absolute left-8 top-8 flex items-center gap-2.5 text-lg font-semibold tracking-tight text-muted transition-colors duration-150 hover:text-foreground"
+          className="absolute left-8 top-8 z-10 flex items-center gap-2.5 text-lg font-semibold tracking-tight text-muted transition-colors duration-150 hover:text-foreground"
         >
           <Logo className="h-[18px] w-auto" />
           OIAD
         </Link>
-        <div className="absolute right-8 top-8 flex items-center gap-4">
+        <div className="absolute right-8 top-8 z-10 flex items-center gap-4">
           <p className="text-sm text-muted">Day {item.day}</p>
           <ThemeToggle />
         </div>
 
-        <item.Component />
+        {item.StageComponent ? <item.StageComponent /> : <item.Component />}
 
-        <div className="absolute bottom-10 text-center">
+        <div className="pointer-events-none absolute bottom-10 z-10 text-center">
           <h1 className="text-3xl font-semibold tracking-tight">{item.title}</h1>
           <p className="mt-1.5 text-base text-muted">{item.hint}</p>
         </div>

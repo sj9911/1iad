@@ -16,15 +16,22 @@ const CELL = 88; // px per grid cell
 const MAX_DELAY = 500; // ms of random wait before a fully visible icon pops in
 const FRICTION = 0.94;
 const DRIFT = { x: 0.18, y: 0.12 }; // idle auto-pan, px per frame
-const COLS = 9;
-const ROWS = 7;
 
 const DEFAULT_ICONS = Array.from(
   { length: 50 },
   (_, i) => `/icons/grid/${i + 1}.png`,
 );
 
-export function IconGrid({ icons = DEFAULT_ICONS }: { icons?: string[] }) {
+export function IconGrid({
+  icons = DEFAULT_ICONS,
+  className = "relative h-[340px] w-full max-w-[520px] rounded-3xl border border-black/10 dark:border-white/15",
+}: {
+  icons?: string[];
+  className?: string;
+}) {
+  const [grid, setGrid] = React.useState({ cols: 9, rows: 7 });
+  const COLS = grid.cols;
+  const ROWS = grid.rows;
   const viewRef = React.useRef<HTMLDivElement>(null);
   const slotRefs = React.useRef<(HTMLDivElement | null)[]>([]);
   const st = React.useRef({
@@ -40,6 +47,11 @@ export function IconGrid({ icons = DEFAULT_ICONS }: { icons?: string[] }) {
       const r = view.getBoundingClientRect();
       s.w = r.width;
       s.h = r.height;
+      const cols = Math.ceil(r.width / CELL) + 2;
+      const rows = Math.ceil(r.height / CELL) + 2;
+      setGrid((g) =>
+        g.cols === cols && g.rows === rows ? g : { cols, rows },
+      );
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -52,6 +64,7 @@ export function IconGrid({ icons = DEFAULT_ICONS }: { icons?: string[] }) {
       wc: NaN,
       wr: NaN,
       scale: 0,
+      vel: 0,
       showAt: -1,
     }));
     let raf = 0;
@@ -82,6 +95,7 @@ export function IconGrid({ icons = DEFAULT_ICONS }: { icons?: string[] }) {
             pop.wc = wc;
             pop.wr = wr;
             pop.scale = 0;
+            pop.vel = 0;
             pop.showAt = -1;
           }
           const inside =
@@ -93,8 +107,16 @@ export function IconGrid({ icons = DEFAULT_ICONS }: { icons?: string[] }) {
           } else {
             pop.showAt = -1;
           }
-          pop.scale += (target - pop.scale) * (target > pop.scale ? 0.22 : 0.35);
-          if (Math.abs(target - pop.scale) < 0.01) pop.scale = target;
+          if (target === 1) {
+            // under-damped spring: overshoots past 1 and bounces back
+            pop.vel += (1 - pop.scale) * 0.24;
+            pop.vel *= 0.7;
+            pop.scale += pop.vel;
+          } else {
+            pop.vel = 0;
+            pop.scale += (0 - pop.scale) * 0.35;
+            if (pop.scale < 0.01) pop.scale = 0;
+          }
           node.style.transform = `translate(${px}px, ${py}px) scale(${pop.scale})`;
           const idx =
             (((wc * 7 + wr * 13) % icons.length) + icons.length) %
@@ -113,13 +135,13 @@ export function IconGrid({ icons = DEFAULT_ICONS }: { icons?: string[] }) {
       cancelAnimationFrame(raf);
       ro.disconnect();
     };
-  }, [icons]);
+  }, [icons, COLS, ROWS]);
 
   return (
     <div
       ref={viewRef}
       aria-label="Infinite icon grid. Drag to explore."
-      className="relative h-[340px] w-full max-w-[520px] cursor-grab touch-none select-none overflow-hidden rounded-3xl border border-black/10 active:cursor-grabbing dark:border-white/15"
+      className={`cursor-grab touch-none select-none overflow-hidden active:cursor-grabbing ${className}`}
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         const s = st.current;
