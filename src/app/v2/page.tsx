@@ -81,14 +81,20 @@ export default async function V2() {
   return (
     <main className="min-h-svh">
       <FloatingNav stars={stars} />
-      <header
-        className="px-6 pb-16 pt-14"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
-          backgroundSize: "18px 18px",
-        }}
-      >
+      <header className="relative px-6 pb-16 pt-14">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
+            backgroundSize: "18px 18px",
+            maskImage:
+              "linear-gradient(to bottom, black 55%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black 55%, transparent 100%)",
+          }}
+        />
         <div className="mx-auto max-w-3xl">
         <h1 className="sr-only">One Interaction A Day</h1>
         <HeroFlicker
