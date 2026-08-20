@@ -12,10 +12,12 @@ import {
 } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  Cancel01Icon,
   Copy01Icon,
   GithubIcon,
   InformationCircleIcon,
   Moon02Icon,
+  SidebarRightIcon,
   StarIcon,
   Sun03Icon,
   Tick02Icon,
@@ -143,6 +145,7 @@ export type NavDay = {
   day: number;
   description: string;
   prompt: string;
+  install: string;
 };
 
 // shared glass shell for every container in the nav row
@@ -279,18 +282,71 @@ export function FloatingNav({
         )}
       </AnimatePresence>
 
+      {/* interaction details sidebar */}
       <AnimatePresence>
         {dayOpen && day && (
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.95 }}
-            transition={SPRING}
-            className="font-bricolage absolute bottom-full left-1/2 mb-3 w-64 -translate-x-1/2 rounded-2xl border border-hairline bg-surface p-4 text-sm leading-relaxed shadow-[0_12px_40px_rgba(0,0,0,0.15)]"
-          >
-            <p className="font-semibold">{day.title}</p>
-            <p className="mt-1 text-muted">{day.description}</p>
-          </motion.div>
+          <>
+            <motion.div
+              key="day-scrim"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setDayOpen(false)}
+              className="pointer-events-auto fixed inset-0 z-40 bg-black/20"
+            />
+            <motion.aside
+              key="day-panel"
+              initial={{ x: "110%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "110%" }}
+              transition={
+                reduced
+                  ? { duration: 0 }
+                  : { type: "spring", duration: 0.5, bounce: 0 }
+              }
+              className="font-bricolage pointer-events-auto fixed bottom-4 right-4 top-4 z-50 w-[340px] overflow-y-auto rounded-2xl border border-hairline bg-surface p-6 shadow-[0_12px_40px_rgba(0,0,0,0.15)]"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-lg font-semibold leading-tight">
+                    {day.title}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold tabular-nums text-muted">
+                    {String(day.day).padStart(3, "0")}
+                  </p>
+                </div>
+                <button
+                  aria-label="Close"
+                  onClick={() => setDayOpen(false)}
+                  className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors duration-150 hover:bg-black/[0.06] hover:text-foreground dark:hover:bg-white/[0.09]"
+                >
+                  <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={2} aria-hidden="true" />
+                </button>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-muted">
+                {day.description}
+              </p>
+              <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-muted">
+                Install
+              </p>
+              <code className="mt-2 block break-all rounded-xl border border-hairline bg-background p-3 font-mono text-xs leading-relaxed">
+                {day.install}
+              </code>
+              <button
+                onClick={copyPrompt}
+                className="mt-3 flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-foreground text-sm font-semibold text-background transition-opacity duration-150 hover:opacity-85"
+              >
+                <HugeiconsIcon
+                  icon={copied ? Tick02Icon : Copy01Icon}
+                  size={16}
+                  strokeWidth={2}
+                  aria-hidden="true"
+                />
+                {copied ? "Copied" : "Copy AI prompt"}
+              </button>
+            </motion.aside>
+          </>
         )}
       </AnimatePresence>
 
@@ -324,6 +380,44 @@ export function FloatingNav({
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* day pages: sidebar trigger + copy the AI install prompt */}
+        {day && (
+          <GlassPill>
+            <Cell
+              hovered={hovered === 3}
+              onHover={() => setHovered(3)}
+              aria-label="Interaction details"
+              aria-expanded={dayOpen}
+              onClick={() => setDayOpen((v) => !v)}
+            >
+              <HugeiconsIcon icon={SidebarRightIcon} size={21} strokeWidth={2} aria-hidden="true" />
+            </Cell>
+            <Cell
+              hovered={hovered === 4}
+              onHover={() => setHovered(4)}
+              aria-label="Copy AI prompt"
+              onClick={copyPrompt}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={copied ? "tick" : "copy"}
+                  initial={{ scale: 0.6, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.6, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 28 }}
+                  className="flex"
+                >
+                  {copied ? (
+                    <HugeiconsIcon icon={Tick02Icon} size={21} strokeWidth={2} aria-hidden="true" />
+                  ) : (
+                    <HugeiconsIcon icon={Copy01Icon} size={21} strokeWidth={2} aria-hidden="true" />
+                  )}
+                </motion.span>
+              </AnimatePresence>
+            </Cell>
+          </GlassPill>
+        )}
 
         {/* day pages: interaction name + padded day number */}
         {day && (
@@ -453,44 +547,6 @@ export function FloatingNav({
           </AnimatePresence>
         </Cell>
         </motion.div>
-
-        {/* day pages: more info + copy the AI install prompt */}
-        {day && (
-          <GlassPill>
-            <Cell
-              hovered={hovered === 3}
-              onHover={() => setHovered(3)}
-              aria-label="About this interaction"
-              aria-expanded={dayOpen}
-              onClick={() => setDayOpen((v) => !v)}
-            >
-              <HugeiconsIcon icon={InformationCircleIcon} size={21} strokeWidth={2} aria-hidden="true" />
-            </Cell>
-            <Cell
-              hovered={hovered === 4}
-              onHover={() => setHovered(4)}
-              aria-label="Copy AI prompt"
-              onClick={copyPrompt}
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={copied ? "tick" : "copy"}
-                  initial={{ scale: 0.6, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.6, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 28 }}
-                  className="flex"
-                >
-                  {copied ? (
-                    <HugeiconsIcon icon={Tick02Icon} size={21} strokeWidth={2} aria-hidden="true" />
-                  ) : (
-                    <HugeiconsIcon icon={Copy01Icon} size={21} strokeWidth={2} aria-hidden="true" />
-                  )}
-                </motion.span>
-              </AnimatePresence>
-            </Cell>
-          </GlassPill>
-        )}
         </div>
         </LayoutGroup>
       </div>

@@ -22,7 +22,8 @@ export default async function DayPage({
   if (!item) notFound();
   const stars = await getStars();
   const badges = await getNavBadges();
-  const prompt = `Add the "${item.title}" interaction from OIAD to my React + Tailwind project by running: npx shadcn@latest add ${SITE_URL}/r/${item.slug}`;
+  const install = `npx shadcn@latest add ${SITE_URL}/r/${item.slug}`;
+  const prompt = `Add the "${item.title}" interaction from OIAD to my React + Tailwind project by running: ${install}`;
 
   return (
     <main>
@@ -35,6 +36,7 @@ export default async function DayPage({
           day: item.day,
           description: item.description,
           prompt,
+          install,
         }}
       />
       {/* The stage — record this section as-is */}
