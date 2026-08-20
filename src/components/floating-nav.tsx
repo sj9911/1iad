@@ -48,8 +48,26 @@ function tick() {
 }
 
 const SPRING = { type: "spring", stiffness: 400, damping: 26 } as const;
+
+// gradual blur without mask-image (masked backdrop-filter is broken in
+// Chromium): stacked top-anchored strips whose blurs compound upward,
+// ~8px at the bottom edge rising to ~17px at the top
+function GlassLayers() {
+  return (
+    <span
+      aria-hidden="true"
+      className="absolute inset-0 overflow-hidden rounded-2xl"
+    >
+      <span className="absolute inset-x-0 top-0 h-full backdrop-blur-[8px]" />
+      <span className="absolute inset-x-0 top-0 h-4/5 backdrop-blur-[4px]" />
+      <span className="absolute inset-x-0 top-0 h-3/5 backdrop-blur-[6px]" />
+      <span className="absolute inset-x-0 top-0 h-2/5 backdrop-blur-[8px]" />
+      <span className="absolute inset-x-0 top-0 h-1/5 backdrop-blur-[10px]" />
+    </span>
+  );
+}
 // liquid birth: playful bounce in, snappy no-bounce system-response out
-const GOO_SPRING = { type: "spring", duration: 0.5, bounce: 0.2 } as const;
+const GOO_SPRING = { type: "spring", duration: 0.9, bounce: 0.18 } as const;
 
 const SPARKS = [
   { angle: 20, dist: 22, size: 5 },
@@ -106,32 +124,6 @@ export function FloatingNav({
   const [dark, setDark] = React.useState<boolean | null>(null);
   const [scrolled, setScrolled] = React.useState(false);
   const gearAngle = React.useRef(0);
-  const dockRef = React.useRef<HTMLDivElement>(null);
-  const [dockW, setDockW] = React.useState(0);
-  const BADGE_W = 113; // badge pill: svg 77 + button px 24 + pill padding 12
-
-  React.useEffect(() => {
-    const el = dockRef.current;
-    if (!el) return;
-    const measure = () => setDockW(el.offsetWidth);
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  const [morphing, setMorphing] = React.useState(false);
-  const firstScroll = React.useRef(true);
-  React.useEffect(() => {
-    if (firstScroll.current) {
-      firstScroll.current = false;
-      return;
-    }
-    setMorphing(true);
-    const t = setTimeout(() => setMorphing(false), 750);
-    return () => clearTimeout(t);
-  }, [scrolled]);
-
   const reduced = useReducedMotion();
   const birth = reduced
     ? {
@@ -144,12 +136,12 @@ export function FloatingNav({
         initial: { x: 90, scale: 0.4, opacity: 0 },
         animate: { x: 0, scale: 1, opacity: 1 },
         exit: {
-          x: 32,
-          scale: 0.6,
+          x: 90,
+          scale: 0.45,
           opacity: 0,
-          transition: { type: "spring", duration: 0.32, bounce: 0 } as const,
+          transition: { type: "spring", duration: 0.8, bounce: 0 } as const,
         },
-        transition: { type: "spring", duration: 0.5, bounce: 0.22 } as const,
+        transition: { type: "spring", duration: 0.9, bounce: 0.2 } as const,
       };
 
   React.useEffect(() => {
@@ -227,66 +219,17 @@ export function FloatingNav({
         )}
       </AnimatePresence>
 
-      {/* metaball goo filter */}
-      <svg aria-hidden="true" className="absolute size-0">
-        <defs>
-          <filter id="oiad-goo">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
-            <feColorMatrix
-              in="blur"
-              mode="matrix"
-              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
-            />
-          </filter>
-        </defs>
-      </svg>
-
       <div className="relative">
-        {/* goo layer: solid blobs that merge and split like liquid */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 transition-opacity duration-300 [filter:drop-shadow(0_8px_32px_rgba(0,0,0,0.12))]"
-          style={{ opacity: morphing ? 1 : 0 }}
-        >
-          <div className="flex h-full items-center gap-3.5 [filter:url(#oiad-goo)]">
-            <AnimatePresence mode="popLayout">
-              {scrolled && badges && (
-                <motion.div
-                  layout
-                  key="goo-badges"
-                  {...birth}
-                  style={{ width: BADGE_W }}
-                  className="h-14 shrink-0 rounded-2xl bg-surface"
-                />
-              )}
-            </AnimatePresence>
-            <motion.div
-              layout
-              transition={GOO_SPRING}
-              style={dockW ? { width: dockW } : undefined}
-              className="h-14 shrink-0 rounded-2xl bg-surface"
-            />
-          </div>
-        </div>
-
         <div className="relative flex items-center gap-3.5">
         {/* badge pill content, born out of the dock like a droplet */}
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           {scrolled && badges && (
             <motion.div
               layout
               key="badges"
               {...birth}
-              className="relative z-10 rounded-2xl border border-hairline p-1.5"
+              className="relative z-10 rounded-2xl border border-hairline bg-surface p-1.5"
             >
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 rounded-2xl backdrop-blur-xl"
-              />
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
-              />
               <button
                 onClick={badgesClick}
                 aria-label="OIAD badges"
@@ -304,14 +247,10 @@ export function FloatingNav({
 
         <motion.div
           layout
-          ref={dockRef}
           transition={GOO_SPRING}
           className="relative flex items-center gap-1 rounded-2xl border border-hairline p-1.5"
         >
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 rounded-2xl backdrop-blur-xl"
-          />
+          <GlassLayers />
           <span
             aria-hidden="true"
             className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
