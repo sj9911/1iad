@@ -168,7 +168,7 @@ export default async function V2() {
           {interactions.map(({ slug, day, title, Component, StageComponent }) => (
             <div
               key={slug}
-              className="group rounded-2xl border border-hairline bg-surface p-2.5"
+              className="group rounded-2xl border border-hairline bg-surface p-2.5 transition-[transform,box-shadow,border-color] duration-300 ease-out hover:border-black/20 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] motion-safe:hover:-translate-y-1.5 dark:hover:border-white/25 dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
             >
               {/* interaction window */}
               <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-background px-10">
