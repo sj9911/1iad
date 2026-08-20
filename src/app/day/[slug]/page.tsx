@@ -58,7 +58,7 @@ export default async function DayPage({
             aria-hidden="true"
             className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
           />
-          <span className="font-bricolage relative flex h-[50px] items-center gap-2 rounded-xl px-3.5 text-base font-semibold transition-colors duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.09]">
+          <span className="font-bricolage relative flex h-[42px] items-center gap-2 rounded-xl px-3.5 text-base font-semibold transition-colors duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.09]">
             <svg
               viewBox="0 0 9 9"
               className="h-[0.72em] w-auto rotate-180 fill-current"

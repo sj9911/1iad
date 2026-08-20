@@ -13,6 +13,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import {
   FloatingNav,
+  GlassLayers,
   tick,
   type NavBadges,
   type NavDay,
@@ -57,25 +58,28 @@ export function DayShell({
         aria-hidden={!open}
       >
         {/* fixed-width inner so text doesn't reflow while the panel animates */}
+        {/* glass close pill, aligned with the fixed Back pill */}
+        <button
+          aria-label="Close"
+          onClick={() => setOpen(false)}
+          className="absolute right-8 top-8 z-10 rounded-2xl border border-hairline p-1.5"
+        >
+          <GlassLayers />
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
+          />
+          <span className="relative flex h-[42px] w-[46px] items-center justify-center rounded-xl transition-colors duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.09]">
+            <HugeiconsIcon icon={Cancel01Icon} size={18} strokeWidth={2} aria-hidden="true" />
+          </span>
+        </button>
+
         {/* pt clears the fixed Back pill sitting at the viewport's top-left */}
         <div className="font-bricolage h-full w-[40vw] overflow-y-auto p-8 pt-28">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-2xl font-semibold leading-tight">
-                {day.title}
-              </p>
-              <p className="mt-1 text-base font-semibold tabular-nums text-muted">
-                {String(day.day).padStart(3, "0")}
-              </p>
-            </div>
-            <button
-              aria-label="Close"
-              onClick={() => setOpen(false)}
-              className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors duration-150 hover:bg-black/[0.06] hover:text-foreground dark:hover:bg-white/[0.09]"
-            >
-              <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={2} aria-hidden="true" />
-            </button>
-          </div>
+          <p className="text-2xl font-semibold leading-tight">{day.title}</p>
+          <p className="mt-1 text-base font-semibold tabular-nums text-muted">
+            {String(day.day).padStart(3, "0")}
+          </p>
           <p className="mt-5 max-w-md text-base leading-relaxed text-muted">
             {day.description}
           </p>
