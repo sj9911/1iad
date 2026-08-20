@@ -227,10 +227,12 @@ export function FloatingNav({
 
       <div className="relative">
         <div className="relative flex items-center gap-3.5">
-        {/* badge pill: blurs in from behind the dock on scroll, slides back
-            under it on the way up; popLayout frees its slot immediately so
-            the dock glides back to center while the pill is still exiting */}
-        <AnimatePresence mode="popLayout" initial={false}>
+        {/* badge pill: blurs in from behind the dock on scroll, dissolves in
+            place on the way up. Sync mode (not popLayout): the pill must keep
+            its flex slot while exiting — popping it to absolute made it ride
+            the wrapper's instant re-center and visibly jump. The dock glides
+            back to center via its layout spring after the dissolve finishes. */}
+        <AnimatePresence initial={false}>
           {scrolled && badges && (
             <motion.div
               key="badge-pill"
