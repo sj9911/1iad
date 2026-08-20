@@ -155,6 +155,9 @@ export default async function V2() {
         </HeroFlicker>
         </div>
       </header>
+
+      {/* body: bordered rails, gallery of days goes here */}
+      <section className="mx-auto min-h-[50vh] max-w-3xl border-x border-hairline" />
     </main>
   );
 }
