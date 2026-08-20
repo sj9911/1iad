@@ -281,7 +281,7 @@ export function FloatingNav({
             >
               <span
                 aria-hidden="true"
-                className="absolute inset-0 -z-10 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,rgba(0,0,0,0.2),black)]"
+                className="absolute inset-0 -z-10 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,rgba(0,0,0,0.5),black)]"
               />
               <button
                 onClick={badgesClick}
@@ -306,7 +306,7 @@ export function FloatingNav({
         >
           <span
             aria-hidden="true"
-            className="absolute inset-0 -z-10 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,rgba(0,0,0,0.2),black)]"
+            className="absolute inset-0 -z-10 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,rgba(0,0,0,0.5),black)]"
           />
         <Cell
           hovered={hovered === 0}
