@@ -29,7 +29,7 @@
   --accent: #2997ff;
   --hairline: rgba(255, 255, 255, 0.14);
   --dot: rgba(255, 255, 255, 0.1);
-  --oiad-blue: #4d6fff; /* lifted for AA contrast on black */
+  --oiad-blue: #1d46fc;
 }
 
 @theme inline {
