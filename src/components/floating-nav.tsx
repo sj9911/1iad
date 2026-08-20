@@ -150,9 +150,9 @@ export function FloatingNav({ stars }: { stars: number | null }) {
                   : { opacity: 0, scale: 0.4, rotate: -40, filter: "blur(5px)" }
               }
               transition={{ type: "spring", stiffness: 450, damping: 20 }}
-              className="absolute inset-0 flex items-center justify-center text-[#D97706] dark:text-[#FBBF24]"
+              className="absolute inset-0 flex items-center justify-center text-[#CA8A04] dark:text-[#FBBF24]"
             >
-              <span className="flex [filter:drop-shadow(0_0_5px_rgba(217,119,6,0.6))] dark:[filter:drop-shadow(0_0_5px_rgba(251,191,36,0.9))]">
+              <span className="flex [filter:drop-shadow(0_0_5px_rgba(202,138,4,0.6))] dark:[filter:drop-shadow(0_0_5px_rgba(251,191,36,0.9))]">
                 <IconStarFilled size={17} aria-hidden="true" />
               </span>
             </motion.span>
@@ -174,7 +174,7 @@ export function FloatingNav({ stars }: { stars: number | null }) {
                         }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.55, ease: "easeOut", delay: 0.05 }}
-                        className="absolute rounded-full bg-[#D97706] dark:bg-[#FBBF24]"
+                        className="absolute rounded-full bg-[#CA8A04] dark:bg-[#FBBF24]"
                         style={{ width: sp.size, height: sp.size }}
                       />
                     );
@@ -186,7 +186,7 @@ export function FloatingNav({ stars }: { stars: number | null }) {
           {stars !== null && (
             <span
               className={`font-bricolage text-xs font-bold tabular-nums transition-colors duration-200 ${
-                hovered === 0 ? "text-[#D97706] dark:text-[#FBBF24]" : ""
+                hovered === 0 ? "text-[#CA8A04] dark:text-[#FBBF24]" : ""
               }`}
             >
               {stars}
