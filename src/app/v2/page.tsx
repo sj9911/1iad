@@ -164,14 +164,12 @@ export default async function V2() {
         <span aria-hidden="true" className="absolute left-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
         <span aria-hidden="true" className="absolute right-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
 
-        <div className="grid sm:grid-cols-2">
+        <div className="grid gap-6 p-6 sm:grid-cols-2">
           {interactions.map(
-            ({ slug, day, title, Component, StageComponent }, i) => (
+            ({ slug, day, title, Component, StageComponent }) => (
               <div
                 key={slug}
-                className={`group relative border-b border-hairline ${
-                  i % 2 === 0 ? "sm:border-r" : ""
-                }`}
+                className="group relative overflow-hidden rounded-2xl border border-hairline bg-surface"
               >
                 <div className="relative flex aspect-[4/3] items-center justify-center px-10">
                   {StageComponent ? <StageComponent /> : <Component />}
@@ -195,7 +193,7 @@ export default async function V2() {
           )}
           {/* tomorrow's slot */}
           <div
-            className="font-bricolage flex aspect-[4/3] flex-col items-center justify-center gap-1 border-b border-hairline"
+            className="font-bricolage flex flex-col items-center justify-center gap-1 rounded-2xl border border-hairline"
             style={{
               backgroundImage:
                 "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
