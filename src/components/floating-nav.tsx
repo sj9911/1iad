@@ -91,7 +91,7 @@ export function FloatingNav({ stars }: { stars: number | null }) {
 
   return (
     <nav
-      className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
+      className="fixed bottom-6 left-1/2 z-50 origin-bottom -translate-x-1/2 scale-[1.15]"
       onMouseLeave={() => setHovered(null)}
     >
       <AnimatePresence>
