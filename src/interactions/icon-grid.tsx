@@ -23,8 +23,8 @@ const DEFAULT_ICONS = Array.from(
 export function IconGrid({
   icons = DEFAULT_ICONS,
   className = "relative h-[340px] w-full max-w-[520px] rounded-3xl border border-black/10 dark:border-white/15",
-  cell: CELL = 230, // px per grid cell
-  iconSize = 110, // px per icon image
+  cell: CELL = 210, // px per grid cell
+  iconSize = 145, // px per icon image
 }: {
   icons?: string[];
   className?: string;
