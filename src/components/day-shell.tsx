@@ -2,8 +2,8 @@
 
 // Day-page layout: a details sidebar slides in from the left and takes 40% of
 // the width, squeezing the interactive stage into the remaining 60%.
-// Sidebar content follows the home header's swiss language: hairline rules,
-// node squares at intersections, numbered uppercase section labels, ample air.
+// The sidebar reads like a swiss spec sheet for the day: a giant blue day
+// number, poster-set title, then label/value rows separated by hairlines.
 
 import * as React from "react";
 import { motion, useReducedMotion } from "motion/react";
@@ -45,19 +45,25 @@ const DEP_NAMES: Record<string, string> = { motion: "Motion" };
 // emil rules: transform/opacity only, strong ease-out, small travel
 const EASE = [0.23, 1, 0.32, 1] as const;
 
-function Label({ n, children }: { n: number; children: React.ReactNode }) {
-  return (
-    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
-      <span className="tabular-nums">{String(n).padStart(2, "0")}</span>
-      <span aria-hidden="true" className="mx-2">—</span>
-      {children}
-    </p>
-  );
-}
+// same maxed variable axes as the home hero headline
+const POSTER = {
+  fontVariationSettings: '"wght" 800, "wdth" 100, "opsz" 96',
+} as const;
 
-function Rule() {
+function Row({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
-    <span aria-hidden="true" className="-mx-8 my-8 block border-t border-hairline" />
+    <div className="grid grid-cols-[104px_1fr] gap-x-8 border-t border-hairline py-7">
+      <dt className="pt-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+        {label}
+      </dt>
+      <dd className="min-w-0">{children}</dd>
+    </div>
   );
 }
 
@@ -83,14 +89,14 @@ export function DayShell({
   const list = {
     hidden: {},
     show: {
-      transition: reduced ? {} : { staggerChildren: 0.05, delayChildren: 0.15 },
+      transition: reduced ? {} : { staggerChildren: 0.06, delayChildren: 0.15 },
     },
   };
   const rise = {
-    hidden: reduced ? { opacity: 0 } : { opacity: 0, y: 14 },
+    hidden: reduced ? { opacity: 0 } : { opacity: 0, y: 16 },
     show: reduced
       ? { opacity: 1 }
-      : { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+      : { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
   };
 
   function copyPrompt() {
@@ -103,7 +109,7 @@ export function DayShell({
 
   const stack = [
     "React 19",
-    "Tailwind CSS v4",
+    "Tailwind v4",
     ...day.dependencies.map((d) => DEP_NAMES[d] ?? d),
   ];
 
@@ -134,139 +140,154 @@ export function DayShell({
           </span>
         </button>
 
-        {/* full-width rule under the button row, node squares at its ends */}
+        {/* full-width rule under the button row */}
         <span
           aria-hidden="true"
           className="absolute inset-x-0 top-[104px] border-t border-hairline"
         />
-        <span aria-hidden="true" className="absolute left-8 top-[98.6px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
-        <span aria-hidden="true" className="absolute right-8 top-[98.6px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
 
         {/* fixed-width inner so text doesn't reflow while the panel animates */}
         <motion.div
           variants={list}
           initial="hidden"
           animate={open ? "show" : "hidden"}
-          className="font-bricolage h-full w-[40vw] overflow-y-auto p-8 pt-[124px]"
+          className="font-bricolage h-full w-[40vw] overflow-y-auto px-8 pt-[104px]"
         >
-          <motion.header variants={rise} className="flex items-baseline justify-between gap-4">
-            <h2 className="text-3xl font-semibold leading-tight tracking-tight">
+          {/* the poster block: giant blue day number, headline-set title */}
+          <motion.header variants={rise} className="pt-10">
+            <p
+              aria-hidden="true"
+              className="text-[clamp(88px,9vw,132px)] leading-[0.85] tracking-tight tabular-nums text-[var(--oiad-blue)]"
+              style={POSTER}
+            >
+              {String(day.day).padStart(3, "0")}
+            </p>
+            <h2
+              className="mt-6 max-w-[10ch] text-[clamp(34px,3.4vw,48px)] uppercase leading-[1.02] tracking-[-0.01em]"
+              style={POSTER}
+            >
               {day.title}
             </h2>
-            <p className="text-3xl font-semibold tabular-nums tracking-tight text-muted">
-              {String(day.day).padStart(3, "0")}
+            <p className="mb-10 mt-6 max-w-md text-lg leading-relaxed text-muted">
+              {day.description}
             </p>
           </motion.header>
 
-          <motion.p variants={rise} className="mt-4 max-w-md text-base leading-relaxed text-muted">
-            {day.description}
-          </motion.p>
+          <dl>
+            <motion.div variants={rise}>
+              <Row label="Feels like">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                  {day.tags.map((t, i) => {
+                    const TagIcon = TAG_ICONS[t];
+                    return (
+                      <React.Fragment key={t}>
+                        {i > 0 && (
+                          <span aria-hidden="true" className="text-lg font-semibold text-[var(--oiad-blue)]">
+                            /
+                          </span>
+                        )}
+                        <span className="flex items-center gap-2 text-lg font-semibold uppercase tracking-tight">
+                          {TagIcon && <TagIcon size={19} stroke={2} aria-hidden="true" />}
+                          {t}
+                        </span>
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+              </Row>
+            </motion.div>
 
-          <motion.section variants={rise}>
-            <Rule />
-            <Label n={1}>Interaction</Label>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {day.tags.map((t) => {
-                const TagIcon = TAG_ICONS[t];
-                return (
-                  <span
-                    key={t}
-                    className="flex items-center gap-1.5 rounded-lg border border-hairline px-2.5 py-1.5 text-sm font-semibold"
-                  >
-                    {TagIcon && <TagIcon size={15} stroke={2} aria-hidden="true" />}
-                    {t}
-                  </span>
-                );
-              })}
-            </div>
-          </motion.section>
+            <motion.div variants={rise}>
+              <Row label="Built with">
+                <p className="text-lg font-semibold tracking-tight">
+                  {stack.map((s, i) => (
+                    <React.Fragment key={s}>
+                      {i > 0 && (
+                        <span aria-hidden="true" className="mx-3 text-[var(--oiad-blue)]">
+                          /
+                        </span>
+                      )}
+                      {s}
+                    </React.Fragment>
+                  ))}
+                </p>
+              </Row>
+            </motion.div>
 
-          <motion.section variants={rise}>
-            <Rule />
-            <Label n={2}>Based on</Label>
-            <div className="mt-4 flex flex-wrap gap-x-2 gap-y-1 text-sm font-semibold">
-              {stack.map((s, i) => (
-                <span key={s} className="flex items-center gap-2">
-                  {i > 0 && <span aria-hidden="true" className="text-muted">·</span>}
-                  {s}
-                </span>
-              ))}
-            </div>
-          </motion.section>
+            <motion.div variants={rise}>
+              <Row label="Steal it">
+                <code className="block max-w-md break-all rounded-xl border border-hairline bg-background p-4 font-mono text-[13px] leading-relaxed">
+                  {day.install}
+                </code>
+                <button
+                  onClick={copyPrompt}
+                  className="mt-3 flex h-12 w-full max-w-md items-center justify-center gap-2 rounded-xl bg-foreground text-base font-semibold text-background transition-opacity duration-150 hover:opacity-85"
+                >
+                  {copied ? (
+                    <IconCheck size={18} stroke={2.5} aria-hidden="true" />
+                  ) : (
+                    <IconCopy size={18} stroke={2} aria-hidden="true" />
+                  )}
+                  {copied ? "Copied" : "Copy AI prompt"}
+                </button>
+                <p className="mt-3 max-w-md text-base leading-relaxed text-muted">
+                  One self-contained file. Paste the prompt into your AI agent
+                  and it does the rest.
+                </p>
+              </Row>
+            </motion.div>
 
-          <motion.section variants={rise}>
-            <Rule />
-            <Label n={3}>Install</Label>
-            <code className="mt-4 block max-w-md break-all rounded-xl border border-hairline bg-background p-3.5 font-mono text-xs leading-relaxed">
-              {day.install}
-            </code>
-            <button
-              onClick={copyPrompt}
-              className="mt-3 flex h-11 w-full max-w-md items-center justify-center gap-2 rounded-xl bg-foreground text-sm font-semibold text-background transition-opacity duration-150 hover:opacity-85"
-            >
-              {copied ? (
-                <IconCheck size={16} stroke={2.5} aria-hidden="true" />
-              ) : (
-                <IconCopy size={16} stroke={2} aria-hidden="true" />
-              )}
-              {copied ? "Copied" : "Copy AI prompt"}
-            </button>
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">
-              Or paste the prompt into your AI agent and let it do the work.
-            </p>
-          </motion.section>
+            <motion.div variants={rise}>
+              <Row label="Good to know">
+                <ul className="max-w-md space-y-3 text-base leading-relaxed">
+                  {[
+                    "No config. Nothing to set up beyond Tailwind.",
+                    "Respects prefers-reduced-motion out of the box.",
+                    "Sound and haptics only fire after a user gesture.",
+                  ].map((point) => (
+                    <li key={point} className="flex gap-3">
+                      <span aria-hidden="true" className="font-semibold text-[var(--oiad-blue)]">
+                        /
+                      </span>
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </Row>
+            </motion.div>
 
-          <motion.section variants={rise}>
-            <Rule />
-            <Label n={4}>Good to know</Label>
-            <ul className="mt-4 max-w-md space-y-2.5 text-sm leading-relaxed text-muted">
-              {[
-                "One self-contained file. No config, no setup beyond Tailwind.",
-                "Respects prefers-reduced-motion out of the box.",
-                "Sound and haptics only fire after a user gesture.",
-              ].map((point) => (
-                <li key={point} className="flex gap-3">
-                  <span
-                    aria-hidden="true"
-                    className="mt-[7px] size-[6px] shrink-0 rounded-[1.5px] border border-[var(--hairline-solid)] bg-background"
-                  />
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </motion.section>
-
-          {/* extra bottom padding keeps credits clear of the fixed dock */}
-          <motion.section variants={rise} className="pb-32">
-            <Rule />
-            <Label n={5}>Credits</Label>
-            <div className="mt-4 flex items-center justify-between gap-4">
-              <p className="text-sm leading-relaxed text-muted">
-                Designed &amp; built in public by{" "}
-                <span className="font-semibold text-foreground">Sunny Joshi</span>
-                <br />
-                MIT licensed. Free to steal.
-              </p>
-              <div className="flex items-center gap-1">
-                {[
-                  { href: "http://x.com/sunnyxdesign", label: "X", Ic: IconBrandX },
-                  { href: "https://www.linkedin.com/in/thesunnyjoshi/", label: "LinkedIn", Ic: IconBrandLinkedin },
-                  { href: "https://github.com/sj9911/oiad", label: "GitHub", Ic: IconBrandGithub },
-                ].map(({ href, label, Ic }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={label}
-                    className="flex size-9 items-center justify-center rounded-lg text-muted transition-colors duration-150 hover:bg-black/[0.06] hover:text-foreground dark:hover:bg-white/[0.09]"
-                  >
-                    <Ic size={18} stroke={1.75} aria-hidden="true" />
-                  </a>
-                ))}
-              </div>
-            </div>
-          </motion.section>
+            <motion.div variants={rise} className="pb-32">
+              <Row label="Credits">
+                <div className="flex items-start justify-between gap-4">
+                  <p className="text-base leading-relaxed">
+                    Built in public by{" "}
+                    <span className="font-semibold">Sunny Joshi</span>
+                    <span className="block text-muted">
+                      MIT licensed. Free to steal.
+                    </span>
+                  </p>
+                  <div className="flex items-center gap-1">
+                    {[
+                      { href: "http://x.com/sunnyxdesign", label: "X", Ic: IconBrandX },
+                      { href: "https://www.linkedin.com/in/thesunnyjoshi/", label: "LinkedIn", Ic: IconBrandLinkedin },
+                      { href: "https://github.com/sj9911/oiad", label: "GitHub", Ic: IconBrandGithub },
+                    ].map(({ href, label, Ic }) => (
+                      <a
+                        key={label}
+                        href={href}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={label}
+                        className="flex size-10 items-center justify-center rounded-lg text-muted transition-colors duration-150 hover:bg-black/[0.06] hover:text-foreground dark:hover:bg-white/[0.09]"
+                      >
+                        <Ic size={20} stroke={1.75} aria-hidden="true" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </Row>
+            </motion.div>
+          </dl>
         </motion.div>
       </motion.aside>
 
