@@ -28,7 +28,11 @@ async function readPiece(name: string): Promise<Piece> {
 }
 
 const HEADLINE =
-  "font-bricolage absolute font-[800] uppercase leading-none tracking-tight";
+  "font-bricolage absolute uppercase leading-none tracking-[-0.035em]";
+// variable axes maxed out: full width, heaviest weight, largest optical size
+const HEADLINE_STYLE = {
+  fontVariationSettings: '"wght" 800, "wdth" 100, "opsz" 96',
+} as const;
 
 export default async function V2() {
   const p = Object.fromEntries(
@@ -49,7 +53,7 @@ export default async function V2() {
                 <span
                   aria-hidden="true"
                   className={HEADLINE}
-                  style={{ left: "5.9%", top: "23.6%", fontSize: "13.9cqw" }}
+                  style={{ ...HEADLINE_STYLE, left: "5.9%", top: "23.6%", fontSize: "13.9cqw" }}
                 >
                   One
                 </span>
@@ -61,7 +65,7 @@ export default async function V2() {
                 <span
                   aria-hidden="true"
                   className={`${HEADLINE} text-right`}
-                  style={{ right: "6.1%", top: "69.6%", fontSize: "13.9cqw" }}
+                  style={{ ...HEADLINE_STYLE, right: "6.1%", top: "69.6%", fontSize: "13.9cqw" }}
                 >
                   A&nbsp;Day
                 </span>
@@ -73,7 +77,7 @@ export default async function V2() {
           <span
             aria-hidden="true"
             className={HEADLINE}
-            style={{ left: "6.4%", top: "46.4%", fontSize: "13.9cqw" }}
+            style={{ ...HEADLINE_STYLE, left: "6.4%", top: "46.4%", fontSize: "13.9cqw" }}
           >
             Interaction
           </span>
