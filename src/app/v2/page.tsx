@@ -46,7 +46,14 @@ export default async function V2() {
       <header className="mx-auto max-w-3xl px-6 pt-14">
         <h1 className="sr-only">One Interaction A Day</h1>
         <HeroFlicker
-          statics={[p.corners, p.globe, p["top-icon"]]}
+          statics={[
+            p.corners,
+            {
+              ...p.globe,
+              className: "motion-safe:animate-[spin_45s_linear_infinite]",
+            },
+            p["top-icon"],
+          ]}
           slots={[
             {
               print: (

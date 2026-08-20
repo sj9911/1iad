@@ -16,13 +16,14 @@ export type Piece = {
   y: number;
   w: number;
   h: number;
+  className?: string;
 };
 
 export function PieceSvg({ piece }: { piece: Piece }) {
   return (
     <svg
       viewBox={piece.viewBox}
-      className="absolute"
+      className={`absolute ${piece.className ?? ""}`}
       style={{
         left: `${(piece.x / W) * 100}%`,
         top: `${(piece.y / H) * 100}%`,
