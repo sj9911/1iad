@@ -109,6 +109,37 @@ html {
   animation: oiad-inflate 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
+/* viewfinder entrance: brackets expand from center while the mask opens */
+@keyframes oiad-corners-open {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.oiad-corners-open {
+  animation: oiad-corners-open 0.7s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes oiad-mask-open {
+  from {
+    clip-path: inset(42% 42% 42% 42%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.oiad-mask-open {
+  animation: oiad-mask-open 0.7s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: 0.05s;
+}
+
 /* entrance for everything else: rise + settle, never from scale(0) */
 @keyframes oiad-rise {
   from {
@@ -128,7 +159,9 @@ html {
   .oiad-heartbeat,
   .oiad-steal-drop,
   .oiad-inflate,
-  .oiad-rise {
+  .oiad-rise,
+  .oiad-corners-open,
+  .oiad-mask-open {
     animation: none;
   }
   .oiad-gear {
