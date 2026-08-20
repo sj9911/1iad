@@ -165,47 +165,46 @@ export default async function V2() {
         <span aria-hidden="true" className="absolute right-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
 
         <div className="grid gap-6 p-6 sm:grid-cols-2">
-          {interactions.map(
-            ({ slug, day, title, Component, StageComponent }) => (
-              <div
-                key={slug}
-                className="group relative overflow-hidden rounded-2xl border border-hairline bg-surface"
-              >
-                <div className="relative flex aspect-[4/3] items-center justify-center px-10">
-                  {StageComponent ? <StageComponent /> : <Component />}
-                </div>
+          {interactions.map(({ slug, title, Component, StageComponent }) => (
+            <div
+              key={slug}
+              className="group rounded-2xl border border-hairline bg-surface p-2.5"
+            >
+              {/* interaction window */}
+              <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-background px-10">
+                {StageComponent ? <StageComponent /> : <Component />}
+              </div>
+              {/* text and cta */}
+              <div className="font-bricolage flex items-center justify-between px-2 pb-1 pt-3">
+                <span className="text-sm font-semibold">{title}</span>
                 <Link
                   href={`/day/${slug}`}
-                  className="font-bricolage flex items-baseline justify-between border-t border-hairline px-5 py-3.5"
+                  className="text-sm font-semibold text-muted transition-colors duration-200 hover:text-[var(--oiad-blue)]"
                 >
-                  <span className="text-sm font-bold uppercase tracking-wide">
-                    <span className="text-[var(--oiad-blue)]">
-                      № {String(day).padStart(3, "0")}
-                    </span>
-                    <span className="ml-2">{title}</span>
-                  </span>
-                  <span className="text-sm font-bold opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                    →
-                  </span>
+                  View →
                 </Link>
               </div>
-            ),
-          )}
+            </div>
+          ))}
           {/* tomorrow's slot */}
-          <div
-            className="font-bricolage flex flex-col items-center justify-center gap-1 rounded-2xl border border-hairline"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
-              backgroundSize: "18px 18px",
-            }}
-          >
-            <p className="text-sm font-bold uppercase tracking-wide text-[var(--oiad-blue)]">
-              № {String(interactions.length + 1).padStart(3, "0")}
-            </p>
-            <p className="text-sm font-bold uppercase tracking-wide text-muted">
-              Tomorrow
-            </p>
+          <div className="rounded-2xl border border-hairline bg-surface p-2.5">
+            <div
+              className="font-bricolage flex aspect-[4/3] items-center justify-center rounded-xl bg-background"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
+                backgroundSize: "18px 18px",
+              }}
+            >
+              <p className="text-sm font-semibold text-muted">
+                Tomorrow, same place
+              </p>
+            </div>
+            <div className="font-bricolage flex items-center px-2 pb-1 pt-3">
+              <span className="text-sm font-semibold text-muted">
+                Day {interactions.length + 1}
+              </span>
+            </div>
           </div>
         </div>
       </section>
