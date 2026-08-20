@@ -188,7 +188,7 @@ export function FloatingNav({ stars }: { stars: number | null }) {
           </span>
           {stars !== null && (
             <span
-              className={`font-bricolage text-xs font-bold tabular-nums transition-colors duration-200 ${
+              className={`font-bricolage text-sm font-bold tabular-nums transition-colors duration-200 ${
                 hovered === 0 ? "text-[#CA8A04] dark:text-[#FBBF24]" : ""
               }`}
             >
