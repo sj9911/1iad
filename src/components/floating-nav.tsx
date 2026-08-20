@@ -57,7 +57,7 @@ const SPRING = { type: "spring", stiffness: 400, damping: 26 } as const;
 // gradual blur without mask-image (masked backdrop-filter is broken in
 // Chromium): stacked top-anchored strips whose blurs compound upward,
 // ~8px at the bottom edge rising to ~17px at the top
-function GlassLayers() {
+export function GlassLayers() {
   return (
     <span
       aria-hidden="true"

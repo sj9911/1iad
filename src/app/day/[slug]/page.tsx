@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { interactions } from "@/interactions/registry";
-import { FloatingNav } from "@/components/floating-nav";
+import { FloatingNav, GlassLayers } from "@/components/floating-nav";
 import { getStars } from "@/lib/stars";
 
 export function generateStaticParams() {
@@ -34,27 +34,27 @@ export default async function DayPage({
       >
         <Link
           href="/v2"
-          className="font-bricolage absolute left-8 top-8 z-10 flex items-center gap-2 text-base font-semibold text-muted transition-colors duration-150 hover:text-foreground"
+          className="absolute left-8 top-8 z-10 rounded-2xl border border-hairline p-1.5"
         >
-          <svg
-            viewBox="0 0 9 9"
-            className="h-[0.72em] w-auto rotate-180 fill-current"
+          <GlassLayers />
+          <span
             aria-hidden="true"
-          >
-            <path d="M4.63636 8.267L3.75852 7.39768L6.38778 4.76842H0V3.49854H6.38778L3.75852 0.873535L4.63636 -4.45843e-05L8.76989 4.13348L4.63636 8.267Z" />
-          </svg>
-          Back
+            className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
+          />
+          <span className="font-bricolage relative flex h-[50px] items-center gap-2 rounded-xl px-3.5 text-base font-semibold transition-colors duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.09]">
+            <svg
+              viewBox="0 0 9 9"
+              className="h-[0.72em] w-auto rotate-180 fill-current"
+              aria-hidden="true"
+            >
+              <path d="M4.63636 8.267L3.75852 7.39768L6.38778 4.76842H0V3.49854H6.38778L3.75852 0.873535L4.63636 -4.45843e-05L8.76989 4.13348L4.63636 8.267Z" />
+            </svg>
+            Back
+          </span>
         </Link>
+        <h1 className="sr-only">{item.title}</h1>
 
         {item.StageComponent ? <item.StageComponent /> : <item.Component />}
-
-        <div className="pointer-events-none absolute bottom-8 left-8 z-10">
-          <h1 className="font-bricolage text-2xl font-semibold">{item.title}</h1>
-          <p className="font-bricolage mt-1 text-base text-muted">{item.hint}</p>
-        </div>
-        <span className="font-bricolage pointer-events-none absolute bottom-8 right-8 z-10 text-2xl font-semibold tabular-nums text-muted">
-          {String(item.day).padStart(3, "0")}
-        </span>
       </section>
     </main>
   );
