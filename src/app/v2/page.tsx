@@ -38,6 +38,23 @@ const HEADLINE_STYLE = {
   fontVariationSettings: '"wght" 800, "wdth" 100, "opsz" 96',
 } as const;
 
+// per-letter inflate with scattered delays; golden-ratio hash keeps the
+// "random" stable between server and client renders
+function Letters({ text, base }: { text: string; base: number }) {
+  return text.split("").map((ch, i) => {
+    const delay = base + ((i * 0.618034) % 1) * 0.5;
+    return (
+      <span
+        key={i}
+        className="oiad-inflate"
+        style={{ animationDelay: `${delay.toFixed(3)}s` }}
+      >
+        {ch === " " ? "\u00A0" : ch}
+      </span>
+    );
+  });
+}
+
 export default async function V2() {
   const p = Object.fromEntries(
     await Promise.all(
@@ -59,10 +76,10 @@ export default async function V2() {
               print: (
                 <span
                   aria-hidden="true"
-                  className={`${HEADLINE} oiad-inflate`}
-                  style={{ ...HEADLINE_STYLE, left: "5.9%", top: "23.0%", fontSize: "15.1cqw", animationDelay: "0.15s" }}
+                  className={HEADLINE}
+                  style={{ ...HEADLINE_STYLE, left: "5.9%", top: "23.0%", fontSize: "15.1cqw" }}
                 >
-                  One
+                  <Letters text="One" base={0} />
                 </span>
               ),
               hand: [p["one-hand"]],
@@ -71,10 +88,10 @@ export default async function V2() {
               print: (
                 <span
                   aria-hidden="true"
-                  className={`${HEADLINE} text-right oiad-inflate`}
-                  style={{ ...HEADLINE_STYLE, right: "5.4%", top: "69.0%", fontSize: "15.1cqw", animationDelay: "0.45s" }}
+                  className={`${HEADLINE} text-right`}
+                  style={{ ...HEADLINE_STYLE, right: "5.4%", top: "69.0%", fontSize: "15.1cqw" }}
                 >
-                  A&nbsp;Day
+                  <Letters text="A Day" base={0.3} />
                 </span>
               ),
               hand: [p["a-hand"], p["day-hand"]],
@@ -83,10 +100,10 @@ export default async function V2() {
         >
           <span
             aria-hidden="true"
-            className={`${HEADLINE} oiad-inflate`}
-            style={{ ...HEADLINE_STYLE, left: "6.4%", top: "45.8%", fontSize: "15.1cqw", animationDelay: "0.3s" }}
+            className={HEADLINE}
+            style={{ ...HEADLINE_STYLE, left: "6.4%", top: "45.8%", fontSize: "15.1cqw" }}
           >
-            Interaction
+            <Letters text="Interaction" base={0.15} />
           </span>
           <p
             className="font-bricolage absolute font-bold uppercase leading-[1.3]"
