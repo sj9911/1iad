@@ -188,7 +188,7 @@ export default async function V2() {
                   <span className="absolute right-0 flex text-[var(--oiad-blue)] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                     <svg
                       viewBox="0 0 9 9"
-                      className="h-[0.8em] w-auto fill-current"
+                      className="h-[0.72em] w-auto fill-current"
                       aria-hidden="true"
                     >
                       <path d="M4.63636 8.267L3.75852 7.39768L6.38778 4.76842H0V3.49854H6.38778L3.75852 0.873535L4.63636 -4.45843e-05L8.76989 4.13348L4.63636 8.267Z" />
