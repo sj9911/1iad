@@ -153,7 +153,7 @@ function Badges({ piece }: { piece: Piece }) {
         ref={ref}
         viewBox={piece.viewBox}
         className="oiad-rise absolute [&_.oiad-gear]:cursor-pointer [&_.oiad-heartbtn]:cursor-pointer"
-        style={{ ...box(piece), animationDelay: "0.45s" }}
+        style={{ ...box(piece), animationDelay: "0.75s" }}
         onClick={onClick}
         dangerouslySetInnerHTML={{ __html: piece.inner }}
       />
@@ -239,7 +239,7 @@ function Globe({ piece }: { piece: Piece }) {
   return (
     <div
       className="oiad-rise absolute"
-      style={{ ...box(piece), animationDelay: "0.35s" }}
+      style={{ ...box(piece), animationDelay: "0.65s" }}
     >
     <svg
       ref={ref}
@@ -284,7 +284,7 @@ function Steal({ copyText }: { copyText: string }) {
         setTimeout(() => setCopied(false), 1400);
       }}
       className="font-bricolage oiad-rise absolute flex cursor-pointer items-center gap-[0.8cqw] font-bold uppercase text-[#002FFF]"
-      style={{ left: "6.5%", top: "86.6%", fontSize: "2.2cqw", animationDelay: "1.25s" }}
+      style={{ left: "6.5%", top: "86.6%", fontSize: "2.2cqw", animationDelay: "1.55s" }}
     >
       {copied ? "Copied." : "Free to steal"}
       <svg

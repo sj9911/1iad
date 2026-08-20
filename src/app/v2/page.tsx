@@ -79,7 +79,7 @@ export default async function V2() {
                   className={HEADLINE}
                   style={{ ...HEADLINE_STYLE, left: "5.9%", top: "23.0%", fontSize: "15.1cqw" }}
                 >
-                  <Letters text="One" base={0.25} />
+                  <Letters text="One" base={0.85} />
                 </span>
               ),
               hand: [p["one-hand"]],
@@ -91,7 +91,7 @@ export default async function V2() {
                   className={`${HEADLINE} text-right`}
                   style={{ ...HEADLINE_STYLE, right: "5.4%", top: "69.0%", fontSize: "15.1cqw" }}
                 >
-                  <Letters text="A Day" base={0.55} />
+                  <Letters text="A Day" base={0.85} />
                 </span>
               ),
               hand: [p["a-hand"], p["day-hand"]],
@@ -103,11 +103,11 @@ export default async function V2() {
             className={HEADLINE}
             style={{ ...HEADLINE_STYLE, left: "6.4%", top: "45.8%", fontSize: "15.1cqw" }}
           >
-            <Letters text="Interaction" base={0.4} />
+            <Letters text="Interaction" base={0.7} />
           </span>
           <p
             className="font-bricolage oiad-rise absolute font-bold uppercase leading-[1.3]"
-            style={{ left: "6.4%", top: "73.5%", fontSize: "2.2cqw", animationDelay: "1.1s" }}
+            style={{ left: "6.4%", top: "73.5%", fontSize: "2.2cqw", animationDelay: "1.4s" }}
           >
             A growing collection of
             <br />

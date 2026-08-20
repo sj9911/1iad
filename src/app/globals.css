@@ -109,35 +109,52 @@ html {
   animation: oiad-inflate 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
-/* viewfinder entrance: brackets expand from center while the mask opens */
-@keyframes oiad-corners-open {
-  0% {
-    opacity: 0;
-    transform: scale(0.3);
-  }
-  25% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+/* viewfinder entrance: brackets meet at center, hold, then fly to their corners
+   (path order in corners.svg: 1 BR, 2 BL, 3 TR, 4 TL) */
+.oiad-corners-open path {
+  animation: 1.1s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
-.oiad-corners-open {
-  animation: oiad-corners-open 0.7s cubic-bezier(0.23, 1, 0.32, 1) both;
+.oiad-corners-open path:nth-of-type(1) { animation-name: oiad-corner-br; }
+.oiad-corners-open path:nth-of-type(2) { animation-name: oiad-corner-bl; }
+.oiad-corners-open path:nth-of-type(3) { animation-name: oiad-corner-tr; }
+.oiad-corners-open path:nth-of-type(4) { animation-name: oiad-corner-tl; }
+
+@keyframes oiad-corner-br {
+  0% { opacity: 0; transform: translate(-350px, -145px); }
+  12% { opacity: 1; transform: translate(-350px, -145px); }
+  40% { opacity: 1; transform: translate(-350px, -145px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes oiad-corner-bl {
+  0% { opacity: 0; transform: translate(350px, -145px); }
+  12% { opacity: 1; transform: translate(350px, -145px); }
+  40% { opacity: 1; transform: translate(350px, -145px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes oiad-corner-tr {
+  0% { opacity: 0; transform: translate(-350px, 145px); }
+  12% { opacity: 1; transform: translate(-350px, 145px); }
+  40% { opacity: 1; transform: translate(-350px, 145px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes oiad-corner-tl {
+  0% { opacity: 0; transform: translate(350px, 145px); }
+  12% { opacity: 1; transform: translate(350px, 145px); }
+  40% { opacity: 1; transform: translate(350px, 145px); }
+  100% { opacity: 1; transform: none; }
 }
 
 @keyframes oiad-mask-open {
   from {
-    clip-path: inset(42% 42% 42% 42%);
+    clip-path: inset(46% 46% 46% 46%);
   }
   to {
     clip-path: inset(0 0 0 0);
   }
 }
 .oiad-mask-open {
-  animation: oiad-mask-open 0.7s cubic-bezier(0.23, 1, 0.32, 1) both;
-  animation-delay: 0.05s;
+  animation: oiad-mask-open 0.66s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: 0.44s;
 }
 
 /* entrance for everything else: rise + settle, never from scale(0) */
@@ -160,7 +177,7 @@ html {
   .oiad-steal-drop,
   .oiad-inflate,
   .oiad-rise,
-  .oiad-corners-open,
+  .oiad-corners-open path,
   .oiad-mask-open {
     animation: none;
   }
