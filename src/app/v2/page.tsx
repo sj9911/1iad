@@ -173,9 +173,6 @@ export default async function V2() {
               {/* interaction window */}
               <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-background px-10">
                 {StageComponent ? <StageComponent /> : <Component />}
-                <span aria-hidden="true" className="oiad-focus pointer-events-none absolute inset-0 z-10">
-                  <span /><span /><span /><span />
-                </span>
               </div>
               {/* text and cta: number for balance, arrow on hover */}
               <div className="font-bricolage flex items-center justify-between px-2 pb-1 pt-3">
