@@ -20,7 +20,7 @@ const stageComponents: Record<string, ComponentType> = {
 // gallery-card overrides: full-bleed like the stage, but scaled for the card
 const cardComponents: Record<string, ComponentType> = {
   "infinite-icon-grid": function IconGridCard() {
-    return <IconGrid className="absolute inset-0" cell={120} iconSize={56} />;
+    return <IconGrid className="absolute inset-0" cell={96} iconSize={44} />;
   },
 };
 
