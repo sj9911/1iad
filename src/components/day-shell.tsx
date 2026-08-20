@@ -74,8 +74,14 @@ export function DayShell({
           </span>
         </button>
 
+        {/* full-width rule under the button row */}
+        <span
+          aria-hidden="true"
+          className="absolute inset-x-0 top-[104px] border-t border-hairline"
+        />
+
         {/* pt clears the fixed Back pill sitting at the viewport's top-left */}
-        <div className="font-bricolage h-full w-[40vw] overflow-y-auto p-8 pt-28">
+        <div className="font-bricolage h-full w-[40vw] overflow-y-auto p-8 pt-32">
           <p className="text-2xl font-semibold leading-tight">{day.title}</p>
           <p className="mt-1 text-base font-semibold tabular-nums text-muted">
             {String(day.day).padStart(3, "0")}
