@@ -12,7 +12,7 @@
 
 import * as React from "react";
 
-const CELL = 88; // px per grid cell
+const CELL = 230; // px per grid cell
 const MAX_DELAY = 500; // ms of random wait before a fully visible icon pops in
 const FRICTION = 0.94;
 
@@ -180,7 +180,7 @@ export function IconGrid({
           style={{ width: CELL, height: CELL, opacity: 0 }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img alt="" draggable={false} className="pointer-events-none size-[55px]" />
+          <img alt="" draggable={false} className="pointer-events-none size-[110px]" />
         </div>
       ))}
     </div>
