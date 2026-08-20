@@ -34,12 +34,14 @@ function tick() {
 const SPRING = { type: "spring", stiffness: 400, damping: 26 } as const;
 
 const SPARKS = [
-  { angle: 20, dist: 18, size: 3 },
-  { angle: 80, dist: 21, size: 2.5 },
-  { angle: 140, dist: 17, size: 3 },
-  { angle: 200, dist: 20, size: 2.5 },
-  { angle: 260, dist: 18, size: 3 },
-  { angle: 320, dist: 21, size: 2.5 },
+  { angle: 20, dist: 22, size: 5 },
+  { angle: 65, dist: 26, size: 4 },
+  { angle: 110, dist: 21, size: 5 },
+  { angle: 155, dist: 25, size: 4 },
+  { angle: 200, dist: 22, size: 5 },
+  { angle: 245, dist: 26, size: 4 },
+  { angle: 290, dist: 21, size: 5 },
+  { angle: 335, dist: 25, size: 4 },
 ];
 
 function Cell({
@@ -174,8 +176,8 @@ export function FloatingNav({ stars }: { stars: number | null }) {
                           opacity: 0,
                         }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.55, ease: "easeOut", delay: 0.05 }}
-                        className="absolute rounded-full bg-[#CA8A04] dark:bg-[#FBBF24]"
+                        transition={{ duration: 0.7, ease: "easeOut", delay: 0.05 }}
+                        className="absolute rounded-full bg-[#CA8A04] shadow-[0_0_6px_rgba(202,138,4,0.8)] dark:bg-[#FBBF24] dark:shadow-[0_0_6px_rgba(251,191,36,0.9)]"
                         style={{ width: sp.size, height: sp.size }}
                       />
                     );
