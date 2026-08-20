@@ -277,16 +277,20 @@ export function FloatingNav({
               layout
               key="badges"
               {...birth}
-              className="relative z-10 rounded-2xl border border-hairline bg-linear-to-t from-surface/20 to-surface p-1.5"
+              className="relative z-10 rounded-2xl border border-hairline p-1.5"
             >
               <span
                 aria-hidden="true"
-                className="absolute inset-0 -z-10 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,rgba(0,0,0,0.5),black)]"
+                className="absolute inset-0 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,rgba(0,0,0,0.5),black)]"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface"
               />
               <button
                 onClick={badgesClick}
                 aria-label="OIAD badges"
-                className="flex h-11 items-center rounded-xl px-3 transition-colors duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.09] [&_.oiad-gear]:cursor-pointer [&_.oiad-heartbtn]:cursor-pointer"
+                className="relative flex h-11 items-center rounded-xl px-3 transition-colors duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.09] [&_.oiad-gear]:cursor-pointer [&_.oiad-heartbtn]:cursor-pointer"
               >
                 <svg
                   viewBox={badges.viewBox}
@@ -302,11 +306,15 @@ export function FloatingNav({
           layout
           ref={dockRef}
           transition={GOO_SPRING}
-          className="relative flex items-center gap-1 rounded-2xl border border-hairline bg-linear-to-t from-surface/20 to-surface p-1.5"
+          className="relative flex items-center gap-1 rounded-2xl border border-hairline p-1.5"
         >
           <span
             aria-hidden="true"
-            className="absolute inset-0 -z-10 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,rgba(0,0,0,0.5),black)]"
+            className="absolute inset-0 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,rgba(0,0,0,0.5),black)]"
+          />
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface"
           />
         <Cell
           hovered={hovered === 0}
