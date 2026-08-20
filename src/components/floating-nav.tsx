@@ -4,7 +4,12 @@
 // highlight springs between cells and stretches while traveling.
 
 import * as React from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import {
+  AnimatePresence,
+  LayoutGroup,
+  motion,
+  useReducedMotion,
+} from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   GithubIcon,
@@ -230,6 +235,10 @@ export function FloatingNav({
       </AnimatePresence>
 
       <div className="relative">
+        {/* LayoutGroup: the dock is a sibling of the pill's AnimatePresence and
+            doesn't re-render when the pill is finally removed — without the
+            group its FLIP never measures and it snaps to center */}
+        <LayoutGroup>
         <div className="relative flex items-center gap-3.5">
         {/* badge pill: blurs in from behind the dock on scroll, dissolves in
             place on the way up. Sync mode (not popLayout): the pill must keep
@@ -372,6 +381,7 @@ export function FloatingNav({
         </Cell>
         </motion.div>
         </div>
+        </LayoutGroup>
       </div>
       </div>
     </nav>
