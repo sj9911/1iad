@@ -238,8 +238,7 @@ export function FloatingNav({
               animate={{ opacity: 1, x: 0, filter: "blur(0px)", transition: MORPH }}
               exit={{
                 opacity: 0,
-                y: 12,
-                filter: "blur(8px)",
+                filter: "blur(10px)",
                 transition: reduced
                   ? { duration: 0 }
                   : { duration: 0.8, ease: "easeInOut" },
