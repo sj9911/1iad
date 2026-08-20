@@ -95,8 +95,11 @@ export function IconGrid({
             pop.vel = 0;
             pop.showAt = -1;
           }
+          // "inside" once at least 75% of the cell's area is in view
+          const visW = Math.min(px + CELL, s.w) - Math.max(px, 0);
+          const visH = Math.min(py + CELL, s.h) - Math.max(py, 0);
           const inside =
-            px >= 0 && py >= 0 && px + CELL <= s.w && py + CELL <= s.h;
+            visW > 0 && visH > 0 && visW * visH >= 0.75 * CELL * CELL;
           let target = 0;
           if (inside) {
             if (pop.showAt < 0) pop.showAt = now + Math.random() * MAX_DELAY;
