@@ -121,6 +121,29 @@ function Badges({ piece }: { piece: Piece }) {
   const raceT = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const gearAngle = React.useRef(0);
 
+  const calm = React.useRef(false);
+
+  function heartEl() {
+    return ref.current?.querySelector<SVGPathElement>(".oiad-heartbeat");
+  }
+  function calmHeart() {
+    const heart = heartEl();
+    if (!heart) return;
+    // freeze at the current mid-beat scale, then ease down to rest
+    const m = getComputedStyle(heart).transform;
+    heart.style.transform = m === "none" ? "scale(1)" : m;
+    heart.classList.add("oiad-calm");
+    requestAnimationFrame(() => {
+      heart.style.transform = "scale(1)";
+    });
+  }
+  function wakeHeart() {
+    const heart = heartEl();
+    if (!heart) return;
+    heart.classList.remove("oiad-calm");
+    heart.style.removeProperty("transform");
+  }
+
   function onClick(e: React.MouseEvent) {
     const target = e.target as Element;
     const svg = ref.current!;
@@ -167,6 +190,20 @@ function Badges({ piece }: { piece: Piece }) {
         className="oiad-rise absolute [&_.oiad-gear]:cursor-pointer [&_.oiad-heartbtn]:cursor-pointer"
         style={{ ...box(piece), animationDelay: "0.75s" }}
         onClick={onClick}
+        onMouseOver={(e) => {
+          if (!matchMedia("(hover: hover)").matches) return;
+          if ((e.target as Element).closest(".oiad-heartbtn") && !calm.current) {
+            calm.current = true;
+            calmHeart();
+          }
+        }}
+        onMouseOut={(e) => {
+          const to = e.relatedTarget as Element | null;
+          if (calm.current && !to?.closest?.(".oiad-heartbtn")) {
+            calm.current = false;
+            wakeHeart();
+          }
+        }}
         dangerouslySetInnerHTML={{ __html: piece.inner }}
       />
       {burst > 0 && (
