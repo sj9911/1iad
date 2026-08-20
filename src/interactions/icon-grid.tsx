@@ -15,7 +15,6 @@ import * as React from "react";
 const CELL = 88; // px per grid cell
 const MAX_DELAY = 500; // ms of random wait before a fully visible icon pops in
 const FRICTION = 0.94;
-const DRIFT = { x: 0.18, y: 0.12 }; // idle auto-pan, px per frame
 
 const DEFAULT_ICONS = Array.from(
   { length: 50 },
@@ -73,9 +72,6 @@ export function IconGrid({
       if (!s.dragging) {
         s.vx *= FRICTION;
         s.vy *= FRICTION;
-        // ease back into the idle drift once the throw settles
-        s.vx += (DRIFT.x - s.vx) * 0.015;
-        s.vy += (DRIFT.y - s.vy) * 0.015;
         s.ox += s.vx;
         s.oy += s.vy;
       }
@@ -176,7 +172,7 @@ export function IconGrid({
           style={{ width: CELL, height: CELL, transform: "scale(0)" }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img alt="" draggable={false} className="pointer-events-none size-11" />
+          <img alt="" draggable={false} className="pointer-events-none size-[55px]" />
         </div>
       ))}
     </div>
