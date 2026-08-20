@@ -58,11 +58,12 @@ export function IconGrid({
 
     const totalW = COLS * CELL;
     const totalH = ROWS * CELL;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     // per-slot pop state, reset whenever the slot wraps to a new world cell
     const pops = Array.from({ length: COLS * ROWS }, () => ({
       wc: NaN,
       wr: NaN,
-      scale: 0,
+      p: 0, // pop progress 0..1 (springs slightly past 1 on entry)
       vel: 0,
       showAt: -1,
     }));
@@ -90,7 +91,7 @@ export function IconGrid({
           if (pop.wc !== wc || pop.wr !== wr) {
             pop.wc = wc;
             pop.wr = wr;
-            pop.scale = 0;
+            pop.p = 0;
             pop.vel = 0;
             pop.showAt = -1;
           }
@@ -104,16 +105,23 @@ export function IconGrid({
             pop.showAt = -1;
           }
           if (target === 1) {
-            // under-damped spring: overshoots past 1 and bounces back
-            pop.vel += (1 - pop.scale) * 0.24;
-            pop.vel *= 0.7;
-            pop.scale += pop.vel;
+            if (reduced) {
+              pop.p += (1 - pop.p) * 0.25; // gentle fade, no bounce
+            } else {
+              // soft spring: settles in ~350ms with a barely-there overshoot
+              pop.vel += (1 - pop.p) * 0.12;
+              pop.vel *= 0.78;
+              pop.p += pop.vel;
+            }
           } else {
             pop.vel = 0;
-            pop.scale += (0 - pop.scale) * 0.35;
-            if (pop.scale < 0.01) pop.scale = 0;
+            pop.p += (0 - pop.p) * 0.3; // exit mirrors the entrance, but snappier
+            if (pop.p < 0.005) pop.p = 0;
           }
-          node.style.transform = `translate(${px}px, ${py}px) scale(${pop.scale})`;
+          // never from scale(0): icons rise from 0.6 while fading in
+          const scale = 0.6 + 0.4 * pop.p;
+          node.style.opacity = String(Math.min(1, pop.p / 0.6));
+          node.style.transform = `translate(${px}px, ${py}px) scale(${scale})`;
           const idx =
             (((wc * 7 + wr * 13) % icons.length) + icons.length) %
             icons.length;
@@ -169,7 +177,7 @@ export function IconGrid({
             slotRefs.current[k] = el;
           }}
           className="absolute left-0 top-0 flex items-center justify-center will-change-transform"
-          style={{ width: CELL, height: CELL, transform: "scale(0)" }}
+          style={{ width: CELL, height: CELL, opacity: 0 }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img alt="" draggable={false} className="pointer-events-none size-[55px]" />
