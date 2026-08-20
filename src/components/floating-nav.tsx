@@ -32,6 +32,15 @@ function tick() {
 
 const SPRING = { type: "spring", stiffness: 400, damping: 26 } as const;
 
+const SPARKS = [
+  { angle: 20, dist: 18, size: 3 },
+  { angle: 80, dist: 21, size: 2.5 },
+  { angle: 140, dist: 17, size: 3 },
+  { angle: 200, dist: 20, size: 2.5 },
+  { angle: 260, dist: 18, size: 3 },
+  { angle: 320, dist: 21, size: 2.5 },
+];
+
 function Cell({
   children,
   hovered,
@@ -62,7 +71,7 @@ function Cell({
   );
 }
 
-export function FloatingNav({ stars }: { stars: number | null }) {
+export function FloatingNav() {
   const [hovered, setHovered] = React.useState<number | null>(null);
   const [info, setInfo] = React.useState(false);
   const [dark, setDark] = React.useState<boolean | null>(null);
@@ -120,13 +129,60 @@ export function FloatingNav({ stars }: { stars: number | null }) {
           aria-label="OIAD on GitHub"
           onClick={() => window.open("https://github.com/sj9911/oiad", "_blank")}
         >
-          <IconBrandGithub size={18} stroke={2} aria-hidden="true" />
-          {stars !== null && (
-            <span className="font-bricolage flex items-center gap-1 text-xs font-bold tabular-nums">
-              <IconStarFilled size={12} aria-hidden="true" />
-              {stars}
-            </span>
-          )}
+          <span className="relative flex size-[18px] items-center justify-center">
+            {/* github mark blurs away on hover */}
+            <motion.span
+              animate={
+                hovered === 0
+                  ? { opacity: 0, scale: 0.5, filter: "blur(5px)" }
+                  : { opacity: 1, scale: 1, filter: "blur(0px)" }
+              }
+              transition={SPRING}
+              className="flex"
+            >
+              <IconBrandGithub size={18} stroke={2} aria-hidden="true" />
+            </motion.span>
+            {/* golden star blurs in */}
+            <motion.span
+              animate={
+                hovered === 0
+                  ? { opacity: 1, scale: 1, rotate: 0, filter: "blur(0px)" }
+                  : { opacity: 0, scale: 0.4, rotate: -40, filter: "blur(5px)" }
+              }
+              transition={{ type: "spring", stiffness: 450, damping: 20 }}
+              className="absolute inset-0 flex items-center justify-center text-[#FBBF24]"
+            >
+              <span className="flex [filter:drop-shadow(0_0_5px_rgba(251,191,36,0.9))]">
+                <IconStarFilled size={17} aria-hidden="true" />
+              </span>
+            </motion.span>
+            {/* one-shot sparkle burst */}
+            <AnimatePresence>
+              {hovered === 0 && (
+                <span className="pointer-events-none absolute left-1/2 top-1/2">
+                  {SPARKS.map((sp, i) => {
+                    const rad = (sp.angle * Math.PI) / 180;
+                    return (
+                      <motion.span
+                        key={i}
+                        initial={{ x: 0, y: 0, scale: 0, opacity: 1 }}
+                        animate={{
+                          x: Math.cos(rad) * sp.dist,
+                          y: Math.sin(rad) * sp.dist,
+                          scale: 1,
+                          opacity: 0,
+                        }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.55, ease: "easeOut", delay: 0.05 }}
+                        className="absolute rounded-full bg-[#FBBF24]"
+                        style={{ width: sp.size, height: sp.size }}
+                      />
+                    );
+                  })}
+                </span>
+              )}
+            </AnimatePresence>
+          </span>
         </Cell>
 
         <Cell
