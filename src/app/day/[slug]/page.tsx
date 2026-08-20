@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { interactions } from "@/interactions/registry";
-import { FloatingNav, GlassLayers } from "@/components/floating-nav";
+import { GlassLayers } from "@/components/floating-nav";
+import { DayShell } from "@/components/day-shell";
 import { getStars } from "@/lib/stars";
 import { getNavBadges } from "@/lib/badges";
 import { SITE_URL } from "@/interactions/meta";
@@ -27,10 +28,9 @@ export default async function DayPage({
 
   return (
     <main>
-      <FloatingNav
+      <DayShell
         stars={stars}
         badges={badges}
-        alwaysBadges
         day={{
           title: item.title,
           day: item.day,
@@ -38,7 +38,7 @@ export default async function DayPage({
           prompt,
           install,
         }}
-      />
+      >
       {/* The stage — record this section as-is */}
       <section
         className="relative flex min-h-svh flex-col items-center justify-center px-6"
@@ -72,6 +72,7 @@ export default async function DayPage({
 
         {item.StageComponent ? <item.StageComponent /> : <item.Component />}
       </section>
+      </DayShell>
     </main>
   );
 }

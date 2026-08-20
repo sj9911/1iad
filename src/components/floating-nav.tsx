@@ -12,7 +12,6 @@ import {
 } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Cancel01Icon,
   Copy01Icon,
   GithubIcon,
   InformationCircleIcon,
@@ -24,7 +23,7 @@ import {
 } from "@hugeicons/core-free-icons";
 
 let audioCtx: AudioContext | null = null;
-function thump() {
+export function thump() {
   try {
     audioCtx ??= new AudioContext();
     const t = audioCtx.currentTime;
@@ -40,7 +39,7 @@ function thump() {
     osc.stop(t + 0.15);
   } catch {}
 }
-function tick() {
+export function tick() {
   try {
     audioCtx ??= new AudioContext();
     const t = audioCtx.currentTime;
@@ -173,16 +172,20 @@ export function FloatingNav({
   badges,
   alwaysBadges = false,
   day,
+  dayOpen = false,
+  onDayOpenChange,
 }: {
   stars: number | null;
   badges?: NavBadges;
   // day pages have no scroll, so the badge pill shows from the start
   alwaysBadges?: boolean;
   day?: NavDay;
+  // sidebar state is owned by DayShell, which renders the sidebar in-flow
+  dayOpen?: boolean;
+  onDayOpenChange?: (open: boolean) => void;
 }) {
   const [hovered, setHovered] = React.useState<number | null>(null);
   const [info, setInfo] = React.useState(false);
-  const [dayOpen, setDayOpen] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
   const [dark, setDark] = React.useState<boolean | null>(null);
   const [scrolled, setScrolled] = React.useState(false);
@@ -245,11 +248,14 @@ export function FloatingNav({
   }
 
   return (
-    <nav
+    <motion.nav
       // flexbox centering, not translate: a CSS transform on this ancestor
       // corrupts the dock's FLIP layout measurements (dock jumps to center
       // instead of gliding when the pill unmounts)
       className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center"
+      // re-center within the viewport left over next to the DayShell sidebar
+      animate={{ left: day && dayOpen ? "40vw" : "0vw" }}
+      transition={MORPH}
       onMouseLeave={() => setHovered(null)}
     >
       <div className="pointer-events-auto relative">
@@ -279,74 +285,6 @@ export function FloatingNav({
               </a>
             </p>
           </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* interaction details sidebar */}
-      <AnimatePresence>
-        {dayOpen && day && (
-          <>
-            <motion.div
-              key="day-scrim"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              onClick={() => setDayOpen(false)}
-              className="pointer-events-auto fixed inset-0 z-40 bg-black/20"
-            />
-            <motion.aside
-              key="day-panel"
-              initial={{ x: "110%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "110%" }}
-              transition={
-                reduced
-                  ? { duration: 0 }
-                  : { type: "spring", duration: 0.5, bounce: 0 }
-              }
-              className="font-bricolage pointer-events-auto fixed bottom-4 right-4 top-4 z-50 w-[340px] overflow-y-auto rounded-2xl border border-hairline bg-surface p-6 shadow-[0_12px_40px_rgba(0,0,0,0.15)]"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-lg font-semibold leading-tight">
-                    {day.title}
-                  </p>
-                  <p className="mt-1 text-sm font-semibold tabular-nums text-muted">
-                    {String(day.day).padStart(3, "0")}
-                  </p>
-                </div>
-                <button
-                  aria-label="Close"
-                  onClick={() => setDayOpen(false)}
-                  className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors duration-150 hover:bg-black/[0.06] hover:text-foreground dark:hover:bg-white/[0.09]"
-                >
-                  <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={2} aria-hidden="true" />
-                </button>
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-muted">
-                {day.description}
-              </p>
-              <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-muted">
-                Install
-              </p>
-              <code className="mt-2 block break-all rounded-xl border border-hairline bg-background p-3 font-mono text-xs leading-relaxed">
-                {day.install}
-              </code>
-              <button
-                onClick={copyPrompt}
-                className="mt-3 flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-foreground text-sm font-semibold text-background transition-opacity duration-150 hover:opacity-85"
-              >
-                <HugeiconsIcon
-                  icon={copied ? Tick02Icon : Copy01Icon}
-                  size={16}
-                  strokeWidth={2}
-                  aria-hidden="true"
-                />
-                {copied ? "Copied" : "Copy AI prompt"}
-              </button>
-            </motion.aside>
-          </>
         )}
       </AnimatePresence>
 
@@ -389,7 +327,7 @@ export function FloatingNav({
               onHover={() => setHovered(3)}
               aria-label="Interaction details"
               aria-expanded={dayOpen}
-              onClick={() => setDayOpen((v) => !v)}
+              onClick={() => onDayOpenChange?.(!dayOpen)}
             >
               <HugeiconsIcon icon={SidebarRightIcon} size={21} strokeWidth={2} aria-hidden="true" />
             </Cell>
@@ -551,6 +489,6 @@ export function FloatingNav({
         </LayoutGroup>
       </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 }
