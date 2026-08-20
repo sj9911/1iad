@@ -281,7 +281,7 @@ export function FloatingNav({
             >
               <span
                 aria-hidden="true"
-                className="absolute inset-0 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,rgba(0,0,0,0.5),black)]"
+                className="absolute inset-0 rounded-2xl backdrop-blur-xl"
               />
               <span
                 aria-hidden="true"
@@ -310,7 +310,7 @@ export function FloatingNav({
         >
           <span
             aria-hidden="true"
-            className="absolute inset-0 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,rgba(0,0,0,0.5),black)]"
+            className="absolute inset-0 rounded-2xl backdrop-blur-xl"
           />
           <span
             aria-hidden="true"
