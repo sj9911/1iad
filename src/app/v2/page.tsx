@@ -81,7 +81,15 @@ export default async function V2() {
   return (
     <main className="min-h-svh">
       <FloatingNav stars={stars} />
-      <header className="mx-auto max-w-3xl px-6 pt-14">
+      <header
+        className="px-6 pb-16 pt-14"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, var(--dot) 1px, transparent 1px)",
+          backgroundSize: "18px 18px",
+        }}
+      >
+        <div className="mx-auto max-w-3xl">
         <h1 className="sr-only">One Interaction A Day</h1>
         <HeroFlicker
           statics={[p.corners]}
@@ -139,6 +147,7 @@ export default async function V2() {
             animated React components.
           </p>
         </HeroFlicker>
+        </div>
       </header>
     </main>
   );
