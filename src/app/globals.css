@@ -30,7 +30,7 @@
   --accent: #2997ff;
   --hairline: rgba(255, 255, 255, 0.14);
   --dot: rgba(255, 255, 255, 0.18);
-  --oiad-blue: #1d46fc;
+  --oiad-blue: #3e64ff; /* lifted for ~4.5:1 on black; print blue reads too dark here */
   --hairline-solid: #242424; /* rgba(255,255,255,.14) blended over #000 */
 }
 
@@ -97,6 +97,13 @@ html {
   transform-box: fill-box;
   transform-origin: center;
   transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* svg groups only receive pointer events on painted pixels; make the whole
+   badge rectangle interactive, not just the strokes */
+.oiad-heartbtn,
+.oiad-gear {
+  pointer-events: bounding-box;
 }
 
 /* steal arrow drops and bounces back after copying */
