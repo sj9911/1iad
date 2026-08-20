@@ -71,7 +71,7 @@ function Cell({
   );
 }
 
-export function FloatingNav() {
+export function FloatingNav({ stars }: { stars: number | null }) {
   const [hovered, setHovered] = React.useState<number | null>(null);
   const [info, setInfo] = React.useState(false);
   const [dark, setDark] = React.useState<boolean | null>(null);
@@ -183,6 +183,15 @@ export function FloatingNav() {
               )}
             </AnimatePresence>
           </span>
+          {stars !== null && (
+            <span
+              className={`font-bricolage text-xs font-bold tabular-nums transition-colors duration-200 ${
+                hovered === 0 ? "text-[#FBBF24]" : ""
+              }`}
+            >
+              {stars}
+            </span>
+          )}
         </Cell>
 
         <Cell

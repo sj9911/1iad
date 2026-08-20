@@ -7,6 +7,18 @@ import { HeroFlicker, type Piece } from "@/components/hero-flicker";
 import { FloatingNav } from "@/components/floating-nav";
 import { interactionsMeta, SITE_URL } from "@/interactions/meta";
 
+async function getStars(): Promise<number | null> {
+  try {
+    const r = await fetch("https://api.github.com/repos/sj9911/oiad", {
+      next: { revalidate: 3600 },
+    });
+    if (!r.ok) return null;
+    return (await r.json()).stargazers_count ?? null;
+  } catch {
+    return null;
+  }
+}
+
 
 const latest = interactionsMeta[interactionsMeta.length - 1];
 const INSTALL = `npx shadcn@latest add ${SITE_URL}/r/${latest.slug}`;
@@ -58,6 +70,7 @@ function Letters({ text, base }: { text: string; base: number }) {
 }
 
 export default async function V2() {
+  const stars = await getStars();
   const p = Object.fromEntries(
     await Promise.all(
       Object.keys(ART).map(async (n) => [n, await readPiece(n)]),
@@ -66,7 +79,7 @@ export default async function V2() {
 
   return (
     <main className="min-h-svh">
-      <FloatingNav />
+      <FloatingNav stars={stars} />
       <header className="mx-auto max-w-3xl px-6 pt-14">
         <h1 className="sr-only">One Interaction A Day</h1>
         <HeroFlicker
