@@ -1,7 +1,8 @@
 "use client";
 
-// v2 hero, composited from individual pieces so "One" and "A Day" can
-// each blink to their handwritten version on their own random clocks.
+// v2 hero: decorative SVG pieces + real text, composited in the poster's
+// 738x386 coordinate space. Each word slot blinks to its handwritten SVG
+// on its own random clock.
 
 import * as React from "react";
 
@@ -17,7 +18,7 @@ export type Piece = {
   h: number;
 };
 
-function PieceSvg({ piece }: { piece: Piece }) {
+export function PieceSvg({ piece }: { piece: Piece }) {
   return (
     <svg
       viewBox={piece.viewBox}
@@ -33,8 +34,15 @@ function PieceSvg({ piece }: { piece: Piece }) {
   );
 }
 
-// shows `print` normally; every 2-4s blinks to `hand` for 200-350ms
-function WordSlot({ print, hand }: { print: Piece[]; hand: Piece[] }) {
+// shows the real-text `print` normally; every 2-4s blinks to the
+// handwritten SVG pieces for 200-350ms
+function WordSlot({
+  print,
+  hand,
+}: {
+  print: React.ReactNode;
+  hand: Piece[];
+}) {
   const [showHand, setShowHand] = React.useState(false);
 
   React.useEffect(() => {
@@ -54,11 +62,7 @@ function WordSlot({ print, hand }: { print: Piece[]; hand: Piece[] }) {
 
   return (
     <>
-      <span className={showHand ? "invisible" : ""}>
-        {print.map((p, i) => (
-          <PieceSvg key={i} piece={p} />
-        ))}
-      </span>
+      <span className={showHand ? "invisible" : ""}>{print}</span>
       <span className={showHand ? "" : "invisible"}>
         {hand.map((p, i) => (
           <PieceSvg key={i} piece={p} />
@@ -70,16 +74,22 @@ function WordSlot({ print, hand }: { print: Piece[]; hand: Piece[] }) {
 
 export function HeroFlicker({
   statics,
+  children,
   slots,
 }: {
   statics: Piece[];
-  slots: { print: Piece[]; hand: Piece[] }[];
+  children?: React.ReactNode; // static real-text layers
+  slots: { print: React.ReactNode; hand: Piece[] }[];
 }) {
   return (
-    <div className="relative w-full" style={{ aspectRatio: `${W} / ${H}` }}>
+    <div
+      className="relative w-full"
+      style={{ aspectRatio: `${W} / ${H}`, containerType: "inline-size" }}
+    >
       {statics.map((p, i) => (
         <PieceSvg key={i} piece={p} />
       ))}
+      {children}
       {slots.map((slot, i) => (
         <WordSlot key={i} print={slot.print} hand={slot.hand} />
       ))}

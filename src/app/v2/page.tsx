@@ -1,20 +1,15 @@
 // Homepage redesign in progress. Current home stays at / until this replaces it.
-// Piece offsets were derived by matching path coordinates against the full
-// compositions (1.svg / 2.svg, 738x386).
+// Layout lives in the poster's 738x386 coordinate space; text sizes use cqw so
+// everything scales with the container. Offsets derived from the original comps.
 import { promises as fs } from "fs";
 import path from "path";
 import { HeroFlicker, type Piece } from "@/components/hero-flicker";
 
-const PIECES: Record<string, { x: number; y: number; w: number; h: number }> = {
+const ART: Record<string, { x: number; y: number; w: number; h: number }> = {
   corners: { x: 0, y: 61.2, w: 738, h: 325 },
   globe: { x: 461.45, y: 0, w: 271, h: 271 },
   "top-icon": { x: 318.17, y: 115.73, w: 119, h: 34 },
-  interaction: { x: 47.08, y: 185.47, w: 646, h: 76 },
-  copy: { x: 47, y: 285.51, w: 256, h: 30 },
-  steal: { x: 47.9, y: 336.51, w: 115, h: 11 },
-  one: { x: 43.58, y: 97.47, w: 202, h: 76 },
   "one-hand": { x: 40.32, y: 94.23, w: 216, h: 83 },
-  "a-day": { x: 410.88, y: 275, w: 282, h: 73 },
   "a-hand": { x: 409.16, y: 265.97, w: 68, h: 89 },
   "day-hand": { x: 502.4, y: 262.46, w: 199, h: 119 },
 };
@@ -29,33 +24,74 @@ async function readPiece(name: string): Promise<Piece> {
     .replace(/^[\s\S]*?<svg[^>]*>/, "")
     .replace(/<\/svg>[\s\S]*$/, "")
     .replaceAll('"black"', '"currentColor"');
-  return { viewBox, inner, ...PIECES[name] };
+  return { viewBox, inner, ...ART[name] };
 }
+
+const HEADLINE =
+  "font-bricolage absolute font-[800] uppercase leading-none tracking-tight";
 
 export default async function V2() {
   const p = Object.fromEntries(
     await Promise.all(
-      Object.keys(PIECES).map(async (n) => [n, await readPiece(n)]),
+      Object.keys(ART).map(async (n) => [n, await readPiece(n)]),
     ),
   ) as Record<string, Piece>;
 
   return (
     <main className="min-h-svh">
       <header className="mx-auto max-w-3xl px-6 pt-14">
+        <h1 className="sr-only">One Interaction A Day</h1>
         <HeroFlicker
-          statics={[
-            p.corners,
-            p.globe,
-            p["top-icon"],
-            p.interaction,
-            p.copy,
-            p.steal,
-          ]}
+          statics={[p.corners, p.globe, p["top-icon"]]}
           slots={[
-            { print: [p.one], hand: [p["one-hand"]] },
-            { print: [p["a-day"]], hand: [p["a-hand"], p["day-hand"]] },
+            {
+              print: (
+                <span
+                  aria-hidden="true"
+                  className={HEADLINE}
+                  style={{ left: "5.9%", top: "23.6%", fontSize: "13.9cqw" }}
+                >
+                  One
+                </span>
+              ),
+              hand: [p["one-hand"]],
+            },
+            {
+              print: (
+                <span
+                  aria-hidden="true"
+                  className={`${HEADLINE} text-right`}
+                  style={{ right: "6.1%", top: "69.6%", fontSize: "13.9cqw" }}
+                >
+                  A&nbsp;Day
+                </span>
+              ),
+              hand: [p["a-hand"], p["day-hand"]],
+            },
           ]}
-        />
+        >
+          <span
+            aria-hidden="true"
+            className={HEADLINE}
+            style={{ left: "6.4%", top: "46.4%", fontSize: "13.9cqw" }}
+          >
+            Interaction
+          </span>
+          <p
+            className="font-bricolage absolute font-bold uppercase leading-[1.3]"
+            style={{ left: "6.4%", top: "73.5%", fontSize: "2.2cqw" }}
+          >
+            A growing collection of
+            <br />
+            animated React components.
+          </p>
+          <p
+            className="font-bricolage absolute font-bold uppercase text-[#002FFF]"
+            style={{ left: "6.5%", top: "86.6%", fontSize: "2.2cqw" }}
+          >
+            Free to steal
+          </p>
+        </HeroFlicker>
       </header>
     </main>
   );
