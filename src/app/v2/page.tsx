@@ -106,8 +106,8 @@ export default async function V2() {
             <Letters text="Interaction" base={0.15} />
           </span>
           <p
-            className="font-bricolage absolute font-bold uppercase leading-[1.3]"
-            style={{ left: "6.4%", top: "73.5%", fontSize: "2.2cqw" }}
+            className="font-bricolage oiad-rise absolute font-bold uppercase leading-[1.3]"
+            style={{ left: "6.4%", top: "73.5%", fontSize: "2.2cqw", animationDelay: "0.9s" }}
           >
             A growing collection of
             <br />

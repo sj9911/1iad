@@ -66,12 +66,20 @@ function box(p: Piece): React.CSSProperties {
   };
 }
 
-export function PieceSvg({ piece }: { piece: Piece }) {
+export function PieceSvg({
+  piece,
+  className = "",
+  delay,
+}: {
+  piece: Piece;
+  className?: string;
+  delay?: number;
+}) {
   return (
     <svg
       viewBox={piece.viewBox}
-      className="absolute"
-      style={box(piece)}
+      className={`absolute ${className}`}
+      style={{ ...box(piece), animationDelay: delay ? `${delay}s` : undefined }}
       dangerouslySetInnerHTML={{ __html: piece.inner }}
     />
   );
@@ -144,8 +152,8 @@ function Badges({ piece }: { piece: Piece }) {
       <svg
         ref={ref}
         viewBox={piece.viewBox}
-        className="absolute [&_.oiad-gear]:cursor-pointer [&_.oiad-heartbtn]:cursor-pointer"
-        style={box(piece)}
+        className="oiad-rise absolute [&_.oiad-gear]:cursor-pointer [&_.oiad-heartbtn]:cursor-pointer"
+        style={{ ...box(piece), animationDelay: "0.2s" }}
         onClick={onClick}
         dangerouslySetInnerHTML={{ __html: piece.inner }}
       />
@@ -229,11 +237,14 @@ function Globe({ piece }: { piece: Piece }) {
   }
 
   return (
+    <div
+      className="oiad-rise absolute"
+      style={{ ...box(piece), animationDelay: "0.1s" }}
+    >
     <svg
       ref={ref}
       viewBox={piece.viewBox}
-      className="absolute cursor-grab touch-none select-none active:cursor-grabbing"
-      style={box(piece)}
+      className="h-full w-full cursor-grab touch-none select-none active:cursor-grabbing"
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         const s = st.current;
@@ -257,6 +268,7 @@ function Globe({ piece }: { piece: Piece }) {
       onPointerCancel={() => (st.current.dragging = false)}
       dangerouslySetInnerHTML={{ __html: piece.inner }}
     />
+    </div>
   );
 }
 
@@ -271,8 +283,8 @@ function Steal({ copyText }: { copyText: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 1400);
       }}
-      className="font-bricolage absolute flex cursor-pointer items-center gap-[0.8cqw] font-bold uppercase text-[#002FFF]"
-      style={{ left: "6.5%", top: "86.6%", fontSize: "2.2cqw" }}
+      className="font-bricolage oiad-rise absolute flex cursor-pointer items-center gap-[0.8cqw] font-bold uppercase text-[#002FFF]"
+      style={{ left: "6.5%", top: "86.6%", fontSize: "2.2cqw", animationDelay: "1.05s" }}
     >
       {copied ? "Copied." : "Free to steal"}
       <svg
@@ -303,11 +315,11 @@ export function HeroFlicker({
 }) {
   return (
     <div
-      className="oiad-fade relative w-full"
+      className="relative w-full"
       style={{ aspectRatio: `${W} / ${H}`, containerType: "inline-size" }}
     >
       {statics.map((p, i) => (
-        <PieceSvg key={i} piece={p} />
+        <PieceSvg key={i} piece={p} className="oiad-rise" delay={i * 0.06} />
       ))}
       <Globe piece={globe} />
       <Badges piece={badges} />
