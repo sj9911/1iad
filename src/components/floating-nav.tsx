@@ -285,7 +285,7 @@ export function FloatingNav({
               />
               <span
                 aria-hidden="true"
-                className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface"
+                className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
               />
               <button
                 onClick={badgesClick}
@@ -314,7 +314,7 @@ export function FloatingNav({
           />
           <span
             aria-hidden="true"
-            className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface"
+            className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
           />
         <Cell
           hovered={hovered === 0}
