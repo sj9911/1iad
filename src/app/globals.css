@@ -177,6 +177,29 @@ html {
   animation-delay: 0.44s;
 }
 
+/* card hover: viewfinder brackets lock onto the interaction window */
+.oiad-focus span {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--oiad-blue);
+  opacity: 0;
+  transition:
+    opacity 0.25s ease-out,
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.oiad-focus span:nth-child(1) { top: 8px; left: 8px; border-right: 0; border-bottom: 0; border-top-left-radius: 6px; transform: translate(-7px, -7px); }
+.oiad-focus span:nth-child(2) { top: 8px; right: 8px; border-left: 0; border-bottom: 0; border-top-right-radius: 6px; transform: translate(7px, -7px); }
+.oiad-focus span:nth-child(3) { bottom: 8px; left: 8px; border-right: 0; border-top: 0; border-bottom-left-radius: 6px; transform: translate(-7px, 7px); }
+.oiad-focus span:nth-child(4) { bottom: 8px; right: 8px; border-left: 0; border-top: 0; border-bottom-right-radius: 6px; transform: translate(7px, 7px); }
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .oiad-focus span {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
 /* entrance for everything else: rise + settle, never from scale(0) */
 @keyframes oiad-rise {
   from {
@@ -200,6 +223,10 @@ html {
   .oiad-corners-open path,
   .oiad-mask-open {
     animation: none;
+  }
+  .oiad-focus span {
+    transition: opacity 0.25s ease-out;
+    transform: none;
   }
   .oiad-gear {
     transition: none;
