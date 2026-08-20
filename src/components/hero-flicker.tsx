@@ -1,24 +1,49 @@
 "use client";
 
-// v2 hero: the typeset composition flickers to the handwritten one and back.
-// "One" and "A Day" are the only parts that differ, so swapping whole
-// compositions reads as just those words flickering.
+// v2 hero, composited from individual pieces so "One" and "A Day" can
+// each blink to their handwritten version on their own random clocks.
 
 import * as React from "react";
 
-export type HeroArt = { viewBox: string; inner: string };
+const W = 738;
+const H = 386;
 
-export function HeroFlicker({ art }: { art: [HeroArt, HeroArt] }) {
-  const [hand, setHand] = React.useState(false);
+export type Piece = {
+  viewBox: string;
+  inner: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+};
 
-  // mostly typeset; every 2-4s the handwritten version blinks in briefly
+function PieceSvg({ piece }: { piece: Piece }) {
+  return (
+    <svg
+      viewBox={piece.viewBox}
+      className="absolute"
+      style={{
+        left: `${(piece.x / W) * 100}%`,
+        top: `${(piece.y / H) * 100}%`,
+        width: `${(piece.w / W) * 100}%`,
+        height: `${(piece.h / H) * 100}%`,
+      }}
+      dangerouslySetInnerHTML={{ __html: piece.inner }}
+    />
+  );
+}
+
+// shows `print` normally; every 2-4s blinks to `hand` for 200-350ms
+function WordSlot({ print, hand }: { print: Piece[]; hand: Piece[] }) {
+  const [showHand, setShowHand] = React.useState(false);
+
   React.useEffect(() => {
     let t: ReturnType<typeof setTimeout>;
     const schedule = () => {
       t = setTimeout(() => {
-        setHand(true);
+        setShowHand(true);
         t = setTimeout(() => {
-          setHand(false);
+          setShowHand(false);
           schedule();
         }, 200 + Math.random() * 150);
       }, 2000 + Math.random() * 2000);
@@ -28,16 +53,35 @@ export function HeroFlicker({ art }: { art: [HeroArt, HeroArt] }) {
   }, []);
 
   return (
-    <div className="relative w-full">
-      {art.map((a, i) => (
-        <svg
-          key={i}
-          viewBox={a.viewBox}
-          className={`w-full ${i === 0 ? "" : "absolute inset-0"} ${
-            (i === 1) === hand ? "visible" : "invisible"
-          }`}
-          dangerouslySetInnerHTML={{ __html: a.inner }}
-        />
+    <>
+      <span className={showHand ? "invisible" : ""}>
+        {print.map((p, i) => (
+          <PieceSvg key={i} piece={p} />
+        ))}
+      </span>
+      <span className={showHand ? "" : "invisible"}>
+        {hand.map((p, i) => (
+          <PieceSvg key={i} piece={p} />
+        ))}
+      </span>
+    </>
+  );
+}
+
+export function HeroFlicker({
+  statics,
+  slots,
+}: {
+  statics: Piece[];
+  slots: { print: Piece[]; hand: Piece[] }[];
+}) {
+  return (
+    <div className="relative w-full" style={{ aspectRatio: `${W} / ${H}` }}>
+      {statics.map((p, i) => (
+        <PieceSvg key={i} piece={p} />
+      ))}
+      {slots.map((slot, i) => (
+        <WordSlot key={i} print={slot.print} hand={slot.hand} />
       ))}
     </div>
   );
