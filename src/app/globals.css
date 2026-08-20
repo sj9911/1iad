@@ -65,9 +65,36 @@ html {
   animation: oiad-heartbeat 1.2s ease-in-out infinite;
 }
 
+/* tapped heart briefly races */
+.oiad-racing .oiad-heartbeat {
+  animation-duration: 0.45s;
+}
+
+/* gear ratchets one notch per click */
+.oiad-gear {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* steal arrow drops and bounces back after copying */
+@keyframes oiad-steal-drop {
+  0% { transform: translateY(0); }
+  45% { transform: translateY(0.35em); }
+  70% { transform: translateY(-0.08em); }
+  100% { transform: translateY(0); }
+}
+.oiad-steal-drop {
+  animation: oiad-steal-drop 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .oiad-heartbeat {
+  .oiad-heartbeat,
+  .oiad-steal-drop {
     animation: none;
+  }
+  .oiad-gear {
+    transition: none;
   }
 }
 

@@ -4,6 +4,10 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { HeroFlicker, type Piece } from "@/components/hero-flicker";
+import { interactionsMeta, SITE_URL } from "@/interactions/meta";
+
+const latest = interactionsMeta[interactionsMeta.length - 1];
+const INSTALL = `npx shadcn@latest add ${SITE_URL}/r/${latest.slug}`;
 
 const ART: Record<string, { x: number; y: number; w: number; h: number }> = {
   corners: { x: 0, y: 61.2, w: 738, h: 325 },
@@ -46,14 +50,10 @@ export default async function V2() {
       <header className="mx-auto max-w-3xl px-6 pt-14">
         <h1 className="sr-only">One Interaction A Day</h1>
         <HeroFlicker
-          statics={[
-            p.corners,
-            {
-              ...p.globe,
-              className: "motion-safe:animate-[spin_45s_linear_infinite]",
-            },
-            p["top-icon"],
-          ]}
+          statics={[p.corners]}
+          globe={p.globe}
+          badges={p["top-icon"]}
+          copyText={INSTALL}
           slots={[
             {
               print: (
@@ -95,19 +95,6 @@ export default async function V2() {
             A growing collection of
             <br />
             animated React components.
-          </p>
-          <p
-            className="font-bricolage absolute flex items-center gap-[0.8cqw] font-bold uppercase text-[#002FFF]"
-            style={{ left: "6.5%", top: "86.6%", fontSize: "2.2cqw" }}
-          >
-            Free to steal
-            <svg
-              viewBox="0 0 11 12"
-              className="h-[0.72em] w-auto fill-current"
-              aria-hidden="true"
-            >
-              <path d="M6.27246 7.5957L9.10645 4.76172L10.4639 6.08691L5.23633 11.3066L0 6.08691L1.35742 4.76172L4.19238 7.59668V0H6.27246V7.5957Z" />
-            </svg>
           </p>
         </HeroFlicker>
       </header>
