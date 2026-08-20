@@ -71,8 +71,13 @@ export function IconGrid({
       showAt: -1,
     }));
     let raf = 0;
+    let firstNow = -1;
 
     const loop = (now: number) => {
+      if (firstNow < 0) firstNow = now;
+      // full random stagger for the opening bloom; icons entering later
+      // (while panning) show almost immediately
+      const maxDelay = now - firstNow < 1000 ? MAX_DELAY : 120;
       if (!s.dragging) {
         s.vx *= FRICTION;
         s.vy *= FRICTION;
@@ -108,7 +113,7 @@ export function IconGrid({
             visW > 0 && visH > 0 && visW * visH >= 0.75 * iconSize * iconSize;
           let target = 0;
           if (inside) {
-            if (pop.showAt < 0) pop.showAt = now + Math.random() * MAX_DELAY;
+            if (pop.showAt < 0) pop.showAt = now + Math.random() * maxDelay;
             if (now >= pop.showAt) target = 1;
           } else {
             pop.showAt = -1;
