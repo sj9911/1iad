@@ -98,11 +98,14 @@ export function IconGrid({
             pop.vel = 0;
             pop.showAt = -1;
           }
-          // "inside" once at least 75% of the cell's area is in view
-          const visW = Math.min(px + CELL, s.w) - Math.max(px, 0);
-          const visH = Math.min(py + CELL, s.h) - Math.max(py, 0);
+          // "inside" once at least 75% of the icon itself (not its cell) is in view
+          const pad = (CELL - iconSize) / 2;
+          const ix = px + pad;
+          const iy = py + pad;
+          const visW = Math.min(ix + iconSize, s.w) - Math.max(ix, 0);
+          const visH = Math.min(iy + iconSize, s.h) - Math.max(iy, 0);
           const inside =
-            visW > 0 && visH > 0 && visW * visH >= 0.75 * CELL * CELL;
+            visW > 0 && visH > 0 && visW * visH >= 0.75 * iconSize * iconSize;
           let target = 0;
           if (inside) {
             if (pop.showAt < 0) pop.showAt = now + Math.random() * MAX_DELAY;
@@ -145,7 +148,7 @@ export function IconGrid({
       cancelAnimationFrame(raf);
       ro.disconnect();
     };
-  }, [icons, COLS, ROWS, CELL]);
+  }, [icons, COLS, ROWS, CELL, iconSize]);
 
   return (
     <div
