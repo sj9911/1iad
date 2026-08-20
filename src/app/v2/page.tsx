@@ -81,7 +81,7 @@ export default async function V2() {
   return (
     <main className="min-h-svh">
       <FloatingNav stars={stars} />
-      <header className="relative border-b border-hairline px-6 pb-16 pt-14">
+      <header className="relative border-b border-hairline px-6 pb-20 pt-20">
         <div
           aria-hidden="true"
           className="absolute inset-0"
