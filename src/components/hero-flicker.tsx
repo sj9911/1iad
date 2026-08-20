@@ -6,16 +6,25 @@
 
 import * as React from "react";
 
-const SWAP_MS = 800;
-
 export type HeroArt = { viewBox: string; inner: string };
 
 export function HeroFlicker({ art }: { art: [HeroArt, HeroArt] }) {
   const [hand, setHand] = React.useState(false);
 
+  // mostly typeset; every 2-4s the handwritten version blinks in briefly
   React.useEffect(() => {
-    const id = setInterval(() => setHand((h) => !h), SWAP_MS);
-    return () => clearInterval(id);
+    let t: ReturnType<typeof setTimeout>;
+    const schedule = () => {
+      t = setTimeout(() => {
+        setHand(true);
+        t = setTimeout(() => {
+          setHand(false);
+          schedule();
+        }, 200 + Math.random() * 150);
+      }, 2000 + Math.random() * 2000);
+    };
+    schedule();
+    return () => clearTimeout(t);
   }, []);
 
   return (
