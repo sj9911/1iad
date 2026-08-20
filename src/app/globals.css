@@ -88,9 +88,37 @@ html {
   animation: oiad-steal-drop 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+/* entrance: headline words inflate from light+condensed to full weight/width */
+@keyframes oiad-inflate {
+  0% {
+    opacity: 0;
+    font-variation-settings: "wght" 200, "wdth" 75, "opsz" 96;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    font-variation-settings: "wght" 800, "wdth" 100, "opsz" 96;
+  }
+}
+.oiad-inflate {
+  animation: oiad-inflate 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes oiad-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.oiad-fade {
+  animation: oiad-fade 0.5s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .oiad-heartbeat,
-  .oiad-steal-drop {
+  .oiad-steal-drop,
+  .oiad-inflate,
+  .oiad-fade {
     animation: none;
   }
   .oiad-gear {

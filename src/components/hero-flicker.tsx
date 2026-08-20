@@ -303,7 +303,7 @@ export function HeroFlicker({
 }) {
   return (
     <div
-      className="relative w-full"
+      className="oiad-fade relative w-full"
       style={{ aspectRatio: `${W} / ${H}`, containerType: "inline-size" }}
     >
       {statics.map((p, i) => (

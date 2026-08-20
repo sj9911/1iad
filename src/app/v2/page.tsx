@@ -59,8 +59,8 @@ export default async function V2() {
               print: (
                 <span
                   aria-hidden="true"
-                  className={HEADLINE}
-                  style={{ ...HEADLINE_STYLE, left: "5.9%", top: "23.0%", fontSize: "15.1cqw" }}
+                  className={`${HEADLINE} oiad-inflate`}
+                  style={{ ...HEADLINE_STYLE, left: "5.9%", top: "23.0%", fontSize: "15.1cqw", animationDelay: "0.15s" }}
                 >
                   One
                 </span>
@@ -71,8 +71,8 @@ export default async function V2() {
               print: (
                 <span
                   aria-hidden="true"
-                  className={`${HEADLINE} text-right`}
-                  style={{ ...HEADLINE_STYLE, right: "5.4%", top: "69.0%", fontSize: "15.1cqw" }}
+                  className={`${HEADLINE} text-right oiad-inflate`}
+                  style={{ ...HEADLINE_STYLE, right: "5.4%", top: "69.0%", fontSize: "15.1cqw", animationDelay: "0.45s" }}
                 >
                   A&nbsp;Day
                 </span>
@@ -83,8 +83,8 @@ export default async function V2() {
         >
           <span
             aria-hidden="true"
-            className={HEADLINE}
-            style={{ ...HEADLINE_STYLE, left: "6.4%", top: "45.8%", fontSize: "15.1cqw" }}
+            className={`${HEADLINE} oiad-inflate`}
+            style={{ ...HEADLINE_STYLE, left: "6.4%", top: "45.8%", fontSize: "15.1cqw", animationDelay: "0.3s" }}
           >
             Interaction
           </span>
