@@ -180,15 +180,18 @@ export function FloatingNav({
         )}
       </AnimatePresence>
 
-      <div className="flex items-center gap-1 rounded-2xl border border-hairline bg-surface/80 p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl">
+      <div className="flex items-center gap-2">
+        {/* badge pill, born out of the dock like a droplet */}
         <AnimatePresence>
           {scrolled && badges && (
             <motion.div
-              initial={{ width: 0, opacity: 0, filter: "blur(8px)", scale: 0.7 }}
-              animate={{ width: "auto", opacity: 1, filter: "blur(0px)", scale: 1 }}
-              exit={{ width: 0, opacity: 0, filter: "blur(8px)", scale: 0.7 }}
-              transition={{ type: "spring", stiffness: 300, damping: 26 }}
-              className="flex items-center overflow-hidden"
+              layout
+              key="badges"
+              initial={{ x: 90, scale: 0.4, opacity: 0, filter: "blur(10px)" }}
+              animate={{ x: 0, scale: 1, opacity: 1, filter: "blur(0px)" }}
+              exit={{ x: 90, scale: 0.4, opacity: 0, filter: "blur(10px)" }}
+              transition={{ type: "spring", stiffness: 260, damping: 19 }}
+              className="rounded-2xl border border-hairline bg-surface/80 p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl"
             >
               <button
                 onClick={badgesClick}
@@ -201,10 +204,15 @@ export function FloatingNav({
                   dangerouslySetInnerHTML={{ __html: badges.inner }}
                 />
               </button>
-              <span className="mx-1 h-4 w-px shrink-0 bg-hairline" />
             </motion.div>
           )}
         </AnimatePresence>
+
+        <motion.div
+          layout
+          transition={{ type: "spring", stiffness: 260, damping: 24 }}
+          className="flex items-center gap-1 rounded-2xl border border-hairline bg-surface/80 p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl"
+        >
         <Cell
           hovered={hovered === 0}
           onHover={() => setHovered(0)}
@@ -309,6 +317,7 @@ export function FloatingNav({
             </motion.span>
           </AnimatePresence>
         </Cell>
+        </motion.div>
       </div>
     </nav>
   );
