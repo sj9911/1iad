@@ -120,6 +120,18 @@ export function FloatingNav({
     return () => ro.disconnect();
   }, []);
 
+  const [morphing, setMorphing] = React.useState(false);
+  const firstScroll = React.useRef(true);
+  React.useEffect(() => {
+    if (firstScroll.current) {
+      firstScroll.current = false;
+      return;
+    }
+    setMorphing(true);
+    const t = setTimeout(() => setMorphing(false), 750);
+    return () => clearTimeout(t);
+  }, [scrolled]);
+
   const reduced = useReducedMotion();
   const birth = reduced
     ? {
@@ -132,8 +144,8 @@ export function FloatingNav({
         initial: { x: 90, scale: 0.4, opacity: 0 },
         animate: { x: 0, scale: 1, opacity: 1 },
         exit: {
-          x: 90,
-          scale: 0.4,
+          x: 32,
+          scale: 0.6,
           opacity: 0,
           transition: { type: "spring", duration: 0.32, bounce: 0 } as const,
         },
@@ -233,10 +245,11 @@ export function FloatingNav({
         {/* goo layer: solid blobs that merge and split like liquid */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 [filter:drop-shadow(0_8px_32px_rgba(0,0,0,0.12))]"
+          className="absolute inset-0 transition-opacity duration-300 [filter:drop-shadow(0_8px_32px_rgba(0,0,0,0.12))]"
+          style={{ opacity: morphing ? 1 : 0 }}
         >
-          <div className="flex h-full items-center gap-2 [filter:url(#oiad-goo)]">
-            <AnimatePresence>
+          <div className="flex h-full items-center gap-3.5 [filter:url(#oiad-goo)]">
+            <AnimatePresence mode="popLayout">
               {scrolled && badges && (
                 <motion.div
                   layout
@@ -256,16 +269,20 @@ export function FloatingNav({
           </div>
         </div>
 
-        <div className="relative flex items-center gap-2">
+        <div className="relative flex items-center gap-3.5">
         {/* badge pill content, born out of the dock like a droplet */}
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {scrolled && badges && (
             <motion.div
               layout
               key="badges"
               {...birth}
-              className="rounded-2xl p-1.5"
+              className="relative z-10 rounded-2xl border border-hairline bg-linear-to-t from-surface/20 to-surface p-1.5"
             >
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 -z-10 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,transparent,black)]"
+              />
               <button
                 onClick={badgesClick}
                 aria-label="OIAD badges"
@@ -285,8 +302,12 @@ export function FloatingNav({
           layout
           ref={dockRef}
           transition={GOO_SPRING}
-          className="flex items-center gap-1 rounded-2xl p-1.5"
+          className="relative flex items-center gap-1 rounded-2xl border border-hairline bg-linear-to-t from-surface/20 to-surface p-1.5"
         >
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 -z-10 rounded-2xl backdrop-blur-xl [mask-image:linear-gradient(to_top,transparent,black)]"
+          />
         <Cell
           hovered={hovered === 0}
           onHover={() => setHovered(0)}
