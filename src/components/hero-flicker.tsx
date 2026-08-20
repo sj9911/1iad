@@ -128,6 +128,18 @@ function Badges({ piece }: { piece: Piece }) {
       thump();
       buzz(12);
       setBurst((b) => b + 1);
+      // Day 2 style spring pop; restart cleanly on rapid taps
+      const heart = svg.querySelector<SVGPathElement>(".oiad-heartbeat");
+      if (heart) {
+        heart.classList.remove("oiad-heart-pop");
+        void heart.getBoundingClientRect();
+        heart.classList.add("oiad-heart-pop");
+        heart.addEventListener(
+          "animationend",
+          () => heart.classList.remove("oiad-heart-pop"),
+          { once: true },
+        );
+      }
       svg.classList.add("oiad-racing");
       if (raceT.current) clearTimeout(raceT.current);
       raceT.current = setTimeout(
@@ -168,6 +180,12 @@ function Badges({ piece }: { piece: Piece }) {
             top: `${((piece.y + 17.3) / H) * 100}%`,
           }}
         >
+          <motion.span
+            initial={{ scale: 0.3, opacity: 0.6 }}
+            animate={{ scale: 1.9, opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="absolute -left-4 -top-4 size-8 rounded-full border-2 border-[#002FFF]"
+          />
           {HEART_BURST.map((p, i) => {
             const rad = (p.angle * Math.PI) / 180;
             return (
