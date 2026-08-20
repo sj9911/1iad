@@ -5,13 +5,14 @@
 
 import * as React from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  IconBrandGithub,
-  IconInfoCircle,
-  IconMoon,
-  IconStarFilled,
-  IconSun,
-} from "@tabler/icons-react";
+  GithubIcon,
+  InformationCircleIcon,
+  Moon02Icon,
+  StarIcon,
+  Sun03Icon,
+} from "@hugeicons/core-free-icons";
 
 let audioCtx: AudioContext | null = null;
 function tick() {
@@ -140,7 +141,7 @@ export function FloatingNav({ stars }: { stars: number | null }) {
               transition={SPRING}
               className="flex"
             >
-              <IconBrandGithub size={18} stroke={2} aria-hidden="true" />
+              <HugeiconsIcon icon={GithubIcon} size={18} strokeWidth={2} aria-hidden="true" />
             </motion.span>
             {/* golden star blurs in */}
             <motion.span
@@ -153,7 +154,7 @@ export function FloatingNav({ stars }: { stars: number | null }) {
               className="absolute inset-0 flex items-center justify-center text-[#CA8A04] dark:text-[#FBBF24]"
             >
               <span className="flex [filter:drop-shadow(0_0_5px_rgba(202,138,4,0.6))] dark:[filter:drop-shadow(0_0_5px_rgba(251,191,36,0.9))]">
-                <IconStarFilled size={17} aria-hidden="true" />
+                <HugeiconsIcon icon={StarIcon} size={17} strokeWidth={1.5} className="[&_path]:fill-current" aria-hidden="true" />
               </span>
             </motion.span>
             {/* one-shot sparkle burst */}
@@ -201,7 +202,7 @@ export function FloatingNav({ stars }: { stars: number | null }) {
           aria-expanded={info}
           onClick={() => setInfo((v) => !v)}
         >
-          <IconInfoCircle size={18} stroke={2} aria-hidden="true" />
+          <HugeiconsIcon icon={InformationCircleIcon} size={18} strokeWidth={2} aria-hidden="true" />
         </Cell>
 
         <Cell
@@ -220,9 +221,9 @@ export function FloatingNav({ stars }: { stars: number | null }) {
               className="flex"
             >
               {dark ? (
-                <IconMoon size={18} stroke={2} aria-hidden="true" />
+                <HugeiconsIcon icon={Moon02Icon} size={18} strokeWidth={2} aria-hidden="true" />
               ) : (
-                <IconSun size={18} stroke={2} aria-hidden="true" />
+                <HugeiconsIcon icon={Sun03Icon} size={18} strokeWidth={2} aria-hidden="true" />
               )}
             </motion.span>
           </AnimatePresence>
