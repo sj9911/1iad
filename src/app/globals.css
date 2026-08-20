@@ -19,6 +19,7 @@
   --hairline: rgba(0, 0, 0, 0.08);
   --dot: rgba(0, 0, 0, 0.14);
   --oiad-blue: #002fff;
+  --hairline-solid: #e1e1e3; /* rgba(0,0,0,.08) blended over #f5f5f7 */
 }
 
 .dark {
@@ -30,6 +31,7 @@
   --hairline: rgba(255, 255, 255, 0.14);
   --dot: rgba(255, 255, 255, 0.18);
   --oiad-blue: #1d46fc;
+  --hairline-solid: #242424; /* rgba(255,255,255,.14) blended over #000 */
 }
 
 @theme inline {
