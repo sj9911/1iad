@@ -82,7 +82,7 @@ export default async function V2() {
                   className={HEADLINE}
                   style={{ ...HEADLINE_STYLE, left: "5.9%", top: "23.0%", fontSize: "15.1cqw" }}
                 >
-                  <Letters text="One" base={0.85} />
+                  <Letters text="One" base={0.55} />
                 </span>
               ),
               hand: [p["one-hand"]],
