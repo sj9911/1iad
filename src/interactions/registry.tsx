@@ -17,13 +17,22 @@ const stageComponents: Record<string, ComponentType> = {
   },
 };
 
+// gallery-card overrides: full-bleed like the stage, but scaled for the card
+const cardComponents: Record<string, ComponentType> = {
+  "infinite-icon-grid": function IconGridCard() {
+    return <IconGrid className="absolute inset-0" cell={150} iconSize={72} />;
+  },
+};
+
 export type Interaction = InteractionMeta & {
   Component: ComponentType;
   StageComponent?: ComponentType;
+  CardComponent?: ComponentType;
 };
 
 export const interactions: Interaction[] = interactionsMeta.map((m) => ({
   ...m,
   Component: components[m.slug],
   StageComponent: stageComponents[m.slug],
+  CardComponent: cardComponents[m.slug],
 }));

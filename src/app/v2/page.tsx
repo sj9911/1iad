@@ -168,14 +168,23 @@ export default async function V2() {
         <span aria-hidden="true" className="absolute right-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
 
         <div className="grid gap-6 p-6 sm:grid-cols-2">
-          {interactions.map(({ slug, day, title, Component, StageComponent }) => (
+          {interactions
+            .slice()
+            .reverse()
+            .map(({ slug, day, title, Component, StageComponent, CardComponent }) => (
             <div
               key={slug}
               className="group oiad-card rounded-2xl border border-hairline bg-surface p-2.5"
             >
               {/* interaction window */}
               <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-background px-10">
-                {StageComponent ? <StageComponent /> : <Component />}
+                {CardComponent ? (
+                  <CardComponent />
+                ) : StageComponent ? (
+                  <StageComponent />
+                ) : (
+                  <Component />
+                )}
               </div>
               {/* text and cta: number for balance, arrow on hover */}
               <div className="font-bricolage flex items-center justify-between px-2 pb-1 pt-3">

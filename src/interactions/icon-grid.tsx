@@ -12,7 +12,6 @@
 
 import * as React from "react";
 
-const CELL = 230; // px per grid cell
 const MAX_DELAY = 500; // ms of random wait before a fully visible icon pops in
 const FRICTION = 0.94;
 
@@ -24,9 +23,13 @@ const DEFAULT_ICONS = Array.from(
 export function IconGrid({
   icons = DEFAULT_ICONS,
   className = "relative h-[340px] w-full max-w-[520px] rounded-3xl border border-black/10 dark:border-white/15",
+  cell: CELL = 230, // px per grid cell
+  iconSize = 110, // px per icon image
 }: {
   icons?: string[];
   className?: string;
+  cell?: number;
+  iconSize?: number;
 }) {
   const [grid, setGrid] = React.useState({ cols: 9, rows: 7 });
   const COLS = grid.cols;
@@ -142,7 +145,7 @@ export function IconGrid({
       cancelAnimationFrame(raf);
       ro.disconnect();
     };
-  }, [icons, COLS, ROWS]);
+  }, [icons, COLS, ROWS, CELL]);
 
   return (
     <div
@@ -183,7 +186,12 @@ export function IconGrid({
           style={{ width: CELL, height: CELL, opacity: 0 }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img alt="" draggable={false} className="pointer-events-none size-[110px]" />
+          <img
+            alt=""
+            draggable={false}
+            className="pointer-events-none"
+            style={{ width: iconSize, height: iconSize }}
+          />
         </div>
       ))}
     </div>
