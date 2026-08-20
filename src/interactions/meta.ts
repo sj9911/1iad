@@ -35,6 +35,17 @@ export const interactionsMeta: InteractionMeta[] = [
     dependencies: ["motion"],
     file: "like-button.tsx",
   },
+  {
+    slug: "infinite-icon-grid",
+    day: 3,
+    date: "2026-08-20",
+    title: "Infinite Icon Grid",
+    description:
+      "A window onto an endless grid of icons. Drag in any direction forever; icons bloom in at the edges and shrink away as they leave, with soft inertia and a slow idle drift. Bring your own images via the icons prop.",
+    hint: "Drag anywhere. It never ends.",
+    dependencies: [],
+    file: "icon-grid.tsx",
+  },
 ];
 
 export const SITE_URL =

@@ -85,14 +85,21 @@ export default async function DayPage({
         </div>
 
         <p className="mt-10 text-sm text-muted">
-          Needs{" "}
-          {item.dependencies.map((d, i) => (
-            <span key={d}>
-              {i > 0 && ", "}
-              <code className="font-mono">{d}</code>
-            </span>
-          ))}{" "}
-          and Tailwind. MIT — do whatever you like.
+          {item.dependencies.length > 0 ? (
+            <>
+              Needs{" "}
+              {item.dependencies.map((d, i) => (
+                <span key={d}>
+                  {i > 0 && ", "}
+                  <code className="font-mono">{d}</code>
+                </span>
+              ))}{" "}
+              and Tailwind.
+            </>
+          ) : (
+            <>Needs only Tailwind.</>
+          )}{" "}
+          MIT, do whatever you like.
         </p>
       </section>
     </main>
