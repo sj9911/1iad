@@ -3,6 +3,8 @@
 // everything scales with the container. Offsets derived from the original comps.
 import { promises as fs } from "fs";
 import path from "path";
+import Link from "next/link";
+import { interactions } from "@/interactions/registry";
 import { HeroFlicker, type Piece } from "@/components/hero-flicker";
 import { FloatingNav } from "@/components/floating-nav";
 import { interactionsMeta, SITE_URL } from "@/interactions/meta";
@@ -156,11 +158,58 @@ export default async function V2() {
         </div>
       </header>
 
-      {/* body: bordered rails, gallery of days goes here */}
-      <section className="relative mx-auto min-h-[50vh] max-w-6xl border-x border-hairline">
+      {/* body: the gallery of days inside the rails */}
+      <section className="relative mx-auto max-w-6xl border-x border-hairline">
         {/* node markers where the rails meet the header rule */}
-        <span aria-hidden="true" className="absolute left-[-5.4px] top-[-5.4px] size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
-        <span aria-hidden="true" className="absolute right-[-5.4px] top-[-5.4px] size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
+        <span aria-hidden="true" className="absolute left-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
+        <span aria-hidden="true" className="absolute right-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
+
+        <div className="grid sm:grid-cols-2">
+          {interactions.map(
+            ({ slug, day, title, Component, StageComponent }, i) => (
+              <div
+                key={slug}
+                className={`group relative border-b border-hairline ${
+                  i % 2 === 0 ? "sm:border-r" : ""
+                }`}
+              >
+                <div className="relative flex aspect-[4/3] items-center justify-center px-10">
+                  {StageComponent ? <StageComponent /> : <Component />}
+                </div>
+                <Link
+                  href={`/day/${slug}`}
+                  className="font-bricolage flex items-baseline justify-between border-t border-hairline px-5 py-3.5"
+                >
+                  <span className="text-sm font-bold uppercase tracking-wide">
+                    <span className="text-[var(--oiad-blue)]">
+                      № {String(day).padStart(3, "0")}
+                    </span>
+                    <span className="ml-2">{title}</span>
+                  </span>
+                  <span className="text-sm font-bold opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    →
+                  </span>
+                </Link>
+              </div>
+            ),
+          )}
+          {/* tomorrow's slot */}
+          <div
+            className="font-bricolage flex aspect-[4/3] flex-col items-center justify-center gap-1 border-b border-hairline"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
+              backgroundSize: "18px 18px",
+            }}
+          >
+            <p className="text-sm font-bold uppercase tracking-wide text-[var(--oiad-blue)]">
+              № {String(interactions.length + 1).padStart(3, "0")}
+            </p>
+            <p className="text-sm font-bold uppercase tracking-wide text-muted">
+              Tomorrow
+            </p>
+          </div>
+        </div>
       </section>
     </main>
   );
