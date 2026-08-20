@@ -15,7 +15,7 @@ export type Slot = Box & {
   flick?: Box; // where variants 1-3 render, when the final glyph's box is misleading (curved A)
 };
 
-const FINAL_W = 247;
+const FINAL_W = 245;
 const FINAL_H = 92;
 const FLICKS = 5; // random variants shown before settling
 const FLICK_MS = 220;

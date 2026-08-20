@@ -8,18 +8,18 @@ import type { Glyph, Slot } from "@/components/logo-intro";
 const INTRO_DIR = path.join(process.cwd(), "src", "intro");
 
 const SLOTS = [
-  { char: "1", x: 0, y: 2.544, w: 53, h: 80 },
-  { char: "I", x: 54.055, y: 3.364, w: 54, h: 79 },
+  { char: "1", x: 0, y: 3.399, w: 51, h: 78 },
+  { char: "I", x: 54.055, y: 4.222, w: 53, h: 77 },
   {
     char: "A",
-    x: 58.211,
+    x: 57.352,
     y: 0,
     w: 129,
     h: 92,
     // plain A variants render over the script A's core, not its full swoosh box
     flick: { x: 112, y: 4, w: 70, h: 79 },
   },
-  { char: "D", x: 177.188, y: 3.364, w: 70, h: 79 },
+  { char: "D", x: 177.188, y: 4.222, w: 68, h: 77 },
 ];
 
 async function readGlyph(file: string): Promise<Glyph> {
