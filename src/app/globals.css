@@ -88,25 +88,21 @@ html {
   animation: oiad-steal-drop 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-/* entrance: headline letters inflate from light+condensed+small to full size */
+/* entrance: headline letters pop in place — scale + fade only, no axis
+   animation, so letter widths never change and words don't slide sideways */
 @keyframes oiad-inflate {
   0% {
     opacity: 0;
-    transform: scale(0.92);
-    font-variation-settings: "wght" 200, "wdth" 75, "opsz" 96;
-  }
-  35% {
-    opacity: 1;
+    transform: scale(0.85);
   }
   100% {
     opacity: 1;
     transform: scale(1);
-    font-variation-settings: "wght" 800, "wdth" 100, "opsz" 96;
   }
 }
 .oiad-inflate {
   display: inline-block; /* inline elements can't transform */
-  animation: oiad-inflate 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: oiad-inflate 0.55s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
 /* viewfinder entrance: brackets meet at center, hold, then fly to their corners
