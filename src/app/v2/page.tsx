@@ -168,7 +168,7 @@ export default async function V2() {
           {interactions.map(({ slug, day, title, Component, StageComponent }) => (
             <div
               key={slug}
-              className="group rounded-2xl border border-hairline bg-surface p-2.5"
+              className="group oiad-card rounded-2xl border border-hairline bg-surface p-2.5"
             >
               {/* interaction window */}
               <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-background px-10">
