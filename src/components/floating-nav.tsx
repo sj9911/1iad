@@ -15,6 +15,22 @@ import {
 } from "@hugeicons/core-free-icons";
 
 let audioCtx: AudioContext | null = null;
+function thump() {
+  try {
+    audioCtx ??= new AudioContext();
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(90, t);
+    osc.frequency.exponentialRampToValueAtTime(40, t + 0.12);
+    gain.gain.setValueAtTime(0.3, t);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + 0.15);
+  } catch {}
+}
 function tick() {
   try {
     audioCtx ??= new AudioContext();
@@ -74,14 +90,53 @@ function Cell({
   );
 }
 
-export function FloatingNav({ stars }: { stars: number | null }) {
+export type NavBadges = { viewBox: string; inner: string };
+
+export function FloatingNav({
+  stars,
+  badges,
+}: {
+  stars: number | null;
+  badges?: NavBadges;
+}) {
   const [hovered, setHovered] = React.useState<number | null>(null);
   const [info, setInfo] = React.useState(false);
   const [dark, setDark] = React.useState<boolean | null>(null);
+  const [scrolled, setScrolled] = React.useState(false);
+  const gearAngle = React.useRef(0);
 
   React.useEffect(() => {
     setDark(document.documentElement.classList.contains("dark"));
+    const onScroll = () => setScrolled(window.scrollY > 480);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  function badgesClick(e: React.MouseEvent) {
+    const t = e.target as Element;
+    const root = e.currentTarget as HTMLElement;
+    if (t.closest(".oiad-heartbtn")) {
+      thump();
+      const heart = root.querySelector<SVGPathElement>(".oiad-heartbeat");
+      if (heart) {
+        heart.classList.remove("oiad-heart-pop");
+        void heart.getBoundingClientRect();
+        heart.classList.add("oiad-heart-pop");
+        heart.addEventListener(
+          "animationend",
+          () => heart.classList.remove("oiad-heart-pop"),
+          { once: true },
+        );
+      }
+    } else if (t.closest(".oiad-gear")) {
+      gearAngle.current += 60;
+      root
+        .querySelector<SVGGElement>(".oiad-gear")
+        ?.style.setProperty("transform", `rotate(${gearAngle.current}deg)`);
+      toggleTheme();
+    }
+  }
 
   function toggleTheme() {
     tick();
@@ -126,6 +181,30 @@ export function FloatingNav({ stars }: { stars: number | null }) {
       </AnimatePresence>
 
       <div className="flex items-center gap-1 rounded-2xl border border-hairline bg-surface/80 p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl">
+        <AnimatePresence>
+          {scrolled && badges && (
+            <motion.div
+              initial={{ width: 0, opacity: 0, filter: "blur(8px)", scale: 0.7 }}
+              animate={{ width: "auto", opacity: 1, filter: "blur(0px)", scale: 1 }}
+              exit={{ width: 0, opacity: 0, filter: "blur(8px)", scale: 0.7 }}
+              transition={{ type: "spring", stiffness: 300, damping: 26 }}
+              className="flex items-center overflow-hidden"
+            >
+              <button
+                onClick={badgesClick}
+                aria-label="OIAD badges"
+                className="flex h-11 items-center rounded-xl px-3 transition-colors duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.09] [&_.oiad-gear]:cursor-pointer [&_.oiad-heartbtn]:cursor-pointer"
+              >
+                <svg
+                  viewBox={badges.viewBox}
+                  className="h-[22px] w-auto"
+                  dangerouslySetInnerHTML={{ __html: badges.inner }}
+                />
+              </button>
+              <span className="mx-1 h-4 w-px shrink-0 bg-hairline" />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <Cell
           hovered={hovered === 0}
           onHover={() => setHovered(0)}

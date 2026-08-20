@@ -82,7 +82,10 @@ export default async function V2() {
 
   return (
     <main className="min-h-svh">
-      <FloatingNav stars={stars} />
+      <FloatingNav
+        stars={stars}
+        badges={{ viewBox: p["top-icon"].viewBox, inner: p["top-icon"].inner }}
+      />
       <header className="relative border-b border-hairline px-6 pb-24 pt-16">
         <div
           aria-hidden="true"
