@@ -193,9 +193,13 @@ export function FloatingNav({
 
   return (
     <nav
-      className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
+      // flexbox centering, not translate: a CSS transform on this ancestor
+      // corrupts the dock's FLIP layout measurements (dock jumps to center
+      // instead of gliding when the pill unmounts)
+      className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center"
       onMouseLeave={() => setHovered(null)}
     >
+      <div className="pointer-events-auto relative">
       <AnimatePresence>
         {info && (
           <motion.div
@@ -368,6 +372,7 @@ export function FloatingNav({
         </Cell>
         </motion.div>
         </div>
+      </div>
       </div>
     </nav>
   );
