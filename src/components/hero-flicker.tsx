@@ -122,6 +122,7 @@ function Badges({ piece }: { piece: Piece }) {
   const gearAngle = React.useRef(0);
 
   const calm = React.useRef(false);
+  const wakeT = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function heartEl() {
     return ref.current?.querySelector<SVGPathElement>(".oiad-heartbeat");
@@ -194,6 +195,7 @@ function Badges({ piece }: { piece: Piece }) {
           if (!matchMedia("(hover: hover)").matches) return;
           if ((e.target as Element).closest(".oiad-heartbtn") && !calm.current) {
             calm.current = true;
+            if (wakeT.current) clearTimeout(wakeT.current);
             calmHeart();
           }
         }}
@@ -201,7 +203,9 @@ function Badges({ piece }: { piece: Piece }) {
           const to = e.relatedTarget as Element | null;
           if (calm.current && !to?.closest?.(".oiad-heartbtn")) {
             calm.current = false;
-            wakeHeart();
+            // linger at rest for a beat before the pulse returns
+            if (wakeT.current) clearTimeout(wakeT.current);
+            wakeT.current = setTimeout(wakeHeart, 1000);
           }
         }}
         dangerouslySetInnerHTML={{ __html: piece.inner }}
