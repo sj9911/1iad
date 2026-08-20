@@ -37,6 +37,8 @@ export default async function DayPage({
           description: item.description,
           prompt,
           install,
+          tags: item.tags,
+          dependencies: item.dependencies,
         }}
       >
       {/* The stage — record this section as-is */}

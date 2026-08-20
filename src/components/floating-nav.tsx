@@ -145,6 +145,8 @@ export type NavDay = {
   description: string;
   prompt: string;
   install: string;
+  tags: string[];
+  dependencies: string[];
 };
 
 // shared glass shell for every container in the nav row

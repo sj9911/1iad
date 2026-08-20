@@ -10,6 +10,7 @@ export type InteractionMeta = {
   hint: string; // one-line "how to play" shown on the stage
   dependencies: string[];
   file: string; // path under src/interactions/
+  tags: string[]; // interaction verbs shown in the day sidebar
 };
 
 export const interactionsMeta: InteractionMeta[] = [
@@ -23,6 +24,7 @@ export const interactionsMeta: InteractionMeta[] = [
     hint: "Drag it, then keep dragging past the end. Sound on.",
     dependencies: ["motion"],
     file: "elastic-slider.tsx",
+    tags: ["Drag", "Spring", "Sound"],
   },
   {
     slug: "like-button",
@@ -34,6 +36,7 @@ export const interactionsMeta: InteractionMeta[] = [
     hint: "Tap the heart. Sound on.",
     dependencies: ["motion"],
     file: "like-button.tsx",
+    tags: ["Tap", "Particles", "Sound"],
   },
   {
     slug: "infinite-icon-grid",
@@ -45,6 +48,7 @@ export const interactionsMeta: InteractionMeta[] = [
     hint: "Drag anywhere. It never ends.",
     dependencies: [],
     file: "icon-grid.tsx",
+    tags: ["Drag", "Infinite", "Spring"],
   },
 ];
 
