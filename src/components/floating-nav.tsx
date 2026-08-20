@@ -242,7 +242,7 @@ export function FloatingNav({
                 filter: "blur(8px)",
                 transition: reduced
                   ? { duration: 0 }
-                  : { duration: 0.45, ease: [0.23, 1, 0.32, 1] },
+                  : { duration: 0.8, ease: "easeInOut" },
               }}
               className="relative z-0 rounded-2xl border border-hairline bg-surface p-1.5"
             >
