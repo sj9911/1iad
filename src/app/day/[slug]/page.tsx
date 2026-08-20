@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { interactions } from "@/interactions/registry";
 import { FloatingNav, GlassLayers } from "@/components/floating-nav";
 import { getStars } from "@/lib/stars";
+import { getNavBadges } from "@/lib/badges";
+import { SITE_URL } from "@/interactions/meta";
 
 export function generateStaticParams() {
   return interactions.map(({ slug }) => ({ slug }));
@@ -19,10 +21,22 @@ export default async function DayPage({
   const item = interactions.find((i) => i.slug === slug);
   if (!item) notFound();
   const stars = await getStars();
+  const badges = await getNavBadges();
+  const prompt = `Add the "${item.title}" interaction from OIAD to my React + Tailwind project by running: npx shadcn@latest add ${SITE_URL}/r/${item.slug}`;
 
   return (
     <main>
-      <FloatingNav stars={stars} />
+      <FloatingNav
+        stars={stars}
+        badges={badges}
+        alwaysBadges
+        day={{
+          title: item.title,
+          day: item.day,
+          description: item.description,
+          prompt,
+        }}
+      />
       {/* The stage — record this section as-is */}
       <section
         className="relative flex min-h-svh flex-col items-center justify-center px-6"

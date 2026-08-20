@@ -12,11 +12,13 @@ import {
 } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  Copy01Icon,
   GithubIcon,
   InformationCircleIcon,
   Moon02Icon,
   StarIcon,
   Sun03Icon,
+  Tick02Icon,
 } from "@hugeicons/core-free-icons";
 
 let audioCtx: AudioContext | null = null;
@@ -136,19 +138,53 @@ function Cell({
 }
 
 export type NavBadges = { viewBox: string; inner: string };
+export type NavDay = {
+  title: string;
+  day: number;
+  description: string;
+  prompt: string;
+};
+
+// shared glass shell for every container in the nav row
+function GlassPill({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`relative rounded-2xl border border-hairline p-1.5 ${className}`}>
+      <GlassLayers />
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
+      />
+      <div className="relative flex items-center gap-1">{children}</div>
+    </div>
+  );
+}
 
 export function FloatingNav({
   stars,
   badges,
+  alwaysBadges = false,
+  day,
 }: {
   stars: number | null;
   badges?: NavBadges;
+  // day pages have no scroll, so the badge pill shows from the start
+  alwaysBadges?: boolean;
+  day?: NavDay;
 }) {
   const [hovered, setHovered] = React.useState<number | null>(null);
   const [info, setInfo] = React.useState(false);
+  const [dayOpen, setDayOpen] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
   const [dark, setDark] = React.useState<boolean | null>(null);
   const [scrolled, setScrolled] = React.useState(false);
   const gearAngle = React.useRef(0);
+  const copyTimer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
   const reduced = useReducedMotion();
   // zero-bounce spring: the dock re-centers without overshoot
   const MORPH = reduced
@@ -196,6 +232,15 @@ export function FloatingNav({
     localStorage.theme = next ? "dark" : "light";
   }
 
+  function copyPrompt() {
+    if (!day) return;
+    navigator.clipboard.writeText(day.prompt).catch(() => {});
+    tick();
+    setCopied(true);
+    clearTimeout(copyTimer.current);
+    copyTimer.current = setTimeout(() => setCopied(false), 1600);
+  }
+
   return (
     <nav
       // flexbox centering, not translate: a CSS transform on this ancestor
@@ -234,6 +279,21 @@ export function FloatingNav({
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {dayOpen && day && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.95 }}
+            transition={SPRING}
+            className="font-bricolage absolute bottom-full left-1/2 mb-3 w-64 -translate-x-1/2 rounded-2xl border border-hairline bg-surface p-4 text-sm leading-relaxed shadow-[0_12px_40px_rgba(0,0,0,0.15)]"
+          >
+            <p className="font-semibold">{day.title}</p>
+            <p className="mt-1 text-muted">{day.description}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="relative">
         {/* LayoutGroup: the dock is a sibling of the pill's AnimatePresence and
             doesn't re-render when the pill is finally removed — without the
@@ -246,7 +306,7 @@ export function FloatingNav({
             the wrapper's instant re-center and visibly jump. The dock glides
             back to center via its layout spring after the dissolve finishes. */}
         <AnimatePresence initial={false}>
-          {scrolled && badges && (
+          {(scrolled || alwaysBadges) && badges && (
             <motion.div
               key="badge-pill"
               initial={{ opacity: 0, x: 48, filter: "blur(8px)" }}
@@ -264,6 +324,19 @@ export function FloatingNav({
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* day pages: interaction name + padded day number */}
+        {day && (
+          <GlassPill>
+            <span className="font-bricolage flex h-[50px] items-center px-3.5 text-base font-semibold">
+              {day.title}
+            </span>
+            <span aria-hidden="true" className="mx-1 h-4 w-px shrink-0 bg-hairline" />
+            <span className="font-bricolage flex h-[50px] items-center px-3.5 text-base font-semibold tabular-nums text-muted">
+              {String(day.day).padStart(3, "0")}
+            </span>
+          </GlassPill>
+        )}
 
         <motion.div
           layout
@@ -380,6 +453,44 @@ export function FloatingNav({
           </AnimatePresence>
         </Cell>
         </motion.div>
+
+        {/* day pages: more info + copy the AI install prompt */}
+        {day && (
+          <GlassPill>
+            <Cell
+              hovered={hovered === 3}
+              onHover={() => setHovered(3)}
+              aria-label="About this interaction"
+              aria-expanded={dayOpen}
+              onClick={() => setDayOpen((v) => !v)}
+            >
+              <HugeiconsIcon icon={InformationCircleIcon} size={21} strokeWidth={2} aria-hidden="true" />
+            </Cell>
+            <Cell
+              hovered={hovered === 4}
+              onHover={() => setHovered(4)}
+              aria-label="Copy AI prompt"
+              onClick={copyPrompt}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={copied ? "tick" : "copy"}
+                  initial={{ scale: 0.6, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.6, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 28 }}
+                  className="flex"
+                >
+                  {copied ? (
+                    <HugeiconsIcon icon={Tick02Icon} size={21} strokeWidth={2} aria-hidden="true" />
+                  ) : (
+                    <HugeiconsIcon icon={Copy01Icon} size={21} strokeWidth={2} aria-hidden="true" />
+                  )}
+                </motion.span>
+              </AnimatePresence>
+            </Cell>
+          </GlassPill>
+        )}
         </div>
         </LayoutGroup>
       </div>
