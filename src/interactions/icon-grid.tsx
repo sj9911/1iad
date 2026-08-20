@@ -16,8 +16,8 @@ const MAX_DELAY = 500; // ms of random wait before a fully visible icon pops in
 const FRICTION = 0.94;
 
 const DEFAULT_ICONS = Array.from(
-  { length: 50 },
-  (_, i) => `/icons/grid/${i + 1}.png`,
+  { length: 30 },
+  (_, i) => `/icons/grid/${i + 1}.webp`,
 );
 
 export function IconGrid({
