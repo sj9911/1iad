@@ -187,11 +187,11 @@ export default async function V2() {
                   </span>
                   <span className="absolute right-0 flex text-[var(--oiad-blue)] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                     <svg
-                      viewBox="0 0 11 12"
-                      className="h-[0.8em] w-auto -rotate-90 fill-current"
+                      viewBox="0 0 9 9"
+                      className="h-[0.8em] w-auto fill-current"
                       aria-hidden="true"
                     >
-                      <path d="M6.27246 7.5957L9.10645 4.76172L10.4639 6.08691L5.23633 11.3066L0 6.08691L1.35742 4.76172L4.19238 7.59668V0H6.27246V7.5957Z" />
+                      <path d="M4.63636 8.267L3.75852 7.39768L6.38778 4.76842H0V3.49854H6.38778L3.75852 0.873535L4.63636 -4.45843e-05L8.76989 4.13348L4.63636 8.267Z" />
                     </svg>
                   </span>
                 </Link>
