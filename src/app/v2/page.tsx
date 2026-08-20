@@ -28,7 +28,7 @@ async function readPiece(name: string): Promise<Piece> {
 }
 
 const HEADLINE =
-  "font-bricolage absolute uppercase leading-none tracking-[-0.035em]";
+  "font-bricolage absolute uppercase leading-none tracking-[-0.01em]";
 // variable axes maxed out: full width, heaviest weight, largest optical size
 const HEADLINE_STYLE = {
   fontVariationSettings: '"wght" 800, "wdth" 100, "opsz" 96',
