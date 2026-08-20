@@ -57,7 +57,8 @@ export function DayShell({
         aria-hidden={!open}
       >
         {/* fixed-width inner so text doesn't reflow while the panel animates */}
-        <div className="font-bricolage h-full w-[40vw] overflow-y-auto p-8">
+        {/* pt clears the fixed Back pill sitting at the viewport's top-left */}
+        <div className="font-bricolage h-full w-[40vw] overflow-y-auto p-8 pt-28">
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="text-2xl font-semibold leading-tight">
