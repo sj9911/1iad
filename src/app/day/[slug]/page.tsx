@@ -35,7 +35,7 @@ export default async function DayPage({
         className="relative flex min-h-[85svh] flex-col items-center justify-center bg-surface px-6"
         style={{
           backgroundImage:
-            "radial-gradient(circle, var(--dot) 1px, transparent 1px)",
+            "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
           backgroundSize: "18px 18px",
         }}
       >

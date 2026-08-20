@@ -85,7 +85,7 @@ export default async function V2() {
         className="px-6 pb-16 pt-14"
         style={{
           backgroundImage:
-            "radial-gradient(circle, var(--dot) 1px, transparent 1px)",
+            "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
           backgroundSize: "18px 18px",
         }}
       >
