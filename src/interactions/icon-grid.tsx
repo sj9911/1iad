@@ -13,7 +13,7 @@
 import * as React from "react";
 
 const CELL = 88; // px per grid cell
-const EDGE = 90; // px band over which icons scale in/out
+const MAX_DELAY = 500; // ms of random wait before a fully visible icon pops in
 const FRICTION = 0.94;
 const DRIFT = { x: 0.18, y: 0.12 }; // idle auto-pan, px per frame
 const COLS = 9;
@@ -47,9 +47,16 @@ export function IconGrid({ icons = DEFAULT_ICONS }: { icons?: string[] }) {
 
     const totalW = COLS * CELL;
     const totalH = ROWS * CELL;
+    // per-slot pop state, reset whenever the slot wraps to a new world cell
+    const pops = Array.from({ length: COLS * ROWS }, () => ({
+      wc: NaN,
+      wr: NaN,
+      scale: 0,
+      showAt: -1,
+    }));
     let raf = 0;
 
-    const loop = () => {
+    const loop = (now: number) => {
       if (!s.dragging) {
         s.vx *= FRICTION;
         s.vy *= FRICTION;
@@ -65,15 +72,30 @@ export function IconGrid({ icons = DEFAULT_ICONS }: { icons?: string[] }) {
           if (!node) continue;
           const px = ((((i * CELL + s.ox) % totalW) + totalW) % totalW) - CELL;
           const py = ((((j * CELL + s.oy) % totalH) + totalH) % totalH) - CELL;
-          const cx = px + CELL / 2;
-          const cy = py + CELL / 2;
-          const d = Math.min(cx, s.w - cx, cy, s.h - cy);
-          let k = Math.max(0, Math.min(1, d / EDGE));
-          k = k * k * (3 - 2 * k); // smoothstep
-          node.style.transform = `translate(${px}px, ${py}px) scale(${k})`;
           // icon identity is tied to the world cell, so the field is stable while panning
           const wc = Math.round((px - s.ox) / CELL);
           const wr = Math.round((py - s.oy) / CELL);
+
+          // pop in at a random moment once fully inside; pop out when touching an edge
+          const pop = pops[j * COLS + i];
+          if (pop.wc !== wc || pop.wr !== wr) {
+            pop.wc = wc;
+            pop.wr = wr;
+            pop.scale = 0;
+            pop.showAt = -1;
+          }
+          const inside =
+            px >= 0 && py >= 0 && px + CELL <= s.w && py + CELL <= s.h;
+          let target = 0;
+          if (inside) {
+            if (pop.showAt < 0) pop.showAt = now + Math.random() * MAX_DELAY;
+            if (now >= pop.showAt) target = 1;
+          } else {
+            pop.showAt = -1;
+          }
+          pop.scale += (target - pop.scale) * (target > pop.scale ? 0.22 : 0.35);
+          if (Math.abs(target - pop.scale) < 0.01) pop.scale = target;
+          node.style.transform = `translate(${px}px, ${py}px) scale(${pop.scale})`;
           const idx =
             (((wc * 7 + wr * 13) % icons.length) + icons.length) %
             icons.length;
