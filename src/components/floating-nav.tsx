@@ -135,11 +135,9 @@ export type NavBadges = { viewBox: string; inner: string };
 export function FloatingNav({
   stars,
   badges,
-  debugPhase,
 }: {
   stars: number | null;
   badges?: NavBadges;
-  debugPhase?: "hidden" | "inside" | "detached";
 }) {
   const [hovered, setHovered] = React.useState<number | null>(null);
   const [info, setInfo] = React.useState(false);
@@ -147,27 +145,10 @@ export function FloatingNav({
   const [scrolled, setScrolled] = React.useState(false);
   const gearAngle = React.useRef(0);
   const reduced = useReducedMotion();
+  // zero-bounce spring: the dock re-centers without overshoot
   const MORPH = reduced
     ? ({ duration: 0 } as const)
-    : ({ type: "spring", duration: 0.55, bounce: 0.2 } as const);
-
-  // hidden -> inside (dock widens to include the badges) -> detached (own pill)
-  const [phase, setPhase] = React.useState<"hidden" | "inside" | "detached">(
-    "hidden",
-  );
-  React.useEffect(() => {
-    if (debugPhase) return;
-    let t: ReturnType<typeof setTimeout>;
-    if (scrolled) {
-      setPhase((prev) => (prev === "detached" ? prev : "inside"));
-      t = setTimeout(() => setPhase("detached"), 750);
-    } else {
-      setPhase((prev) => (prev === "hidden" ? prev : "inside"));
-      t = setTimeout(() => setPhase("hidden"), 500);
-    }
-    return () => clearTimeout(t);
-  }, [scrolled, debugPhase]);
-  const livePhase = debugPhase ?? phase;
+    : ({ type: "spring", duration: 0.5, bounce: 0 } as const);
 
   React.useEffect(() => {
     setDark(document.documentElement.classList.contains("dark"));
@@ -246,43 +227,40 @@ export function FloatingNav({
 
       <div className="relative">
         <div className="relative flex items-center gap-3.5">
-        {/* detached: the badge unit as its own pill */}
-        {livePhase === "detached" && badges && (
-          <motion.div
-            layoutId="oiad-badge-unit"
-            transition={MORPH}
-            className="relative z-10 rounded-2xl border border-hairline bg-surface p-1.5"
-          >
-            <BadgeButton badges={badges} onClick={badgesClick} />
-          </motion.div>
-        )}
+        {/* badge pill: blurs in from behind the dock on scroll, slides back
+            under it on the way up; popLayout frees its slot immediately so
+            the dock glides back to center while the pill is still exiting */}
+        <AnimatePresence mode="popLayout" initial={false}>
+          {scrolled && badges && (
+            <motion.div
+              key="badge-pill"
+              initial={{ opacity: 0, x: 48, filter: "blur(8px)" }}
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)", transition: MORPH }}
+              exit={{
+                opacity: 0,
+                x: 48,
+                filter: "blur(8px)",
+                transition: reduced
+                  ? { duration: 0 }
+                  : { duration: 0.3, ease: [0.23, 1, 0.32, 1] },
+              }}
+              className="relative z-0 rounded-2xl border border-hairline bg-surface p-1.5"
+            >
+              <BadgeButton badges={badges} onClick={badgesClick} />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <motion.div
           layout
           transition={MORPH}
-          className="relative flex items-center gap-1 rounded-2xl border border-hairline p-1.5"
+          className="relative z-10 flex items-center gap-1 rounded-2xl border border-hairline p-1.5"
         >
           <GlassLayers />
           <span
             aria-hidden="true"
             className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
           />
-        <AnimatePresence initial={false}>
-          {livePhase === "inside" && badges && (
-            <motion.div
-              key="badge-inside"
-              layoutId="oiad-badge-unit"
-              transition={MORPH}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.15 } }}
-              className="relative flex items-center"
-            >
-              <BadgeButton badges={badges} onClick={badgesClick} />
-              <span className="mx-1 h-4 w-px shrink-0 bg-hairline" />
-            </motion.div>
-          )}
-        </AnimatePresence>
         <Cell
           hovered={hovered === 0}
           onHover={() => setHovered(0)}
