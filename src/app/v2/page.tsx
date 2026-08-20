@@ -159,8 +159,8 @@ export default async function V2() {
       {/* body: bordered rails, gallery of days goes here */}
       <section className="relative mx-auto min-h-[50vh] max-w-6xl border-x border-hairline">
         {/* node markers where the rails meet the header rule */}
-        <span aria-hidden="true" className="absolute left-[-4.75px] top-[-4.75px] size-[10.5px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-surface" />
-        <span aria-hidden="true" className="absolute right-[-4.75px] top-[-4.75px] size-[10.5px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-surface" />
+        <span aria-hidden="true" className="absolute left-[-7.375px] top-[-7.375px] size-[15.75px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-surface" />
+        <span aria-hidden="true" className="absolute right-[-7.375px] top-[-7.375px] size-[15.75px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-surface" />
       </section>
     </main>
   );
