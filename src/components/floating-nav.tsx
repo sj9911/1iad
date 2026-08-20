@@ -113,7 +113,7 @@ export function FloatingNav({ stars }: { stars: number | null }) {
                 href="https://x.com/sunnyxdesign"
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#002FFF] hover:underline"
+                className="text-[var(--oiad-blue)] hover:underline"
               >
                 Sunny Joshi
               </a>

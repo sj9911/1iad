@@ -18,6 +18,7 @@
   --accent: #0071e3;
   --hairline: rgba(0, 0, 0, 0.08);
   --dot: rgba(0, 0, 0, 0.07);
+  --oiad-blue: #002fff;
 }
 
 .dark {
@@ -28,6 +29,7 @@
   --accent: #2997ff;
   --hairline: rgba(255, 255, 255, 0.14);
   --dot: rgba(255, 255, 255, 0.1);
+  --oiad-blue: #4d6fff; /* lifted for AA contrast on black */
 }
 
 @theme inline {

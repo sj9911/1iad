@@ -105,14 +105,14 @@ function WordSlot({ print, hand }: { print: React.ReactNode; hand: Piece[] }) {
 
 /* --- badges: tappable heart, gear = theme toggle --- */
 const HEART_BURST = [
-  { angle: 15, dist: 30, size: 5, color: "#002FFF" },
+  { angle: 15, dist: 30, size: 5, color: "var(--oiad-blue)" },
   { angle: 70, dist: 36, size: 4, color: "currentColor" },
-  { angle: 120, dist: 30, size: 5, color: "#002FFF" },
-  { angle: 165, dist: 38, size: 4, color: "#002FFF" },
+  { angle: 120, dist: 30, size: 5, color: "var(--oiad-blue)" },
+  { angle: 165, dist: 38, size: 4, color: "var(--oiad-blue)" },
   { angle: 210, dist: 32, size: 5, color: "currentColor" },
-  { angle: 255, dist: 37, size: 4, color: "#002FFF" },
+  { angle: 255, dist: 37, size: 4, color: "var(--oiad-blue)" },
   { angle: 300, dist: 31, size: 5, color: "currentColor" },
-  { angle: 345, dist: 36, size: 4, color: "#002FFF" },
+  { angle: 345, dist: 36, size: 4, color: "var(--oiad-blue)" },
 ];
 
 function Badges({ piece }: { piece: Piece }) {
@@ -225,7 +225,7 @@ function Badges({ piece }: { piece: Piece }) {
             initial={{ scale: 0.3, opacity: 0.6 }}
             animate={{ scale: 1.9, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="absolute -left-4 -top-4 size-8 rounded-full border-2 border-[#002FFF]"
+            className="absolute -left-4 -top-4 size-8 rounded-full border-2 border-[var(--oiad-blue)]"
           />
           {HEART_BURST.map((p, i) => {
             const rad = (p.angle * Math.PI) / 180;
@@ -342,7 +342,7 @@ function Steal({ copyText }: { copyText: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 1400);
       }}
-      className="font-bricolage oiad-rise absolute flex cursor-pointer items-center gap-[0.8cqw] font-bold uppercase text-[#002FFF]"
+      className="font-bricolage oiad-rise absolute flex cursor-pointer items-center gap-[0.8cqw] font-bold uppercase text-[var(--oiad-blue)]"
       style={{ left: "6.5%", top: "86.6%", fontSize: "2.2cqw", animationDelay: "1.55s" }}
     >
       {copied ? "Copied." : "Free to steal"}

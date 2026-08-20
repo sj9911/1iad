@@ -41,7 +41,8 @@ async function readPiece(name: string): Promise<Piece> {
   const inner = raw
     .replace(/^[\s\S]*?<svg[^>]*>/, "")
     .replace(/<\/svg>[\s\S]*$/, "")
-    .replaceAll('"black"', '"currentColor"');
+    .replaceAll('"black"', '"currentColor"')
+    .replaceAll('"#002FFF"', '"var(--oiad-blue)"');
   return { viewBox, inner, ...ART[name] };
 }
 
