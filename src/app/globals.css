@@ -70,6 +70,13 @@ html {
   animation-duration: 0.45s;
 }
 
+/* hovering the heart calms it completely */
+@media (hover: hover) and (pointer: fine) {
+  .oiad-heartbtn:hover .oiad-heartbeat {
+    animation: none;
+  }
+}
+
 /* gear ratchets one notch per click */
 .oiad-gear {
   transform-box: fill-box;
