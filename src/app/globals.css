@@ -17,7 +17,7 @@
   --muted: #6e6e73;
   --accent: #0071e3;
   --hairline: rgba(0, 0, 0, 0.08);
-  --dot: rgba(0, 0, 0, 0.07);
+  --dot: rgba(0, 0, 0, 0.14);
   --oiad-blue: #002fff;
 }
 
@@ -28,7 +28,7 @@
   --muted: #86868b;
   --accent: #2997ff;
   --hairline: rgba(255, 255, 255, 0.14);
-  --dot: rgba(255, 255, 255, 0.1);
+  --dot: rgba(255, 255, 255, 0.18);
   --oiad-blue: #1d46fc;
 }
 
