@@ -165,7 +165,7 @@ export default async function V2() {
         <span aria-hidden="true" className="absolute right-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
 
         <div className="grid gap-6 p-6 sm:grid-cols-2">
-          {interactions.map(({ slug, title, Component, StageComponent }) => (
+          {interactions.map(({ slug, day, title, Component, StageComponent }) => (
             <div
               key={slug}
               className="group rounded-2xl border border-hairline bg-surface p-2.5"
@@ -174,14 +174,26 @@ export default async function V2() {
               <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-background px-10">
                 {StageComponent ? <StageComponent /> : <Component />}
               </div>
-              {/* text and cta */}
+              {/* text and cta: number for balance, arrow on hover */}
               <div className="font-bricolage flex items-center justify-between px-2 pb-1 pt-3">
-                <span className="text-sm font-semibold">{title}</span>
+                <span className="text-base font-semibold">{title}</span>
                 <Link
                   href={`/day/${slug}`}
-                  className="text-sm font-semibold text-muted transition-colors duration-200 hover:text-[var(--oiad-blue)]"
+                  aria-label={`Open ${title}`}
+                  className="relative flex items-center"
                 >
-                  View →
+                  <span className="text-base font-semibold tabular-nums text-muted transition-opacity duration-200 group-hover:opacity-0">
+                    {String(day).padStart(3, "0")}
+                  </span>
+                  <span className="absolute right-0 flex text-[var(--oiad-blue)] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    <svg
+                      viewBox="0 0 11 12"
+                      className="h-[0.8em] w-auto -rotate-90 fill-current"
+                      aria-hidden="true"
+                    >
+                      <path d="M6.27246 7.5957L9.10645 4.76172L10.4639 6.08691L5.23633 11.3066L0 6.08691L1.35742 4.76172L4.19238 7.59668V0H6.27246V7.5957Z" />
+                    </svg>
+                  </span>
                 </Link>
               </div>
             </div>
@@ -200,9 +212,10 @@ export default async function V2() {
                 Tomorrow, same place
               </p>
             </div>
-            <div className="font-bricolage flex items-center px-2 pb-1 pt-3">
-              <span className="text-sm font-semibold text-muted">
-                Day {interactions.length + 1}
+            <div className="font-bricolage flex items-center justify-between px-2 pb-1 pt-3">
+              <span className="text-base font-semibold text-muted">Tomorrow</span>
+              <span className="text-base font-semibold tabular-nums text-muted">
+                {String(interactions.length + 1).padStart(3, "0")}
               </span>
             </div>
           </div>
