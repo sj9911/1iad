@@ -5,6 +5,11 @@
  * A heart that pops with a spring, a ring flash, a burst of particles,
  * and a satisfying "pop" sound (plus a haptic buzz on Android).
  *
+ * Standalone it keeps a local count. Pass `api` to back it with a real
+ * shared count — the endpoint contract is GET → { count } and
+ * POST { delta: 1 | -1 } → { count }; "you liked this" is remembered
+ * per-browser in localStorage.
+ *
  * Self-contained: needs only `motion` and Tailwind.
  * https://x.com/sunnyxdesign — built in public, one interaction a day.
  */
@@ -48,18 +53,46 @@ const PARTICLES = [
   { angle: 335, dist: 39, size: 4, color: "#ff9500" },
 ];
 
-export function LikeButton() {
+export function LikeButton({
+  api,
+  storageKey = "oiad-liked",
+}: {
+  api?: string;
+  storageKey?: string;
+}) {
   const [liked, setLiked] = React.useState(false);
-  const [count, setCount] = React.useState(2347);
+  const [count, setCount] = React.useState<number | null>(api ? null : 2347);
+
+  React.useEffect(() => {
+    if (!api) return;
+    const stored = localStorage.getItem(storageKey) === "1";
+    fetch(api)
+      .then((r) => r.json())
+      .then((d) => setCount(typeof d.count === "number" ? d.count : 2347))
+      .catch(() => setCount(2347))
+      .finally(() => setLiked(stored));
+  }, [api, storageKey]);
   const [burst, setBurst] = React.useState(0);
 
   function toggle() {
     const next = !liked;
     setLiked(next);
-    setCount((c) => c + (next ? 1 : -1));
+    setCount((c) => (c ?? 0) + (next ? 1 : -1));
     pop(next);
     buzz();
     if (next) setBurst((b) => b + 1);
+    if (api) {
+      localStorage.setItem(storageKey, next ? "1" : "0");
+      fetch(api, {
+        method: "POST",
+        body: JSON.stringify({ delta: next ? 1 : -1 }),
+      })
+        .then((r) => r.json())
+        .then((d) => {
+          if (typeof d.count === "number") setCount(d.count);
+        })
+        .catch(() => {}); // optimistic count stands if the network flakes
+    }
   }
 
   return (
@@ -121,8 +154,8 @@ export function LikeButton() {
           <path d="M12 21.35c-.4 0-.8-.14-1.11-.42C7.14 17.62 2 13.2 2 8.9 2 5.9 4.42 3.5 7.4 3.5c1.74 0 3.41.84 4.6 2.26A5.93 5.93 0 0 1 16.6 3.5c2.98 0 5.4 2.4 5.4 5.4 0 4.3-5.14 8.72-8.89 12.03-.31.28-.71.42-1.11.42Z" />
         </motion.svg>
       </span>
-      <span className="w-14 text-left text-lg tabular-nums text-neutral-500">
-        {count.toLocaleString()}
+      <span className="w-14 text-left text-lg font-medium tabular-nums text-neutral-500">
+        {count === null ? "…" : count.toLocaleString()}
       </span>
     </button>
   );
