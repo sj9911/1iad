@@ -41,7 +41,7 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-hairline: var(--hairline);
-  --font-sans: "Departure Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans: var(--font-bricolage), system-ui, sans-serif;
   --font-mono: "Departure Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
@@ -252,7 +252,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Departure Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  font-family: var(--font-bricolage), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   transition:
     background-color 0.4s ease,
