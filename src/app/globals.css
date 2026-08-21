@@ -262,30 +262,3 @@ body {
 ::selection {
   background: rgba(0, 113, 227, 0.18);
 }
-
-/* tuner panel: iOS-style range — thin track (fill painted inline), white thumb */
-.tuner-range {
-  appearance: none;
-  -webkit-appearance: none;
-  height: 3px;
-  border-radius: 9999px;
-  background: var(--hairline);
-}
-.tuner-range::-webkit-slider-thumb {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #fff;
-  border: 0.5px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-}
-.tuner-range::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #fff;
-  border: 0.5px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-}
