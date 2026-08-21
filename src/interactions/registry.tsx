@@ -4,6 +4,7 @@ import { ElasticSlider } from "./elastic-slider";
 import { LikeButton } from "./like-button";
 import { IconGrid } from "./icon-grid";
 import { IntelligenceGlow } from "./intelligence-glow";
+import { GlowStageTuned } from "@/components/glow-tuner";
 
 const components: Record<string, ComponentType> = {
   "elastic-slider": ElasticSlider,
@@ -20,9 +21,8 @@ const stageComponents: Record<string, ComponentType> = {
   "infinite-icon-grid": function IconGridStage() {
     return <IconGrid className="absolute inset-0" />;
   },
-  "intelligence-glow": function IntelligenceGlowStage() {
-    return <IntelligenceGlow className="absolute inset-0" />;
-  },
+  // reads tuned layers from GlowTunerProvider when the day page mounts one
+  "intelligence-glow": GlowStageTuned,
 };
 
 // gallery-card overrides: full-bleed like the stage, but scaled for the card

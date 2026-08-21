@@ -73,14 +73,18 @@ export function DayShell({
   stars,
   badges,
   day,
+  tuner,
   children,
 }: {
   stars: number | null;
   badges: NavBadges;
   day: NavDay;
+  // optional live tuning panel; slides in from the right like the sidebar
+  tuner?: React.ReactNode;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = React.useState(false);
+  const [tuneOpen, setTuneOpen] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
   const copyTimer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
   const reduced = useReducedMotion();
@@ -306,6 +310,23 @@ export function DayShell({
 
       <div className="relative min-w-0 flex-1">{children}</div>
 
+      {tuner && (
+        <motion.aside
+          initial={false}
+          animate={{ width: tuneOpen ? 380 : 0 }}
+          transition={MORPH}
+          className={`sticky top-0 h-svh shrink-0 overflow-hidden bg-surface ${
+            tuneOpen ? "border-l border-hairline" : ""
+          }`}
+          aria-hidden={!tuneOpen}
+        >
+          {/* fixed-width inner so controls don't reflow while animating */}
+          <div className="h-full w-[380px] overflow-y-auto px-6 py-8">
+            {tuner}
+          </div>
+        </motion.aside>
+      )}
+
       <FloatingNav
         stars={stars}
         badges={badges}
@@ -313,6 +334,8 @@ export function DayShell({
         day={day}
         dayOpen={open}
         onDayOpenChange={setOpen}
+        tuneOpen={tuneOpen}
+        onTuneOpenChange={tuner ? setTuneOpen : undefined}
       />
     </div>
   );

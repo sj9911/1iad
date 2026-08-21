@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { interactions } from "@/interactions/registry";
 import { GlassLayers } from "@/components/floating-nav";
 import { DayShell } from "@/components/day-shell";
+import { GlowTunerPanel, GlowTunerProvider } from "@/components/glow-tuner";
 import { getStars } from "@/lib/stars";
 import { getNavBadges } from "@/lib/badges";
 import { SITE_URL } from "@/interactions/meta";
@@ -26,11 +27,14 @@ export default async function DayPage({
   const install = `npx shadcn@latest add ${SITE_URL}/r/${item.slug}`;
   const prompt = `Add the "${item.title}" interaction from 1IAD to my React + Tailwind project by running: ${install}`;
 
-  return (
-    <main>
+  // days with a live tuning panel behind the sliders icon in the dock
+  const hasTuner = slug === "intelligence-glow";
+
+  const shell = (
       <DayShell
         stars={stars}
         badges={badges}
+        tuner={hasTuner ? <GlowTunerPanel /> : undefined}
         day={{
           title: item.title,
           day: item.day,
@@ -76,6 +80,11 @@ export default async function DayPage({
         {item.StageComponent ? <item.StageComponent /> : <item.Component />}
       </section>
       </DayShell>
+  );
+
+  return (
+    <main>
+      {hasTuner ? <GlowTunerProvider>{shell}</GlowTunerProvider> : shell}
     </main>
   );
 }

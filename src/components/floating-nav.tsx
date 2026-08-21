@@ -17,6 +17,7 @@ import {
   InformationCircleIcon,
   Moon02Icon,
   SidebarRightIcon,
+  SlidersHorizontalIcon,
   StarIcon,
   Sun03Icon,
   Tick02Icon,
@@ -176,6 +177,8 @@ export function FloatingNav({
   day,
   dayOpen = false,
   onDayOpenChange,
+  tuneOpen = false,
+  onTuneOpenChange,
 }: {
   stars: number | null;
   badges?: NavBadges;
@@ -185,6 +188,9 @@ export function FloatingNav({
   // sidebar state is owned by DayShell, which renders the sidebar in-flow
   dayOpen?: boolean;
   onDayOpenChange?: (open: boolean) => void;
+  // days with a live tuning panel (owned by DayShell, like the sidebar)
+  tuneOpen?: boolean;
+  onTuneOpenChange?: (open: boolean) => void;
 }) {
   const [hovered, setHovered] = React.useState<number | null>(null);
   const [info, setInfo] = React.useState(false);
@@ -330,6 +336,17 @@ export function FloatingNav({
             >
               <HugeiconsIcon icon={SidebarRightIcon} size={21} strokeWidth={2} aria-hidden="true" />
             </Cell>
+            {onTuneOpenChange && (
+              <Cell
+                hovered={hovered === 5}
+                onHover={() => setHovered(5)}
+                aria-label="Tune the interaction"
+                aria-expanded={tuneOpen}
+                onClick={() => onTuneOpenChange(!tuneOpen)}
+              >
+                <HugeiconsIcon icon={SlidersHorizontalIcon} size={21} strokeWidth={2} aria-hidden="true" />
+              </Cell>
+            )}
             <Cell
               hovered={hovered === 4}
               onHover={() => setHovered(4)}
