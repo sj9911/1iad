@@ -1,5 +1,7 @@
 // 0.5s: one live component floating alone on the dotted stage — this IS the
 // recording frame. Chrome matches the v2 home: bricolage captions, floating dock.
+import { existsSync } from "fs";
+import path from "path";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { interactions } from "@/interactions/registry";
@@ -22,6 +24,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const item = interactions.find((i) => i.slug === slug);
   if (!item) return {};
+  // per-day card from scripts/og.mjs when it exists, else the site hero
+  const og = existsSync(path.join(process.cwd(), "public/og", `${slug}.png`))
+    ? `/og/${slug}.png`
+    : "/opengraph-image.png";
   return {
     title: `${item.title} — Free React Component`,
     description: `${item.description} Day ${item.day} of One Interaction A Day — free, MIT licensed, one shadcn CLI command to install.`,
@@ -31,7 +37,11 @@ export async function generateMetadata({
       url: `/day/${item.slug}`,
       title: `${item.title} — Free React Component`,
       description: item.description,
-      images: "/opengraph-image.png",
+      images: og,
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: og,
     },
   };
 }
@@ -59,7 +69,7 @@ export default async function DayPage({
     description: item.description,
     programmingLanguage: "TypeScript",
     runtimePlatform: "React 19",
-    codeRepository: "https://github.com/sj9911/oiad",
+    codeRepository: "https://github.com/sj9911/1iad",
     license: "https://opensource.org/license/mit",
     url: `${SITE_URL}/day/${item.slug}`,
     dateCreated: item.date,

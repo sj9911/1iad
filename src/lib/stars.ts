@@ -1,6 +1,6 @@
 export async function getStars(): Promise<number | null> {
   try {
-    const r = await fetch("https://api.github.com/repos/sj9911/oiad", {
+    const r = await fetch("https://api.github.com/repos/sj9911/1iad", {
       next: { revalidate: 3600 },
     });
     if (!r.ok) return null;

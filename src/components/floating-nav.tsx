@@ -438,7 +438,7 @@ export function FloatingNav({
           onHover={() => setHovered(0)}
           aria-label="1IAD on GitHub"
               tip="Star on GitHub"
-          onClick={() => window.open("https://github.com/sj9911/oiad", "_blank")}
+          onClick={() => window.open("https://github.com/sj9911/1iad", "_blank")}
         >
           <span className="relative flex size-[21px] items-center justify-center">
             {/* github mark blurs away on hover */}

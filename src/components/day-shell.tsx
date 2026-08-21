@@ -287,7 +287,7 @@ export function DayShell({
                     {[
                       { href: "http://x.com/sunnyxdesign", label: "X", Ic: IconBrandX },
                       { href: "https://www.linkedin.com/in/thesunnyjoshi/", label: "LinkedIn", Ic: IconBrandLinkedin },
-                      { href: "https://github.com/sj9911/oiad", label: "GitHub", Ic: IconBrandGithub },
+                      { href: "https://github.com/sj9911/1iad", label: "GitHub", Ic: IconBrandGithub },
                     ].map(({ href, label, Ic }) => (
                       <a
                         key={label}
