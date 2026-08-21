@@ -30,7 +30,7 @@
   --accent: #2997ff;
   --hairline: rgba(255, 255, 255, 0.14);
   --dot: rgba(255, 255, 255, 0.18);
-  --oiad-blue: #3e64ff; /* lifted for ~4.5:1 on black; print blue reads too dark here */
+  --oiad-blue: #ffcc00; /* neon yellow in dark — the print blue reads too dark on black */
   --hairline-solid: #242424; /* rgba(255,255,255,.14) blended over #000 */
 }
 
