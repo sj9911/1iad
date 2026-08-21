@@ -1,12 +1,27 @@
 "use client";
 
 // Live tuning panel for the Intelligence Glow day page. DialKit-inspired
-// controls (drag anywhere on a row; label inside the track, value right),
-// but built on the site's own theme tokens so light/dark always match.
+// controls (drag anywhere on a row) set in the sidebar's spec-sheet voice:
+// kicker → poster title → hairline sections, icons per control, Departure
+// Mono for every value. Emil rules throughout: transform/opacity only,
+// strong ease-out, small travel, staggered rise-in.
 // The provider owns the layer table; the stage reads it through context, so
 // gallery cards and installed copies keep the shipped defaults.
 
 import * as React from "react";
+import { AnimatePresence, motion } from "motion/react";
+import {
+  IconBlur,
+  IconCheck,
+  IconCircleDashed,
+  IconCircleHalf2,
+  IconCopy,
+  IconPlus,
+  IconStopwatch,
+  IconWaveSine,
+  IconX,
+  type Icon,
+} from "@tabler/icons-react";
 import {
   IntelligenceGlow,
   GLOW_LAYERS,
@@ -33,8 +48,30 @@ export function GlowStageTuned() {
   return <IntelligenceGlow className="absolute inset-0" layers={layers} />;
 }
 
+// emil rules: transform/opacity only, strong ease-out, small travel
+const EASE = [0.23, 1, 0.32, 1] as const;
+// zero-bounce spring for the segmented pill
+const SNAP = { type: "spring", duration: 0.35, bounce: 0 } as const;
+
+// same maxed variable axes as the sidebar's poster title
+const POSTER = {
+  fontVariationSettings: '"wght" 800, "wdth" 100, "opsz" 96',
+} as const;
+
+// staggered rise-in, matching DayShell's sidebar choreography.
+// DayShell drives "show"/"hidden" from its aside; these inherit.
+export const tunerList = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.05, delayChildren: 0.1 } },
+};
+const rise = {
+  hidden: { opacity: 0, y: 14 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+};
+
 /* --- DialKit-style row: the whole row is the track — drag anywhere on it --- */
 function DialRow({
+  icon: RowIcon,
   label,
   value,
   min,
@@ -43,6 +80,7 @@ function DialRow({
   format = (v: number) => String(v),
   onChange,
 }: {
+  icon: Icon;
   label: string;
   value: number;
   min: number;
@@ -88,48 +126,70 @@ function DialRow({
         if (e.key === "ArrowRight" || e.key === "ArrowUp") nudge(1);
         if (e.key === "ArrowLeft" || e.key === "ArrowDown") nudge(-1);
       }}
-      className="relative h-10 cursor-ew-resize touch-none select-none overflow-hidden rounded-lg bg-black/[0.04] outline-none focus-visible:ring-2 focus-visible:ring-[var(--oiad-blue)]/50 dark:bg-white/[0.07]"
+      className="group relative h-11 cursor-ew-resize touch-none select-none overflow-hidden rounded-xl bg-black/[0.04] outline-none transition-colors duration-150 hover:bg-black/[0.06] focus-visible:ring-2 focus-visible:ring-[var(--oiad-blue)]/60 dark:bg-white/[0.07] dark:hover:bg-white/[0.09]"
     >
       {/* value fill */}
       <span
         aria-hidden="true"
-        className="absolute inset-y-0 left-0 bg-black/[0.08] dark:bg-white/[0.11]"
+        className="absolute inset-y-0 left-0 bg-black/[0.07] dark:bg-white/[0.10]"
         style={{ width: `${pct}%` }}
       />
-      <span className="relative flex h-full items-center justify-between px-3.5 text-sm">
-        <span className="text-muted">{label}</span>
-        <span className="font-semibold tabular-nums">{format(value)}</span>
+      <span className="relative flex h-full items-center justify-between px-3.5">
+        <span className="flex items-center gap-2.5 text-sm font-medium">
+          <RowIcon
+            size={16}
+            stroke={1.75}
+            aria-hidden="true"
+            className="text-muted transition-colors duration-150 group-hover:text-foreground"
+          />
+          {label}
+        </span>
+        <span className="font-mono text-[13px] tabular-nums">
+          {format(value)}
+        </span>
       </span>
     </div>
   );
 }
 
-/* --- DialKit-style segmented Off/On row --- */
+/* --- segmented Off/On row; the active pill glides between segments --- */
 function SegmentedRow({
+  icon: RowIcon,
   label,
+  id,
   on,
   onChange,
 }: {
+  icon: Icon;
   label: string;
+  id: string;
   on: boolean;
   onChange: (v: boolean) => void;
 }) {
   return (
-    <div className="flex h-10 items-center justify-between rounded-lg bg-black/[0.04] px-3.5 text-sm dark:bg-white/[0.07]">
-      <span className="text-muted">{label}</span>
-      <div className="flex gap-1" role="group" aria-label={label}>
+    <div className="flex h-11 items-center justify-between rounded-xl bg-black/[0.04] px-3.5 dark:bg-white/[0.07]">
+      <span className="flex items-center gap-2.5 text-sm font-medium">
+        <RowIcon size={16} stroke={1.75} aria-hidden="true" className="text-muted" />
+        {label}
+      </span>
+      <div className="flex gap-0.5" role="group" aria-label={label}>
         {([false, true] as const).map((v) => (
           <button
             key={String(v)}
             aria-pressed={on === v}
             onClick={() => onChange(v)}
-            className={`rounded-md px-2.5 py-1 text-xs font-semibold transition-colors duration-150 ${
-              on === v
-                ? "bg-foreground text-background"
-                : "text-muted hover:text-foreground"
+            className={`relative rounded-lg px-3 py-1 font-mono text-[12px] transition-colors duration-150 ${
+              on === v ? "text-background" : "text-muted hover:text-foreground"
             }`}
           >
-            {v ? "On" : "Off"}
+            {on === v && (
+              <motion.span
+                layoutId={`seg-${id}`}
+                transition={SNAP}
+                className="absolute inset-0 rounded-lg bg-foreground"
+              />
+            )}
+            <span className="relative">{v ? "ON" : "OFF"}</span>
           </button>
         ))}
       </div>
@@ -163,32 +223,48 @@ export function GlowTunerPanel() {
 
   return (
     <div>
-      <header className="pb-6 pt-4">
+      {/* poster header, sidebar recipe: kicker → title → description */}
+      <motion.header variants={rise} className="pb-2 pt-4">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--oiad-blue)]">
           Live tuner
         </p>
-        <p className="mt-2 text-sm leading-relaxed text-muted">
+        <h2
+          className="mt-4 uppercase leading-none tracking-[-0.01em] text-[30px]"
+          style={POSTER}
+        >
+          Glow
+        </h2>
+        <p className="mt-3 max-w-[36ch] text-base leading-relaxed text-muted">
           Reshape the bloom in real time. Yours to play with.
         </p>
-      </header>
+      </motion.header>
 
-      <div className="space-y-6">
-        {layers.map((l, i) => (
-          <section key={i} className="space-y-1.5">
-            <div className="flex items-baseline justify-between px-1 pb-1">
-              <h3 className="text-sm font-semibold tracking-tight">
-                Layer {String(i + 1).padStart(2, "0")}
-              </h3>
-              <button
-                onClick={() => setLayers((ls) => ls.filter((_, j) => j !== i))}
-                className="text-xs font-semibold uppercase tracking-[0.14em] text-muted transition-colors duration-150 hover:text-foreground"
-              >
-                Remove
-              </button>
-            </div>
-            <DialRow label="Ring" value={l.t} min={0} max={80} step={1} onChange={(v) => set(i, { t: v })} />
-            <DialRow label="Blur" value={l.b} min={0} max={160} step={1} onChange={(v) => set(i, { b: v })} />
+      {layers.map((l, i) => (
+        <motion.section
+          key={i}
+          variants={rise}
+          className="mt-6 border-t border-hairline pt-5"
+        >
+          <div className="flex items-baseline justify-between px-1 pb-3">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+              <span aria-hidden="true" className="mr-2 font-semibold text-[var(--oiad-blue)]">
+                /
+              </span>
+              Layer {String(i + 1).padStart(2, "0")}
+            </h3>
+            <button
+              onClick={() => setLayers((ls) => ls.filter((_, j) => j !== i))}
+              aria-label={`Remove layer ${i + 1}`}
+              className="flex size-6 items-center justify-center rounded-md text-muted transition-colors duration-150 hover:bg-black/[0.06] hover:text-foreground dark:hover:bg-white/[0.09]"
+            >
+              <IconX size={14} stroke={2} aria-hidden="true" />
+            </button>
+          </div>
+          <div className="space-y-1.5">
+            <DialRow icon={IconCircleDashed} label="Ring" value={l.t} min={0} max={80} step={1} onChange={(v) => set(i, { t: v })} />
+            <DialRow icon={IconBlur} label="Blur" value={l.b} min={0} max={160} step={1} onChange={(v) => set(i, { b: v })} />
             <DialRow
+              icon={IconCircleHalf2}
               label="Opacity"
               value={l.o}
               min={0}
@@ -197,45 +273,77 @@ export function GlowTunerPanel() {
               format={(v) => `${Math.round(v * 100)}%`}
               onChange={(v) => set(i, { o: v })}
             />
-            <SegmentedRow label="Breathe" on={l.breathe} onChange={(v) => set(i, { breathe: v })} />
-            {l.breathe && (
-              <DialRow
-                label="Delay"
-                value={parseFloat(l.delay) || 0}
-                min={0}
-                max={2}
-                step={0.1}
-                format={(v) => `${v.toFixed(1)}s`}
-                onChange={(v) => set(i, { delay: `${v}s` })}
-              />
-            )}
-          </section>
-        ))}
+            <SegmentedRow icon={IconWaveSine} label="Breathe" id={`breathe-${i}`} on={l.breathe} onChange={(v) => set(i, { breathe: v })} />
+            <AnimatePresence initial={false}>
+              {l.breathe && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.25, ease: EASE }}
+                >
+                  <DialRow
+                    icon={IconStopwatch}
+                    label="Delay"
+                    value={parseFloat(l.delay) || 0}
+                    min={0}
+                    max={2}
+                    step={0.1}
+                    format={(v) => `${v.toFixed(1)}s`}
+                    onChange={(v) => set(i, { delay: `${v}s` })}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.section>
+      ))}
 
-        <button
+      <motion.div variants={rise} className="mt-6 border-t border-hairline pt-5">
+        <motion.button
+          whileTap={{ scale: 0.98 }}
           onClick={() =>
             setLayers((ls) => [
               ...ls,
               { ...(ls[ls.length - 1] ?? GLOW_LAYERS[0]) },
             ])
           }
-          className="flex h-10 w-full items-center justify-center rounded-lg bg-black/[0.04] text-sm font-semibold transition-colors duration-150 hover:bg-black/[0.07] dark:bg-white/[0.07] dark:hover:bg-white/[0.11]"
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-black/[0.04] text-sm font-medium transition-colors duration-150 hover:bg-black/[0.07] dark:bg-white/[0.07] dark:hover:bg-white/[0.11]"
         >
-          + Add layer
-        </button>
+          <IconPlus size={16} stroke={2} aria-hidden="true" className="text-[var(--oiad-blue)]" />
+          Add layer
+        </motion.button>
+      </motion.div>
 
-        <div className="pb-12">
-          <code className="block overflow-x-auto whitespace-pre break-normal rounded-xl border border-hairline bg-background p-4 font-mono text-[12px] leading-relaxed">
-            {code}
-          </code>
-          <button
-            onClick={copy}
-            className="mt-3 flex h-12 w-full items-center justify-center rounded-xl bg-foreground text-base font-semibold text-background transition-opacity duration-150 hover:opacity-85"
-          >
-            {copied ? "Copied" : "Copy values"}
-          </button>
-        </div>
-      </div>
+      {/* the values, sidebar "Steal it" recipe: code block + solid button */}
+      <motion.div variants={rise} className="mt-6 border-t border-hairline pb-12 pt-5">
+        <code className="block overflow-x-auto whitespace-pre rounded-xl border border-hairline bg-background p-4 font-mono text-[12px] leading-relaxed">
+          {code}
+        </code>
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          onClick={copy}
+          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-foreground text-base font-semibold text-background transition-opacity duration-150 hover:opacity-85"
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={copied ? "tick" : "copy"}
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.6, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 500, damping: 28 }}
+              className="flex"
+            >
+              {copied ? (
+                <IconCheck size={18} stroke={2.5} aria-hidden="true" />
+              ) : (
+                <IconCopy size={18} stroke={2} aria-hidden="true" />
+              )}
+            </motion.span>
+          </AnimatePresence>
+          {copied ? "Copied" : "Copy values"}
+        </motion.button>
+      </motion.div>
     </div>
   );
 }

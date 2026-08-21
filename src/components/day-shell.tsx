@@ -320,10 +320,16 @@ export function DayShell({
           }`}
           aria-hidden={!tuneOpen}
         >
-          {/* fixed-width inner so controls don't reflow while animating */}
-          <div className="h-full w-[380px] overflow-y-auto px-6 py-8">
+          {/* fixed-width inner so controls don't reflow while animating;
+              same staggered rise choreography as the sidebar */}
+          <motion.div
+            variants={list}
+            initial="hidden"
+            animate={tuneOpen ? "show" : "hidden"}
+            className="h-full w-[380px] overflow-y-auto px-6 py-8"
+          >
             {tuner}
-          </div>
+          </motion.div>
         </motion.aside>
       )}
 
