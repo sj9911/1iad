@@ -112,11 +112,14 @@ function Cell({
   children,
   hovered,
   onHover,
+  tip,
   ...rest
 }: {
   children: React.ReactNode;
   hovered: boolean;
   onHover: () => void;
+  // hover tooltip naming the action; shows after a beat, above the dock
+  tip?: string;
 } & React.ComponentProps<typeof motion.button>) {
   return (
     <motion.button
@@ -127,6 +130,31 @@ function Cell({
       className="relative flex h-[50px] items-center gap-2 rounded-xl px-3.5 text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent"
       {...rest}
     >
+      <AnimatePresence>
+        {hovered && tip && (
+          <motion.span
+            role="tooltip"
+            initial={{ opacity: 0, y: 5, x: "-50%", scale: 0.96 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              x: "-50%",
+              scale: 1,
+              transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1], delay: 0.3 },
+            }}
+            exit={{
+              opacity: 0,
+              y: 4,
+              x: "-50%",
+              scale: 0.97,
+              transition: { duration: 0.12, ease: "easeIn" },
+            }}
+            className="font-bricolage pointer-events-none absolute -top-9 left-1/2 z-20 whitespace-nowrap rounded-lg border border-hairline bg-surface px-2.5 py-1 text-xs font-semibold shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
+          >
+            {tip}
+          </motion.span>
+        )}
+      </AnimatePresence>
       {hovered && (
         <motion.span
           layoutId="nav-glow"
@@ -331,6 +359,7 @@ export function FloatingNav({
               hovered={hovered === 3}
               onHover={() => setHovered(3)}
               aria-label="Interaction details"
+              tip="Interaction details"
               aria-expanded={dayOpen}
               onClick={() => onDayOpenChange?.(!dayOpen)}
             >
@@ -341,6 +370,7 @@ export function FloatingNav({
                 hovered={hovered === 5}
                 onHover={() => setHovered(5)}
                 aria-label="Tune the interaction"
+              tip="Live tuner"
                 aria-expanded={tuneOpen}
                 onClick={() => onTuneOpenChange(!tuneOpen)}
               >
@@ -351,6 +381,7 @@ export function FloatingNav({
               hovered={hovered === 4}
               onHover={() => setHovered(4)}
               aria-label="Copy AI prompt"
+              tip="Copy AI install prompt"
               onClick={copyPrompt}
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -400,6 +431,7 @@ export function FloatingNav({
           hovered={hovered === 0}
           onHover={() => setHovered(0)}
           aria-label="1IAD on GitHub"
+              tip="Star on GitHub"
           onClick={() => window.open("https://github.com/sj9911/oiad", "_blank")}
         >
           <span className="relative flex size-[21px] items-center justify-center">
@@ -471,6 +503,7 @@ export function FloatingNav({
           hovered={hovered === 1}
           onHover={() => setHovered(1)}
           aria-label="About 1IAD"
+              tip="About 1IAD"
           aria-expanded={info}
           onClick={() => setInfo((v) => !v)}
         >
@@ -481,6 +514,7 @@ export function FloatingNav({
           hovered={hovered === 2}
           onHover={() => setHovered(2)}
           aria-label="Toggle dark mode"
+              tip="Switch theme"
           onClick={toggleTheme}
         >
           <AnimatePresence mode="wait" initial={false}>
