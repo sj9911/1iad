@@ -31,6 +31,7 @@ export async function generateMetadata({
       url: `/day/${item.slug}`,
       title: `${item.title} — Free React Component`,
       description: item.description,
+      images: "/opengraph-image.png",
     },
   };
 }

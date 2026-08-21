@@ -26,7 +26,7 @@ export const metadata: Metadata = {
       "Free, open-source animated React interactions — one new component every day. Install any of them with the shadcn CLI.",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     creator: "@sunnyxdesign",
   },
 };
