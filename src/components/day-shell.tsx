@@ -157,13 +157,13 @@ export function DayShell({
           <motion.header variants={rise} className="pt-10">
             <p
               aria-hidden="true"
-              className="text-[clamp(88px,9vw,132px)] leading-[0.85] tracking-tight tabular-nums text-[var(--oiad-blue)]"
+              className="text-[clamp(26px,2.5vw,34px)] leading-none tracking-tight tabular-nums text-[var(--oiad-blue)]"
               style={POSTER}
             >
               {String(day.day).padStart(3, "0")}
             </p>
             <h2
-              className="mt-6 max-w-[10ch] text-[clamp(34px,3.4vw,48px)] uppercase leading-[1.02] tracking-[-0.01em]"
+              className="mt-5 max-w-[10ch] text-[clamp(44px,4.6vw,62px)] uppercase leading-[1.0] tracking-[-0.01em]"
               style={POSTER}
             >
               {day.title}
