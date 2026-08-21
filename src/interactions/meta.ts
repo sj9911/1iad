@@ -50,6 +50,18 @@ export const interactionsMeta: InteractionMeta[] = [
     file: "icon-grid.tsx",
     tags: ["Drag", "Infinite", "Spring"],
   },
+  {
+    slug: "intelligence-glow",
+    day: 4,
+    date: "2026-08-21",
+    title: "Intelligence Glow",
+    description:
+      "The Apple Intelligence summon effect: a flowing multicolor glow that sweeps around the edge of the screen, blooms inward, and breathes while it listens. Tap to summon, tap again to dismiss.",
+    hint: "Tap to summon. Sound on.",
+    dependencies: [],
+    file: "intelligence-glow.tsx",
+    tags: ["Tap", "Glow", "Sound"],
+  },
 ];
 
 export const SITE_URL =

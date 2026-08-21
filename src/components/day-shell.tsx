@@ -19,6 +19,7 @@ import {
   IconHandClick,
   IconHandMove,
   IconInfinity,
+  IconNorthStar,
   IconSparkles,
   IconVolume,
   type Icon,
@@ -38,6 +39,7 @@ const TAG_ICONS: Record<string, Icon> = {
   Spring: IconBounceRight,
   Particles: IconSparkles,
   Infinite: IconInfinity,
+  Glow: IconNorthStar,
 };
 
 const DEP_NAMES: Record<string, string> = { motion: "Motion" };
