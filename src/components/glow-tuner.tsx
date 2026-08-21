@@ -225,7 +225,7 @@ export function GlowTunerPanel() {
     <div>
       {/* poster header, sidebar recipe: kicker → title → description */}
       <motion.header variants={rise} className="pb-2 pt-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--oiad-blue)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--oiad-blue)]">
           Live tuner
         </p>
         <h2

@@ -292,34 +292,6 @@ export function FloatingNav({
       onMouseLeave={() => setHovered(null)}
     >
       <div className="pointer-events-auto relative">
-      <AnimatePresence>
-        {info && (
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.95 }}
-            transition={SPRING}
-            className="font-bricolage absolute bottom-full left-1/2 mb-3 w-64 -translate-x-1/2 rounded-2xl border border-hairline bg-surface p-4 text-sm leading-relaxed shadow-[0_12px_40px_rgba(0,0,0,0.15)]"
-          >
-            <p className="font-semibold">One Interaction A Day</p>
-            <p className="mt-1 text-muted">
-              A daily interaction design practice. Every component is live,
-              open source, and free to steal.
-            </p>
-            <p className="mt-2 text-muted">
-              by{" "}
-              <a
-                href="https://x.com/sunnyxdesign"
-                target="_blank"
-                rel="noreferrer"
-                className="text-[var(--oiad-blue)] hover:underline"
-              >
-                Sunny Joshi
-              </a>
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <div className="relative">
         {/* LayoutGroup: the dock is a sibling of the pill's AnimatePresence and
@@ -345,8 +317,13 @@ export function FloatingNav({
                   ? { duration: 0 }
                   : { duration: 0.8, ease: "easeInOut" },
               }}
-              className="relative z-0 rounded-2xl border border-hairline bg-surface p-1.5"
+              className="relative z-0 rounded-2xl border border-hairline p-1.5"
             >
+              <GlassLayers />
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
+              />
               <BadgeButton badges={badges} onClick={badgesClick} />
             </motion.div>
           )}
@@ -427,6 +404,35 @@ export function FloatingNav({
             aria-hidden="true"
             className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
           />
+          {/* about panel: anchored to this pill so it rises above the ⓘ */}
+          <AnimatePresence>
+            {info && (
+              <motion.div
+                initial={{ opacity: 0, y: 8, x: "-50%", scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+                exit={{ opacity: 0, y: 8, x: "-50%", scale: 0.95 }}
+                transition={SPRING}
+                className="font-bricolage absolute bottom-full left-1/2 mb-3 w-64 rounded-2xl border border-hairline bg-surface p-4 text-sm leading-relaxed shadow-[0_12px_40px_rgba(0,0,0,0.15)]"
+              >
+                <p className="font-semibold">One Interaction A Day</p>
+                <p className="mt-1 text-muted">
+                  A daily interaction design practice. Every component is live,
+                  open source, and free to steal.
+                </p>
+                <p className="mt-2 text-muted">
+                  by{" "}
+                  <a
+                    href="https://x.com/sunnyxdesign"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[var(--oiad-blue)] hover:underline"
+                  >
+                    Sunny Joshi
+                  </a>
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         <Cell
           hovered={hovered === 0}
           onHover={() => setHovered(0)}

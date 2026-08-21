@@ -1,5 +1,8 @@
 // 0.5s: frosted glass pill floating over Apple-gray, STIX serif H1 left, big "№ 001" right
+// parked previous home — noindex so it never competes with / in search
 import Link from "next/link";
+
+export const metadata = { robots: { index: false, follow: true } };
 import { interactions } from "@/interactions/registry";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LogoIntro } from "@/components/logo-intro";

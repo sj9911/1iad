@@ -54,9 +54,9 @@ export const interactionsMeta: InteractionMeta[] = [
     slug: "intelligence-glow",
     day: 4,
     date: "2026-08-21",
-    title: "Intelligence Glow",
+    title: "Apple Intelligence Glow",
     description:
-      "The Apple Intelligence summon effect: a flowing multicolor glow that sweeps around the edge of the screen, blooms inward, and breathes while it listens. Tap to summon, tap again to dismiss.",
+      "The Apple Intelligence summon effect for React: a flowing multicolor glow that sweeps around the edge of the screen, blooms inward, and breathes while it listens — the Siri-style edge light. Tap to summon, tap again to dismiss.",
     hint: "Tap to summon. Sound on.",
     dependencies: [],
     file: "intelligence-glow.tsx",

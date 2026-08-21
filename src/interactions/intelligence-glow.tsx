@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * 1IAD Day 4 — Intelligence Glow
+ * 1IAD Day 4 — Apple Intelligence Glow
  * The Apple Intelligence summon effect: a flowing multicolor glow that
  * sweeps around the edge of the frame, blooms inward, and breathes while
  * it listens. Tap to summon, tap again to dismiss — with a soft shimmer.

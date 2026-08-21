@@ -14,6 +14,27 @@ export function generateStaticParams() {
   return interactions.map(({ slug }) => ({ slug }));
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const item = interactions.find((i) => i.slug === slug);
+  if (!item) return {};
+  return {
+    title: `${item.title} — Free React Component`,
+    description: `${item.description} Day ${item.day} of One Interaction A Day — free, MIT licensed, one shadcn CLI command to install.`,
+    alternates: { canonical: `/day/${item.slug}` },
+    openGraph: {
+      type: "article",
+      url: `/day/${item.slug}`,
+      title: `${item.title} — Free React Component`,
+      description: item.description,
+    },
+  };
+}
+
 export default async function DayPage({
   params,
 }: {
@@ -29,6 +50,24 @@ export default async function DayPage({
 
   // days with a live tuning panel behind the sliders icon in the dock
   const hasTuner = slug === "intelligence-glow";
+
+  const codeLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    name: item.title,
+    description: item.description,
+    programmingLanguage: "TypeScript",
+    runtimePlatform: "React 19",
+    codeRepository: "https://github.com/sj9911/oiad",
+    license: "https://opensource.org/license/mit",
+    url: `${SITE_URL}/day/${item.slug}`,
+    dateCreated: item.date,
+    author: {
+      "@type": "Person",
+      name: "Sunny Joshi",
+      url: "https://x.com/sunnyxdesign",
+    },
+  };
 
   const shell = (
       <DayShell
@@ -84,6 +123,10 @@ export default async function DayPage({
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(codeLd) }}
+      />
       {hasTuner ? <GlowTunerProvider>{shell}</GlowTunerProvider> : shell}
     </main>
   );
