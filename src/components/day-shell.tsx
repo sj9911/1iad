@@ -140,10 +140,21 @@ export function DayShell({
           </span>
         </button>
 
+        {/* frosted strip behind the button row: stepped blur compounding
+            toward the top, fading fill downward (same recipe as the dock) */}
+        <span aria-hidden="true" className="absolute inset-x-0 top-0 z-[5] h-[104px] overflow-hidden">
+          <span className="absolute inset-x-0 top-0 h-full backdrop-blur-[8px]" />
+          <span className="absolute inset-x-0 top-0 h-4/5 backdrop-blur-[4px]" />
+          <span className="absolute inset-x-0 top-0 h-3/5 backdrop-blur-[6px]" />
+          <span className="absolute inset-x-0 top-0 h-2/5 backdrop-blur-[8px]" />
+          <span className="absolute inset-x-0 top-0 h-1/5 backdrop-blur-[10px]" />
+          <span className="absolute inset-0 bg-linear-to-b from-surface/75 to-surface/20" />
+        </span>
+
         {/* full-width rule under the button row */}
         <span
           aria-hidden="true"
-          className="absolute inset-x-0 top-[104px] border-t border-hairline"
+          className="absolute inset-x-0 top-[104px] z-[5] border-t border-hairline"
         />
 
         {/* fixed-width inner so text doesn't reflow while the panel animates */}
