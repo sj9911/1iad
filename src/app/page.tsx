@@ -1,98 +1,226 @@
-// 0.5s: frosted glass pill floating over Apple-gray, STIX serif H1 left, big "№ 001" right
+// The homepage (formerly /v2; the previous home is parked at /v1).
+// Layout lives in the poster's 738x386 coordinate space; text sizes use cqw so
+// everything scales with the container. Offsets derived from the original comps.
+import { promises as fs } from "fs";
+import path from "path";
 import Link from "next/link";
 import { interactions } from "@/interactions/registry";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { LogoIntro } from "@/components/logo-intro";
-import { getLogoSlots } from "@/lib/logo-slots";
+import { HeroFlicker, type Piece } from "@/components/hero-flicker";
+import { FloatingNav } from "@/components/floating-nav";
+import { interactionsMeta, SITE_URL } from "@/interactions/meta";
+import { getStars } from "@/lib/stars";
 
-function Socials() {
-  return (
-    <span className="flex items-center gap-4">
-      <a
-        href="https://x.com/sunnyxdesign"
-        target="_blank"
-        rel="noreferrer"
-        aria-label="Sunny on X"
-        className="text-muted transition-colors duration-150 hover:text-foreground"
-      >
-        <svg viewBox="0 0 24 24" className="size-4 fill-current" aria-hidden="true">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z" />
-        </svg>
-      </a>
-      <a
-        href="https://www.linkedin.com/in/thesunnyjoshi/"
-        target="_blank"
-        rel="noreferrer"
-        aria-label="Sunny on LinkedIn"
-        className="text-muted transition-colors duration-150 hover:text-foreground"
-      >
-        <svg viewBox="0 0 24 24" className="size-4 fill-current" aria-hidden="true">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286ZM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065Zm1.782 13.019H3.555V9h3.564v11.452ZM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0Z" />
-        </svg>
-      </a>
-    </span>
+
+const latest = interactionsMeta[interactionsMeta.length - 1];
+const INSTALL = `npx shadcn@latest add ${SITE_URL}/r/${latest.slug}`;
+
+const ART: Record<string, { x: number; y: number; w: number; h: number }> = {
+  corners: { x: 0, y: 61.2, w: 738, h: 325 },
+  globe: { x: 461.45, y: 0, w: 271, h: 271 },
+  "top-icon": { x: 318.17, y: 115.73, w: 119, h: 34 },
+  "one-hand": { x: 40.32, y: 94.23, w: 216, h: 83 },
+  "a-hand": { x: 414.2, y: 265.97, w: 68, h: 89 },
+  "day-hand": { x: 507.4, y: 262.46, w: 199, h: 119 },
+};
+
+async function readPiece(name: string): Promise<Piece> {
+  const raw = await fs.readFile(
+    path.join(process.cwd(), "src", "v3", "pieces", `${name}.svg`),
+    "utf-8",
   );
+  const viewBox = raw.match(/viewBox="([^"]+)"/)?.[1] ?? "0 0 100 100";
+  const inner = raw
+    .replace(/^[\s\S]*?<svg[^>]*>/, "")
+    .replace(/<\/svg>[\s\S]*$/, "")
+    .replaceAll('"black"', '"currentColor"')
+    .replaceAll('"#002FFF"', '"var(--oiad-blue)"');
+  return { viewBox, inner, ...ART[name] };
 }
 
-export default async function Home() {
-  const logoSlots = await getLogoSlots();
-  return (
-    <main className="mx-auto max-w-5xl px-6 pb-24 pt-4">
-      <div className="sticky top-4 z-10 mx-auto flex w-fit items-center gap-4 rounded-full border border-hairline bg-white/70 px-6 py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] backdrop-blur-xl transition-colors duration-300 dark:bg-[#1d1d1f]/70">
-        <LogoIntro slots={logoSlots} className="h-[20px]" />
-        <span className="h-4 w-px bg-hairline" />
-        <span className="text-sm text-muted">by Sunny Joshi</span>
-        <Socials />
-        <span className="h-4 w-px bg-hairline" />
-        <ThemeToggle />
-      </div>
+const HEADLINE =
+  "font-bricolage absolute uppercase leading-none tracking-[-0.01em]";
+// variable axes maxed out: full width, heaviest weight, largest optical size
+const HEADLINE_STYLE = {
+  fontVariationSettings: '"wght" 800, "wdth" 100, "opsz" 96',
+} as const;
 
-      <header className="flex flex-wrap items-end justify-between gap-8 pb-16 pt-16 sm:pt-24">
-        <div>
-          <h1 className="mt-3 max-w-2xl text-[2.69rem] font-semibold uppercase leading-[0.95] tracking-tight sm:text-[4.03rem]">
-            One
+// per-letter inflate with scattered delays; golden-ratio hash keeps the
+// "random" stable between server and client renders
+function Letters({ text, base }: { text: string; base: number }) {
+  return text.split("").map((ch, i) => {
+    const delay = base + ((i * 0.618034) % 1) * 0.5;
+    return (
+      <span
+        key={i}
+        className="oiad-inflate"
+        style={{ animationDelay: `${delay.toFixed(3)}s` }}
+      >
+        {ch === " " ? "\u00A0" : ch}
+      </span>
+    );
+  });
+}
+
+export default async function V2() {
+  const stars = await getStars();
+  const p = Object.fromEntries(
+    await Promise.all(
+      Object.keys(ART).map(async (n) => [n, await readPiece(n)]),
+    ),
+  ) as Record<string, Piece>;
+
+  return (
+    <main className="min-h-svh">
+      <FloatingNav
+        stars={stars}
+        badges={{ viewBox: p["top-icon"].viewBox, inner: p["top-icon"].inner }}
+      />
+      <header className="relative border-b border-hairline px-6 pb-24 pt-16">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
+            backgroundSize: "18px 18px",
+            maskImage:
+              "linear-gradient(to bottom, black 55%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black 55%, transparent 100%)",
+          }}
+        />
+        <div className="mx-auto max-w-3xl">
+        <h1 className="sr-only">One Interaction A Day</h1>
+        <HeroFlicker
+          statics={[p.corners]}
+          globe={p.globe}
+          badges={p["top-icon"]}
+          copyText={INSTALL}
+          slots={[
+            {
+              print: (
+                <span
+                  aria-hidden="true"
+                  className={HEADLINE}
+                  style={{ ...HEADLINE_STYLE, left: "5.9%", top: "23.0%", fontSize: "15.1cqw" }}
+                >
+                  <Letters text="One" base={0.55} />
+                </span>
+              ),
+              hand: [p["one-hand"]],
+            },
+            {
+              print: (
+                <span
+                  aria-hidden="true"
+                  className={`${HEADLINE} text-right`}
+                  style={{
+                    ...HEADLINE_STYLE,
+                    right: "5.4%",
+                    top: "69.0%",
+                    fontSize: "15.1cqw",
+                    // per-letter spans lose the font's kerning pairs (D-A, A-Y),
+                    // so this word gets extra negative tracking to compensate
+                    letterSpacing: "-0.035em",
+                  }}
+                >
+                  <Letters text="A Day" base={0.85} />
+                </span>
+              ),
+              hand: [p["a-hand"], p["day-hand"]],
+            },
+          ]}
+        >
+          <span
+            aria-hidden="true"
+            className={HEADLINE}
+            style={{ ...HEADLINE_STYLE, left: "6.4%", top: "45.8%", fontSize: "15.1cqw" }}
+          >
+            <Letters text="Interaction" base={0.7} />
+          </span>
+          <p
+            className="font-bricolage oiad-rise absolute font-bold uppercase leading-[1.3]"
+            style={{ left: "6.4%", top: "73.5%", fontSize: "2.2cqw", animationDelay: "1.4s" }}
+          >
+            A growing collection of
             <br />
-            Interaction
-            <br />
-            A&nbsp;Day
-          </h1>
-          <p className="mt-3 max-w-lg text-lg leading-relaxed text-muted">
-            1IAD is a free, open-source collection of animated React
-            interactions, built daily in public. Browse them in action below
-            and install any component with the shadcn CLI.
+            animated React components.
           </p>
-        </div>
-        <div className="pb-1 text-right text-lg leading-relaxed text-muted">
-          <p>
-            {interactions.length} interaction{interactions.length > 1 && "s"}
-          </p>
-          <p>open source · MIT</p>
+        </HeroFlicker>
         </div>
       </header>
 
-      <section className="grid gap-6 sm:grid-cols-2">
-        {interactions.map(({ slug, day, title, Component, StageComponent }) => (
-          <div
-            key={slug}
-            className="group overflow-hidden rounded-[28px] border border-hairline bg-surface transition-[transform,box-shadow,background-color] duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)]"
-          >
-            <div className="relative flex aspect-[4/3] items-center justify-center px-10">
-              {StageComponent ? <StageComponent /> : <Component />}
-            </div>
-            <Link
-              href={`/day/${slug}`}
-              className="flex items-baseline justify-between border-t border-hairline px-6 py-4"
+      {/* body: the gallery of days inside the rails */}
+      <section className="relative mx-auto max-w-6xl border-x border-hairline">
+        {/* node markers where the rails meet the header rule */}
+        <span aria-hidden="true" className="absolute left-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
+        <span aria-hidden="true" className="absolute right-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
+
+        <div className="grid gap-6 p-6 sm:grid-cols-2">
+          {interactions
+            .slice()
+            .reverse()
+            .map(({ slug, day, title, Component, StageComponent, CardComponent }) => (
+            <div
+              key={slug}
+              className="group oiad-card rounded-2xl border border-hairline bg-surface p-2.5"
             >
-              <span className="text-sm">
-                <span className="font-medium">Day {day}</span>
-                <span className="text-muted"> · {title}</span>
+              {/* interaction window */}
+              <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-background px-10">
+                {CardComponent ? (
+                  <CardComponent />
+                ) : StageComponent ? (
+                  <StageComponent />
+                ) : (
+                  <Component />
+                )}
+              </div>
+              {/* text and cta: number for balance, arrow on hover */}
+              <div className="font-bricolage flex items-center justify-between px-2 pb-1 pt-3">
+                <span className="text-base font-semibold">{title}</span>
+                <Link
+                  href={`/day/${slug}`}
+                  aria-label={`Open ${title}`}
+                  className="relative flex items-center"
+                >
+                  <span className="text-base font-semibold tabular-nums text-muted transition-opacity duration-200 group-hover:opacity-0">
+                    {String(day).padStart(3, "0")}
+                  </span>
+                  <span className="absolute right-0 flex text-[var(--oiad-blue)] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    <svg
+                      viewBox="0 0 9 9"
+                      className="h-[0.72em] w-auto fill-current"
+                      aria-hidden="true"
+                    >
+                      <path d="M4.63636 8.267L3.75852 7.39768L6.38778 4.76842H0V3.49854H6.38778L3.75852 0.873535L4.63636 -4.45843e-05L8.76989 4.13348L4.63636 8.267Z" />
+                    </svg>
+                  </span>
+                </Link>
+              </div>
+            </div>
+          ))}
+          {/* tomorrow's slot */}
+          <div className="rounded-2xl border border-hairline bg-surface p-2.5">
+            <div
+              className="font-bricolage flex aspect-[4/3] items-center justify-center rounded-xl bg-background"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
+                backgroundSize: "18px 18px",
+              }}
+            >
+              <p className="text-sm font-semibold text-muted">
+                Tomorrow, same place
+              </p>
+            </div>
+            <div className="font-bricolage flex items-center justify-between px-2 pb-1 pt-3">
+              <span className="text-base font-semibold text-muted">Tomorrow</span>
+              <span className="text-base font-semibold tabular-nums text-muted">
+                {String(interactions.length + 1).padStart(3, "0")}
               </span>
-              <span className="text-sm text-accent opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                Get the code →
-              </span>
-            </Link>
+            </div>
           </div>
-        ))}
+        </div>
       </section>
     </main>
   );

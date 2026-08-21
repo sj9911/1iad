@@ -51,7 +51,7 @@ export default async function DayPage({
         }}
       >
         <Link
-          href="/v2"
+          href="/"
           // fixed, not absolute: stays put when the sidebar squeezes the stage
           className="fixed left-8 top-8 z-[60] rounded-2xl border border-hairline p-1.5"
         >
