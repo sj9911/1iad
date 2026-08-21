@@ -57,7 +57,7 @@ export default async function Home() {
             A&nbsp;Day
           </h1>
           <p className="mt-3 max-w-lg text-lg leading-relaxed text-muted">
-            OIAD is a free, open-source collection of animated React
+            1IAD is a free, open-source collection of animated React
             interactions, built daily in public. Browse them in action below
             and install any component with the shadcn CLI.
           </p>

@@ -65,4 +65,4 @@ export const interactionsMeta: InteractionMeta[] = [
 ];
 
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://oiad.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://1iad.vercel.app";

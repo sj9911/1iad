@@ -1,4 +1,4 @@
-# OIAD — One Interaction A Day
+# 1IAD — One Interaction A Day
 
 One tiny, Apple-grade UI interaction every day. Live on the site, open source, copy-pasteable. Built in public.
 

@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * OIAD Day 2 — Like Button
+ * 1IAD Day 2 — Like Button
  * A heart that pops with a spring, a ring flash, a burst of particles,
  * and a satisfying "pop" sound (plus a haptic buzz on Android).
  *
@@ -55,7 +55,7 @@ const PARTICLES = [
 
 export function LikeButton({
   api,
-  storageKey = "oiad-liked",
+  storageKey = "1iad-liked",
 }: {
   api?: string;
   storageKey?: string;

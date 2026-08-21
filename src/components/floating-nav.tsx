@@ -84,7 +84,7 @@ function BadgeButton({
   return (
     <button
       onClick={onClick}
-      aria-label="OIAD badges"
+      aria-label="1IAD badges"
       className="relative flex h-[50px] items-center rounded-xl px-3.5 transition-colors duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.09] [&_.oiad-gear]:cursor-pointer [&_.oiad-heartbtn]:cursor-pointer"
     >
       <svg
@@ -382,7 +382,7 @@ export function FloatingNav({
         <Cell
           hovered={hovered === 0}
           onHover={() => setHovered(0)}
-          aria-label="OIAD on GitHub"
+          aria-label="1IAD on GitHub"
           onClick={() => window.open("https://github.com/sj9911/oiad", "_blank")}
         >
           <span className="relative flex size-[21px] items-center justify-center">
@@ -453,7 +453,7 @@ export function FloatingNav({
         <Cell
           hovered={hovered === 1}
           onHover={() => setHovered(1)}
-          aria-label="About OIAD"
+          aria-label="About 1IAD"
           aria-expanded={info}
           onClick={() => setInfo((v) => !v)}
         >

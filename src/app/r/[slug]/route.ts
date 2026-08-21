@@ -24,12 +24,12 @@ export async function GET(
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
     name: item.slug,
     type: "registry:component",
-    title: `OIAD Day ${item.day} — ${item.title}`,
+    title: `1IAD Day ${item.day} — ${item.title}`,
     description: item.description,
     dependencies: item.dependencies,
     files: [
       {
-        path: `components/oiad/${item.file}`,
+        path: `components/1iad/${item.file}`,
         type: "registry:component",
         content,
       },

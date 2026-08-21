@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * OIAD Day 1 — Elastic Slider
+ * 1IAD Day 1 — Elastic Slider
  * An iOS-style slider that stretches past its ends and springs back,
  * with a soft tick sound (and a haptic buzz on Android) every 10 steps.
  *

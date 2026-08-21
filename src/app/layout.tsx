@@ -9,7 +9,7 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "OIAD — One Interaction A Day",
+  title: "1IAD — One Interaction A Day",
   description:
     "One tiny, Apple-grade UI interaction every day. Live, open source, copy-pasteable. Built in public.",
 };

@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * OIAD Day 3 — Infinite Icon Grid
+ * 1IAD Day 3 — Infinite Icon Grid
  * A window onto an endless grid of icons. Drag in any direction forever;
  * icons bloom in from nothing at the edges and shrink away as they leave.
  * Soft inertia on release, and a slow drift when idle.

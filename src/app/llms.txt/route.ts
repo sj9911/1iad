@@ -23,7 +23,7 @@ export async function GET() {
   );
 
   const body = [
-    "# OIAD — One Interaction A Day",
+    "# 1IAD — One Interaction A Day",
     "One tiny, Apple-grade React UI interaction per day. Each is a single self-contained .tsx file (React + Tailwind + motion). MIT licensed — copy freely, or install via the shadcn command shown per component.",
     ...sections,
   ].join("\n\n");
