@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { interactions } from "@/interactions/registry";
 import { GlassLayers } from "@/components/floating-nav";
 import { DayShell } from "@/components/day-shell";
-import { GlowTunerPanel } from "@/components/glow-tuner";
+import { GlowTunerPanel, GlowTunerProvider } from "@/components/glow-tuner";
 import { getStars } from "@/lib/stars";
 import { getNavBadges } from "@/lib/badges";
 import { SITE_URL } from "@/interactions/meta";
@@ -82,5 +82,9 @@ export default async function DayPage({
       </DayShell>
   );
 
-  return <main>{shell}</main>;
+  return (
+    <main>
+      {hasTuner ? <GlowTunerProvider>{shell}</GlowTunerProvider> : shell}
+    </main>
+  );
 }
