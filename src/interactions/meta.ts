@@ -62,6 +62,18 @@ export const interactionsMeta: InteractionMeta[] = [
     file: "intelligence-glow.tsx",
     tags: ["Tap", "Glow", "Sound"],
   },
+  {
+    slug: "proximity-grid",
+    day: 5,
+    date: "2026-08-22",
+    title: "Proximity Grid",
+    description:
+      "A field of dots that feels your cursor: inside the influence radius they bloom into rounded squares, brighten, and get magnetically pulled toward the pointer with a smooth eased falloff. Flip the magnet negative and the grid repels instead.",
+    hint: "Move your cursor. The grid feels it.",
+    dependencies: [],
+    file: "proximity-grid.tsx",
+    tags: ["Hover", "Magnet", "Spring"],
+  },
 ];
 
 export const SITE_URL =

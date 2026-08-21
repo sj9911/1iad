@@ -4,7 +4,9 @@ import { ElasticSlider } from "./elastic-slider";
 import { LikeButton } from "./like-button";
 import { IconGrid } from "./icon-grid";
 import { IntelligenceGlow } from "./intelligence-glow";
+import { ProximityGrid } from "./proximity-grid";
 import { GlowStageTuned } from "@/components/glow-tuner";
+import { ProximityStageTuned } from "@/components/proximity-tuner";
 
 const components: Record<string, ComponentType> = {
   "elastic-slider": ElasticSlider,
@@ -14,6 +16,7 @@ const components: Record<string, ComponentType> = {
   },
   "infinite-icon-grid": IconGrid,
   "intelligence-glow": IntelligenceGlow,
+  "proximity-grid": ProximityGrid,
 };
 
 // day-page stage overrides: components that take over the whole dotted stage
@@ -23,6 +26,7 @@ const stageComponents: Record<string, ComponentType> = {
   },
   // reads tuned layers from GlowTunerProvider when the day page mounts one
   "intelligence-glow": GlowStageTuned,
+  "proximity-grid": ProximityStageTuned,
 };
 
 // gallery-card overrides: full-bleed like the stage, but scaled for the card
@@ -33,6 +37,11 @@ const cardComponents: Record<string, ComponentType> = {
   // cards start lit so the gallery shimmers without a tap
   "intelligence-glow": function IntelligenceGlowCard() {
     return <IntelligenceGlow className="absolute inset-0" defaultOn scale={0.55} />;
+  },
+  "proximity-grid": function ProximityGridCard() {
+    return (
+      <ProximityGrid className="absolute inset-0 bg-background" spacing={26} dot={4} influence={120} magnet={9} />
+    );
   },
 };
 

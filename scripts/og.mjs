@@ -51,7 +51,8 @@ for (const slug of slugs) {
   await page.addStyleTag({
     content: `a[href="/"][class*="fixed"], nextjs-portal { display: none !important; }`,
   });
-  // wake interactions that idle until tapped
+  // wake interactions that idle until tapped or hovered
+  await page.mouse.move(600, 300, { steps: 12 });
   const summon = page.locator('button[aria-label="Summon intelligence"]');
   if (await summon.count()) {
     await summon.click();

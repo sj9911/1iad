@@ -8,6 +8,10 @@ import { interactions } from "@/interactions/registry";
 import { GlassLayers } from "@/components/floating-nav";
 import { DayShell } from "@/components/day-shell";
 import { GlowTunerPanel, GlowTunerProvider } from "@/components/glow-tuner";
+import {
+  ProximityTunerPanel,
+  ProximityTunerProvider,
+} from "@/components/proximity-tuner";
 import { getStars } from "@/lib/stars";
 import { getNavBadges } from "@/lib/badges";
 import { SITE_URL } from "@/interactions/meta";
@@ -60,7 +64,14 @@ export default async function DayPage({
   const prompt = `Add the "${item.title}" interaction from 1IAD to my React + Tailwind project by running: ${install}`;
 
   // days with a live tuning panel behind the sliders icon in the dock
-  const hasTuner = slug === "intelligence-glow";
+  const tuners: Record<
+    string,
+    { Provider: React.ComponentType<{ children: React.ReactNode }>; panel: React.ReactNode }
+  > = {
+    "intelligence-glow": { Provider: GlowTunerProvider, panel: <GlowTunerPanel /> },
+    "proximity-grid": { Provider: ProximityTunerProvider, panel: <ProximityTunerPanel /> },
+  };
+  const tuner = tuners[slug];
 
   const codeLd = {
     "@context": "https://schema.org",
@@ -84,7 +95,7 @@ export default async function DayPage({
       <DayShell
         stars={stars}
         badges={badges}
-        tuner={hasTuner ? <GlowTunerPanel /> : undefined}
+        tuner={tuner?.panel}
         day={{
           title: item.title,
           day: item.day,
@@ -138,7 +149,7 @@ export default async function DayPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(codeLd) }}
       />
-      {hasTuner ? <GlowTunerProvider>{shell}</GlowTunerProvider> : shell}
+      {tuner ? <tuner.Provider>{shell}</tuner.Provider> : shell}
     </main>
   );
 }
