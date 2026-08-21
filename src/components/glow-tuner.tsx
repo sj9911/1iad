@@ -3,6 +3,8 @@
 // Live tuning panel for the Intelligence Glow day page. The provider owns the
 // layer table; the stage reads it through context, so anywhere the provider
 // isn't mounted (gallery cards, installed copies) the defaults apply.
+// Styled to match the day sidebar's spec sheet: poster header, hairline rows,
+// iOS-style sliders and switches.
 
 import * as React from "react";
 import {
@@ -31,12 +33,18 @@ export function GlowStageTuned() {
   return <IntelligenceGlow className="absolute inset-0" layers={layers} />;
 }
 
-function Num({
+// same maxed variable axes as the sidebar's poster title
+const POSTER = {
+  fontVariationSettings: '"wght" 800, "wdth" 100, "opsz" 96',
+} as const;
+
+function Slider({
   label,
   value,
   min,
   max,
   step,
+  format = (v: number) => String(v),
   onChange,
 }: {
   label: string;
@@ -44,11 +52,13 @@ function Num({
   min: number;
   max: number;
   step: number;
+  format?: (v: number) => string;
   onChange: (v: number) => void;
 }) {
+  const pct = ((value - min) / (max - min)) * 100;
   return (
-    <label className="flex items-center gap-3 text-sm">
-      <span className="w-16 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+    <label className="grid grid-cols-[64px_1fr_44px] items-center gap-4">
+      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
         {label}
       </span>
       <input
@@ -58,10 +68,44 @@ function Num({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="flex-1 accent-[var(--oiad-blue)]"
+        className="tuner-range w-full"
+        style={{
+          background: `linear-gradient(to right, var(--oiad-blue) ${pct}%, var(--hairline) ${pct}%)`,
+        }}
+        aria-label={label}
       />
-      <span className="w-10 text-right tabular-nums">{value}</span>
+      <span className="text-right text-sm font-semibold tabular-nums">
+        {format(value)}
+      </span>
     </label>
+  );
+}
+
+function Switch({
+  on,
+  onChange,
+  label,
+}: {
+  on: boolean;
+  onChange: (v: boolean) => void;
+  label: string;
+}) {
+  return (
+    <button
+      role="switch"
+      aria-checked={on}
+      aria-label={label}
+      onClick={() => onChange(!on)}
+      className={`h-[24px] w-[40px] shrink-0 rounded-full p-[3px] transition-colors duration-200 ${
+        on ? "bg-[var(--oiad-blue)]" : "bg-black/15 dark:bg-white/25"
+      }`}
+    >
+      <span
+        className={`block size-[18px] rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.3)] transition-transform duration-200 ${
+          on ? "translate-x-[16px]" : ""
+        }`}
+      />
+    </button>
   );
 }
 
@@ -90,70 +134,96 @@ export function GlowTunerPanel() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold uppercase tracking-tight">
-          Glow tuner
-        </h2>
-        <button
-          onClick={copy}
-          className="rounded-xl bg-foreground px-4 py-2 text-sm font-semibold text-background transition-opacity duration-150 hover:opacity-85"
+    <div>
+      {/* poster header, same recipe as the sidebar */}
+      <header className="pt-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--oiad-blue)]">
+          Live tuner
+        </p>
+        <h2
+          className="mt-3 text-[34px] uppercase leading-none tracking-[-0.01em]"
+          style={POSTER}
         >
-          {copied ? "Copied" : "Copy values"}
-        </button>
-      </div>
+          Glow
+        </h2>
+        <p className="mb-8 mt-3 text-base leading-relaxed text-muted">
+          Reshape the bloom in real time. Yours to play with.
+        </p>
+      </header>
 
       {layers.map((l, i) => (
-        <div key={i} className="space-y-3 border-t border-hairline pt-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--oiad-blue)]">
-              Layer {i}
-            </span>
+        <section key={i} className="space-y-4 border-t border-hairline py-6">
+          <div className="flex items-baseline justify-between">
+            <h3 className="text-sm font-semibold uppercase tracking-tight">
+              <span aria-hidden="true" className="mr-2 text-[var(--oiad-blue)]">
+                /
+              </span>
+              Layer {String(i + 1).padStart(2, "0")}
+            </h3>
             <button
               onClick={() => setLayers((ls) => ls.filter((_, j) => j !== i))}
-              className="text-xs text-muted transition-colors hover:text-foreground"
+              className="text-xs font-semibold uppercase tracking-[0.14em] text-muted transition-colors duration-150 hover:text-foreground"
             >
               Remove
             </button>
           </div>
-          <Num label="Ring" value={l.t} min={0} max={80} step={1} onChange={(v) => set(i, { t: v })} />
-          <Num label="Blur" value={l.b} min={0} max={160} step={1} onChange={(v) => set(i, { b: v })} />
-          <Num label="Opacity" value={l.o} min={0} max={1} step={0.05} onChange={(v) => set(i, { o: v })} />
-          <div className="flex items-center gap-5 text-sm">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={l.breathe}
-                onChange={(e) => set(i, { breathe: e.target.checked })}
-                className="accent-[var(--oiad-blue)]"
-              />
+          <Slider label="Ring" value={l.t} min={0} max={80} step={1} onChange={(v) => set(i, { t: v })} />
+          <Slider label="Blur" value={l.b} min={0} max={160} step={1} onChange={(v) => set(i, { b: v })} />
+          <Slider
+            label="Opacity"
+            value={l.o}
+            min={0}
+            max={1}
+            step={0.05}
+            format={(v) => `${Math.round(v * 100)}%`}
+            onChange={(v) => set(i, { o: v })}
+          />
+          <div className="grid grid-cols-[64px_1fr] items-center gap-4">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Breathe
-            </label>
-            <label className="flex items-center gap-2 text-muted">
-              Delay
-              <input
-                type="text"
-                value={l.delay}
-                onChange={(e) => set(i, { delay: e.target.value })}
-                className="w-16 rounded-lg border border-hairline bg-background px-2 py-1 text-foreground"
-              />
-            </label>
+            </span>
+            <div className="flex items-center justify-between">
+              <Switch on={l.breathe} onChange={(v) => set(i, { breathe: v })} label={`Layer ${i + 1} breathe`} />
+            </div>
           </div>
-        </div>
+          {l.breathe && (
+            <Slider
+              label="Delay"
+              value={parseFloat(l.delay) || 0}
+              min={0}
+              max={2}
+              step={0.1}
+              format={(v) => `${v}s`}
+              onChange={(v) => set(i, { delay: `${v}s` })}
+            />
+          )}
+        </section>
       ))}
 
       <button
         onClick={() =>
           setLayers((ls) => [...ls, { ...(ls[ls.length - 1] ?? GLOW_LAYERS[0]) }])
         }
-        className="w-full rounded-xl border border-hairline py-2.5 text-sm font-semibold transition-colors hover:bg-black/[0.04] dark:hover:bg-white/[0.06]"
+        className="flex w-full items-center gap-2 border-t border-hairline py-5 text-sm font-semibold uppercase tracking-tight transition-colors duration-150 hover:text-[var(--oiad-blue)]"
       >
-        + Add layer
+        <span aria-hidden="true" className="text-[var(--oiad-blue)]">
+          +
+        </span>
+        Add layer
       </button>
 
-      <pre className="overflow-x-auto rounded-xl border border-hairline bg-background p-4 font-mono text-xs leading-relaxed">
-        {code}
-      </pre>
+      {/* the values, sidebar "Steal it" style: code block + solid button */}
+      <div className="border-t border-hairline py-6 pb-12">
+        <code className="block break-all rounded-xl border border-hairline bg-background p-4 font-mono text-[12px] leading-relaxed whitespace-pre overflow-x-auto">
+          {code}
+        </code>
+        <button
+          onClick={copy}
+          className="mt-3 flex h-12 w-full items-center justify-center rounded-xl bg-foreground text-base font-semibold text-background transition-opacity duration-150 hover:opacity-85"
+        >
+          {copied ? "Copied" : "Copy values"}
+        </button>
+      </div>
     </div>
   );
 }
