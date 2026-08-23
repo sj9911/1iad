@@ -40,7 +40,7 @@ const cardComponents: Record<string, ComponentType> = {
   },
   "proximity-grid": function ProximityGridCard() {
     return (
-      <ProximityGrid className="absolute inset-0 bg-background" spacing={26} dot={4} influence={120} magnet={9} />
+      <ProximityGrid className="absolute inset-0 bg-background" cols={11} rows={7} spacing={26} dot={4} influence={120} magnet={9} />
     );
   },
 };

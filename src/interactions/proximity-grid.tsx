@@ -2,7 +2,7 @@
 
 /**
  * 1IAD Day 5 — Proximity Grid
- * A field of tiny dots that feel the cursor: inside the influence radius
+ * A block of tiny dots that feels the cursor: inside the influence radius
  * they bloom into rounded squares, brighten, and get magnetically pulled
  * toward (or pushed away from) the pointer, with a smooth eased falloff.
  *
@@ -14,6 +14,8 @@ import * as React from "react";
 
 export function ProximityGrid({
   className = "relative h-[340px] w-full max-w-[520px] rounded-3xl border border-black/10 dark:border-white/15",
+  cols = 13, // grid size, centered in the container
+  rows = 9,
   influence = 170, // px radius the cursor reaches
   magnet = 12, // px of pull at full proximity; negative pushes away
   scale = 5, // near size, as a multiple of the resting dot
@@ -23,6 +25,8 @@ export function ProximityGrid({
   dot = 5, // resting dot size in px
 }: {
   className?: string;
+  cols?: number;
+  rows?: number;
   influence?: number;
   magnet?: number;
   scale?: number;
@@ -33,7 +37,7 @@ export function ProximityGrid({
 }) {
   const viewRef = React.useRef<HTMLDivElement>(null);
   const cellRefs = React.useRef<(HTMLSpanElement | null)[]>([]);
-  const [grid, setGrid] = React.useState({ cols: 0, rows: 0 });
+  const grid = { cols, rows };
   // latest prop values for the rAF loop without re-subscribing it
   const cfg = React.useRef({ influence, magnet, scale, radius, dimmed });
   React.useEffect(() => {
@@ -42,21 +46,8 @@ export function ProximityGrid({
 
   React.useEffect(() => {
     const view = viewRef.current!;
-    const measure = () => {
-      const r = view.getBoundingClientRect();
-      const cols = Math.max(1, Math.floor(r.width / spacing));
-      const rows = Math.max(1, Math.floor(r.height / spacing));
-      setGrid((g) => (g.cols === cols && g.rows === rows ? g : { cols, rows }));
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(view);
-    return () => ro.disconnect();
-  }, [spacing]);
-
-  React.useEffect(() => {
-    const view = viewRef.current!;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const grid = { cols, rows };
     const n = grid.cols * grid.rows;
     // per-cell eased proximity, smoothed per frame for a springy feel
     const cur = new Float32Array(n);
@@ -116,11 +107,11 @@ export function ProximityGrid({
       view.removeEventListener("pointerdown", onMove);
       view.removeEventListener("pointerleave", onLeave);
     };
-  }, [grid, spacing]);
+  }, [cols, rows, spacing]);
 
   return (
     <div ref={viewRef} className={`${className} touch-none overflow-hidden`}>
-      {grid.cols > 0 && (
+      {(
         <div
           aria-hidden="true"
           className="absolute grid"

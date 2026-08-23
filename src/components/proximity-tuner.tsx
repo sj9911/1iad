@@ -9,6 +9,8 @@ import { motion } from "motion/react";
 import {
   IconArrowsMove,
   IconCircleHalf2,
+  IconLayoutColumns,
+  IconLayoutRows,
   IconMagnet,
   IconRadar2,
   IconResize,
@@ -18,6 +20,8 @@ import { DialRow, rise, TunerHeader } from "./tuner-controls";
 import { ProximityGrid } from "@/interactions/proximity-grid";
 
 type Knobs = {
+  cols: number;
+  rows: number;
   influence: number;
   magnet: number;
   scale: number;
@@ -26,6 +30,8 @@ type Knobs = {
   spacing: number;
 };
 const DEFAULTS: Knobs = {
+  cols: 13,
+  rows: 9,
   influence: 170,
   magnet: 12,
   scale: 5,
@@ -56,6 +62,8 @@ export function ProximityStageTuned() {
 }
 
 const ROWS = [
+  { key: "cols", icon: IconLayoutColumns, label: "Columns", min: 3, max: 30, step: 1, unit: "" },
+  { key: "rows", icon: IconLayoutRows, label: "Rows", min: 3, max: 20, step: 1, unit: "" },
   { key: "influence", icon: IconRadar2, label: "Influence", min: 60, max: 420, step: 5, unit: "px" },
   { key: "magnet", icon: IconMagnet, label: "Magnet", min: -40, max: 40, step: 1, unit: "px" },
   { key: "scale", icon: IconResize, label: "Scale", min: 1, max: 9, step: 0.25, unit: "×" },
