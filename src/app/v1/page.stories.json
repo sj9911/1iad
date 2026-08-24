@@ -1,0 +1,5 @@
+{
+  "$schema": "https://forge.dev/schemas/stories.v3.json",
+  "name": "V1 (parked home)",
+  "page": "/v1"
+}

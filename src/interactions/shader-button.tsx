@@ -209,7 +209,7 @@ export function ShaderButton({
 }) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   // hover accelerates the flow; the loop lerps toward this target
-  const speedTarget = React.useRef(0.5);
+  const speedTarget = React.useRef(1);
 
   React.useEffect(() => {
     const canvas = canvasRef.current!;
@@ -267,7 +267,7 @@ export function ShaderButton({
     ro.observe(canvas);
 
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let speed = 0.5;
+    let speed = 1;
     let raf = 0;
     const render = (now: number) => {
       speed += (speedTarget.current - speed) * 0.06;
@@ -299,7 +299,7 @@ export function ShaderButton({
     <button
       onClick={onClick}
       onPointerEnter={() => (speedTarget.current = 1.6)}
-      onPointerLeave={() => (speedTarget.current = 0.5)}
+      onPointerLeave={() => (speedTarget.current = 1)}
       className="sb-root group relative flex select-none items-center gap-5 rounded-full border border-black/10 bg-gradient-to-b from-white to-neutral-200 p-2 pr-9 text-neutral-900 shadow-[0_2px_6px_rgba(0,0,0,0.08),0_12px_28px_rgba(0,0,0,0.10)] outline-none transition-transform duration-150 focus-visible:ring-2 focus-visible:ring-[#e6802e] focus-visible:ring-offset-4 active:scale-[0.97] dark:border-white/10 dark:from-[#2e2e30] dark:to-[#151517] dark:text-neutral-50 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
     >
       <style>{CSS}</style>

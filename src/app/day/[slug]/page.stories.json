@@ -1,0 +1,5 @@
+{
+  "$schema": "https://forge.dev/schemas/stories.v3.json",
+  "name": "Day — Shader Button",
+  "page": "/day/shader-button"
+}
