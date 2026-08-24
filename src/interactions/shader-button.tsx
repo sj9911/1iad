@@ -56,6 +56,7 @@ uniform float u_time;
 uniform vec2 u_res;
 uniform float u_symmetry;
 uniform float u_speed;
+uniform float u_boost;
 
 #define PI 3.14159265359
 #define TAU 6.28318530718
@@ -188,6 +189,7 @@ void main() {
   col = col / (1.0 + col * 0.3);
   col = pow(max(col, vec3(0.0)), vec3(0.92, 0.96, 1.06));
 
+  col = mix(vec3(dot(col, vec3(0.333))), col, 1.0 + (u_boost - 1.0) * 0.8) * u_boost;
   gl_FragColor = vec4(col, 1.0);
 }
 `;
@@ -248,6 +250,7 @@ export function ShaderButton({
     const uRes = gl.getUniformLocation(prog, "u_res");
     const uSymmetry = gl.getUniformLocation(prog, "u_symmetry");
     const uSpeed = gl.getUniformLocation(prog, "u_speed");
+    const uBoost = gl.getUniformLocation(prog, "u_boost");
 
     const dpr = Math.min(devicePixelRatio || 1, 2);
     const resize = () => {
@@ -274,6 +277,11 @@ export function ShaderButton({
       gl.uniform1f(uTime, reduced ? 40 : now * 0.001); // frozen but composed
       gl.uniform1f(uSymmetry, symmetry);
       gl.uniform1f(uSpeed, speed);
+      // hotter band on light backgrounds, where the warm palette goes muddy
+      gl.uniform1f(
+        uBoost,
+        document.documentElement.classList.contains("dark") ? 1.0 : 1.45,
+      );
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       raf = requestAnimationFrame(render);
     };
@@ -292,13 +300,13 @@ export function ShaderButton({
       onClick={onClick}
       onPointerEnter={() => (speedTarget.current = 1.6)}
       onPointerLeave={() => (speedTarget.current = 0.5)}
-      className="sb-root group relative flex select-none items-center gap-5 rounded-full border border-black/10 bg-gradient-to-b from-neutral-100 to-neutral-300 p-2 pr-9 text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-transform duration-150 focus-visible:ring-2 focus-visible:ring-[#e6802e] focus-visible:ring-offset-4 active:scale-[0.97] dark:border-white/10 dark:from-[#2e2e30] dark:to-[#151517] dark:text-neutral-50 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+      className="sb-root group relative flex select-none items-center gap-5 rounded-full border border-black/10 bg-gradient-to-b from-white to-neutral-200 p-2 pr-9 text-neutral-900 shadow-[0_2px_6px_rgba(0,0,0,0.08),0_12px_28px_rgba(0,0,0,0.10)] outline-none transition-transform duration-150 focus-visible:ring-2 focus-visible:ring-[#e6802e] focus-visible:ring-offset-4 active:scale-[0.97] dark:border-white/10 dark:from-[#2e2e30] dark:to-[#151517] dark:text-neutral-50 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
     >
       <style>{CSS}</style>
       {/* the icon well: the shader shows as a thin prismatic ring around it */}
       <span aria-hidden="true" className="relative size-14 shrink-0 rounded-full">
         {/* soft halo behind the ring; blooms on hover */}
-        <span className="sb-paint absolute -inset-1.5 rounded-full opacity-45 blur-md transition-opacity duration-300 group-hover:opacity-90" />
+        <span className="sb-paint absolute -inset-1.5 rounded-full opacity-65 blur-md transition-opacity duration-300 group-hover:opacity-100 dark:opacity-45 dark:group-hover:opacity-90" />
         {/* CSS conic ring — visible only if WebGL is unavailable */}
         <span
           className="sb-paint sb-ring absolute inset-0 rounded-full"
@@ -313,7 +321,7 @@ export function ShaderButton({
         />
         {/* embossed face */}
         <span
-          className="absolute rounded-full border border-white/70 bg-gradient-to-b from-neutral-100 to-neutral-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.18),inset_0_-1px_1px_rgba(255,255,255,0.55)] dark:border-white/10 dark:from-[#2e2e30] dark:to-[#151517] dark:shadow-[inset_0_2px_5px_rgba(0,0,0,0.65),inset_0_-1px_1px_rgba(255,255,255,0.06)]"
+          className="absolute rounded-full border border-white/70 bg-gradient-to-b from-white to-neutral-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.18),inset_0_-1px_1px_rgba(255,255,255,0.55)] dark:border-white/10 dark:from-[#2e2e30] dark:to-[#151517] dark:shadow-[inset_0_2px_5px_rgba(0,0,0,0.65),inset_0_-1px_1px_rgba(255,255,255,0.06)]"
           style={{ inset: thickness }}
         />
         {/* the icon, softly embossed */}
