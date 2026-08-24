@@ -4,8 +4,9 @@
  * 1IAD Day 6 — Shader Button
  * A pill button with a thermal shader border: Paper Shaders' Heatmap runs
  * in a ring around the machined icon well (a dark disc is the heat source,
- * its contour heat landing exactly at the border). Frozen at rest; hovering
- * sets the heat flowing and blooms a halo. Pressing compresses the button.
+ * its contour heat landing exactly at the border). The heat always flows;
+ * hovering doubles the speed, shifts in a hot magenta, and blooms a halo.
+ * Pressing compresses the button.
  *
  * Needs `@paper-design/shaders-react` (installed automatically by the
  * shadcn CLI) and Tailwind. https://x.com/sunnyxdesign — built in public.
@@ -24,6 +25,7 @@ const HEAT_COLORS = [
   "#ff9a1f",
   "#ff4d00",
 ];
+const HOT_COLORS = [...HEAT_COLORS, "#ff2ec4"];
 const CONIC = `${HEAT_COLORS.join(", ")}, ${HEAT_COLORS[0]}`;
 
 // static conic for the halo and the no-WebGL fallback rim — the shader owns
@@ -52,7 +54,7 @@ export function ShaderButton({
   thickness?: number;
   onClick?: () => void;
 }) {
-  // the heat runs only on hover; a static frame shows at rest
+  // the heat always flows; hover runs it hotter, faster, with an extra color
   const [hot, setHot] = React.useState(false);
   const reduced =
     typeof window !== "undefined" &&
@@ -77,14 +79,14 @@ export function ShaderButton({
             occludes everything inside the band */}
         <Heatmap
           image={RING_DISC}
-          colors={HEAT_COLORS}
+          colors={hot ? HOT_COLORS : HEAT_COLORS}
           colorBack="#000000"
           contour={0.5}
           angle={0}
           noise={0}
           innerGlow={0.5}
           outerGlow={0.5}
-          speed={hot && !reduced ? 1 : 0}
+          speed={reduced ? 0 : hot ? 2 : 1}
           frame={52000}
           scale={1}
           className="absolute inset-0 overflow-hidden rounded-full"
