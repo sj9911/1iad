@@ -74,6 +74,18 @@ export const interactionsMeta: InteractionMeta[] = [
     file: "proximity-grid.tsx",
     tags: ["Hover", "Magnet", "Spring"],
   },
+  {
+    slug: "shader-button",
+    day: 6,
+    date: "2026-08-24",
+    title: "Shader Button",
+    description:
+      "A button wrapped in a thick, flowing gradient border: the band rotates slowly, blooms a soft halo behind the button, brightens on hover, and compresses on press.",
+    hint: "Hover it. Press it.",
+    dependencies: [],
+    file: "shader-button.tsx",
+    tags: ["Hover", "Tap", "Glow"],
+  },
 ];
 
 export const SITE_URL =

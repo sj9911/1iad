@@ -5,6 +5,7 @@ import { LikeButton } from "./like-button";
 import { IconGrid } from "./icon-grid";
 import { IntelligenceGlow } from "./intelligence-glow";
 import { ProximityGrid } from "./proximity-grid";
+import { ShaderButton } from "./shader-button";
 import { GlowStageTuned } from "@/components/glow-tuner";
 import { ProximityStageTuned } from "@/components/proximity-tuner";
 
@@ -17,6 +18,7 @@ const components: Record<string, ComponentType> = {
   "infinite-icon-grid": IconGrid,
   "intelligence-glow": IntelligenceGlow,
   "proximity-grid": ProximityGrid,
+  "shader-button": ShaderButton,
 };
 
 // day-page stage overrides: components that take over the whole dotted stage
