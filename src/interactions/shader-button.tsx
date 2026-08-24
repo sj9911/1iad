@@ -70,8 +70,25 @@ export function ShaderButton({
       <style>{CSS}</style>
       {/* the icon well: heat runs in the border ring only */}
       <span aria-hidden="true" className="relative size-14 shrink-0 rounded-full">
-        {/* halo: hidden at rest, blooms on hover */}
-        <span className="sb-paint absolute -inset-1.5 rounded-full opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-90" />
+        {/* halo: a second, larger Heatmap instance — same heat source, cranked
+            outerGlow, transparent background — so the bloom is the shader's
+            own glow output (blurred/faded via CSS), not a fake static gradient */}
+        <span className="absolute -inset-3 overflow-hidden rounded-full opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-90">
+          <Heatmap
+            image={RING_DISC}
+            colors={hot ? HOT_COLORS : HEAT_COLORS}
+            colorBack="rgba(0,0,0,0)"
+            contour={0.65}
+            angle={0}
+            noise={0}
+            innerGlow={0.2}
+            outerGlow={1}
+            speed={reduced ? 0 : 2}
+            frame={52000}
+            scale={0.55}
+            style={{ width: "100%", height: "100%" }}
+          />
+        </span>
         {/* fallback: a faint conic ember ring if WebGL is out */}
         <span className="sb-paint absolute inset-0 rounded-full opacity-60" />
         <span className="absolute inset-[1px] rounded-full bg-black" />
