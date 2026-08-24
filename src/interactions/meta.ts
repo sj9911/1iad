@@ -80,7 +80,7 @@ export const interactionsMeta: InteractionMeta[] = [
     date: "2026-08-24",
     title: "Shader Button",
     description:
-      "A pill button whose icon well runs a live heatmap shader: the icon itself is the heat source, with thermal waves of blue, gold, and red flowing through the glyph inside a machined black porthole. Hovering accelerates the heat and blooms a halo; pressing compresses the button. Built on Paper Shaders.",
+      "A pill button with a thermal shader border: a heatmap ring of blue, gold, and red wraps the machined icon well, frozen until you hover — then the heat flows and a halo blooms. Pressing compresses the button. Built on Paper Shaders.",
     hint: "Hover it. Press it.",
     dependencies: ["@paper-design/shaders-react"],
     file: "shader-button.tsx",
