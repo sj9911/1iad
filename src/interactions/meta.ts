@@ -80,9 +80,9 @@ export const interactionsMeta: InteractionMeta[] = [
     date: "2026-08-24",
     title: "Shader Button",
     description:
-      "A pill button whose icon sits inside a live WebGL shader ring: kaleidoscopic textile patterns morph and flow around the well in warm gold, copper, and hot pink. Hovering accelerates the flow and blooms the halo; pressing compresses the button. Falls back to a CSS gradient without WebGL.",
+      "A pill button whose icon well runs a live heatmap shader: the icon itself is the heat source, with thermal waves of blue, gold, and red flowing through the glyph inside a machined black porthole. Hovering accelerates the heat and blooms a halo; pressing compresses the button. Built on Paper Shaders.",
     hint: "Hover it. Press it.",
-    dependencies: [],
+    dependencies: ["@paper-design/shaders-react"],
     file: "shader-button.tsx",
     tags: ["Hover", "Tap", "Glow"],
   },

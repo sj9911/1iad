@@ -46,7 +46,10 @@ const TAG_ICONS: Record<string, Icon> = {
   Magnet: IconMagnet,
 };
 
-const DEP_NAMES: Record<string, string> = { motion: "Motion" };
+const DEP_NAMES: Record<string, string> = {
+  motion: "Motion",
+  "@paper-design/shaders-react": "Paper Shaders",
+};
 
 // emil rules: transform/opacity only, strong ease-out, small travel
 const EASE = [0.23, 1, 0.32, 1] as const;
