@@ -500,7 +500,8 @@ export function FloatingNav({
               )}
             </AnimatePresence>
           </span>
-          {stars !== null && (
+          {/* 0 stars reads worse than no number at all — show it once it's real */}
+          {stars !== null && stars > 0 && (
             <span
               className={`font-bricolage text-sm font-bold tabular-nums transition-colors duration-200 ${
                 hovered === 0 ? "text-[#CA8A04] dark:text-[#FBBF24]" : ""
