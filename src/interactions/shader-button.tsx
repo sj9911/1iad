@@ -306,7 +306,7 @@ export function ShaderButton({
       {/* the icon well: the shader shows as a thin prismatic ring around it */}
       <span aria-hidden="true" className="relative size-14 shrink-0 rounded-full">
         {/* soft halo behind the ring; blooms on hover */}
-        <span className="sb-paint absolute -inset-1.5 rounded-full opacity-65 blur-md transition-opacity duration-300 group-hover:opacity-100 dark:opacity-45 dark:group-hover:opacity-90" />
+        <span className="sb-paint absolute -inset-1.5 rounded-full opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100 dark:group-hover:opacity-90" />
         {/* CSS conic ring — visible only if WebGL is unavailable */}
         <span
           className="sb-paint sb-ring absolute inset-0 rounded-full"
