@@ -292,7 +292,7 @@ export function ShaderButton({
       onClick={onClick}
       onPointerEnter={() => (speedTarget.current = 1.6)}
       onPointerLeave={() => (speedTarget.current = 0.5)}
-      className="sb-root group relative flex select-none items-center gap-5 rounded-full border border-black/10 bg-white p-2 pr-9 text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-transform duration-150 focus-visible:ring-2 focus-visible:ring-[#e6802e] focus-visible:ring-offset-4 active:scale-[0.97] dark:border-white/10 dark:bg-[#1a1a1c] dark:text-neutral-50 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+      className="sb-root group relative flex select-none items-center gap-5 rounded-full border border-black/10 bg-gradient-to-b from-neutral-100 to-neutral-300 p-2 pr-9 text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-transform duration-150 focus-visible:ring-2 focus-visible:ring-[#e6802e] focus-visible:ring-offset-4 active:scale-[0.97] dark:border-white/10 dark:from-[#2e2e30] dark:to-[#151517] dark:text-neutral-50 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
     >
       <style>{CSS}</style>
       {/* the icon well: the shader shows as a thin prismatic ring around it */}
@@ -313,7 +313,7 @@ export function ShaderButton({
         />
         {/* embossed face */}
         <span
-          className="absolute rounded-full bg-gradient-to-b from-neutral-100 to-neutral-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),inset_0_-2px_4px_rgba(0,0,0,0.15)] dark:from-[#2e2e30] dark:to-[#151517] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.10),inset_0_-2px_5px_rgba(0,0,0,0.6)]"
+          className="absolute rounded-full border border-white/70 bg-gradient-to-b from-neutral-100 to-neutral-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.18),inset_0_-1px_1px_rgba(255,255,255,0.55)] dark:border-white/10 dark:from-[#2e2e30] dark:to-[#151517] dark:shadow-[inset_0_2px_5px_rgba(0,0,0,0.65),inset_0_-1px_1px_rgba(255,255,255,0.06)]"
           style={{ inset: thickness }}
         />
         {/* the icon, softly embossed */}
