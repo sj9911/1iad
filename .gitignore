@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local agent/design tooling — not part of the site
+.agents/
+.claude/
+.forge/
+skills-lock.json
+**/page.stories.json
