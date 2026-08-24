@@ -288,17 +288,21 @@ export function FloatingNav({
       // flexbox centering, not translate: a CSS transform on this ancestor
       // corrupts the dock's FLIP layout measurements (dock jumps to center
       // instead of gliding when the pill unmounts)
-      className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center"
+      className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4"
       onMouseLeave={() => setHovered(null)}
     >
-      <div className="pointer-events-auto relative">
+      {/* on narrow phones the day-page dock (badges + controls + title +
+          actions) is wider than the viewport; this becomes a horizontally
+          scrollable safety net so every control stays reachable rather than
+          clipping off both edges. Inert (no scroll) whenever content fits. */}
+      <div className="pointer-events-auto relative max-w-full overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 
       <div className="relative">
         {/* LayoutGroup: the dock is a sibling of the pill's AnimatePresence and
             doesn't re-render when the pill is finally removed — without the
             group its FLIP never measures and it snaps to center */}
         <LayoutGroup>
-        <div className="relative flex items-center gap-3.5">
+        <div className="relative flex items-center gap-2 sm:gap-3.5">
         {/* badge pill: blurs in from behind the dock on scroll, dissolves in
             place on the way up. Sync mode (not popLayout): the pill must keep
             its flex slot while exiting — popping it to absolute made it ride
@@ -381,9 +385,11 @@ export function FloatingNav({
           </GlassPill>
         )}
 
-        {/* day pages: interaction name + padded day number */}
+        {/* day pages: interaction name + padded day number — decorative
+            (the title lives in the sidebar/h1 too), so it drops on narrow
+            phones where the dock has no room to spare */}
         {day && (
-          <GlassPill>
+          <GlassPill className="hidden sm:block">
             <span className="font-bricolage flex h-[50px] items-center px-3.5 text-base font-semibold">
               {day.title}
             </span>

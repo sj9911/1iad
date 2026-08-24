@@ -95,6 +95,16 @@ export function DayShell({
   const [copied, setCopied] = React.useState(false);
   const copyTimer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
   const reduced = useReducedMotion();
+  // 40vw (sidebar) and a fixed 380px (tuner) are desktop-only widths — on a
+  // phone they're either unreadably narrow or wider than the screen itself
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    const mq = matchMedia("(max-width: 640px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
   const MORPH = reduced
     ? ({ duration: 0 } as const)
     : ({ type: "spring", duration: 0.5, bounce: 0 } as const);
@@ -130,7 +140,7 @@ export function DayShell({
     <div className="flex min-h-svh">
       <motion.aside
         initial={false}
-        animate={{ width: open ? "40vw" : "0vw" }}
+        animate={{ width: open ? (isMobile ? "100vw" : "40vw") : "0vw" }}
         transition={MORPH}
         className={`sticky top-0 h-svh shrink-0 overflow-hidden bg-surface ${
           open ? "border-r border-hairline" : ""
@@ -175,7 +185,7 @@ export function DayShell({
           variants={list}
           initial="hidden"
           animate={open ? "show" : "hidden"}
-          className="font-bricolage h-full w-[40vw] overflow-y-auto px-8 pt-[104px]"
+          className={`font-bricolage h-full overflow-y-auto px-8 pt-[104px] ${isMobile ? "w-screen" : "w-[40vw]"}`}
         >
           {/* the poster block: giant blue day number, headline-set title */}
           <motion.header variants={rise} className="pt-10">
@@ -320,7 +330,7 @@ export function DayShell({
       {tuner && (
         <motion.aside
           initial={false}
-          animate={{ width: tuneOpen ? 380 : 0 }}
+          animate={{ width: tuneOpen ? (isMobile ? "100vw" : 380) : 0 }}
           transition={MORPH}
           className={`sticky top-0 h-svh shrink-0 overflow-hidden bg-surface ${
             tuneOpen ? "border-l border-hairline" : ""
@@ -328,12 +338,14 @@ export function DayShell({
           aria-hidden={!tuneOpen}
         >
           {/* fixed-width inner so controls don't reflow while animating;
-              same staggered rise choreography as the sidebar */}
+              same staggered rise choreography as the sidebar. Extra top
+              clearance on mobile: full-width here sits under the fixed
+              "Back" pill (top-8), which the desktop layout never overlaps */}
           <motion.div
             variants={list}
             initial="hidden"
             animate={tuneOpen ? "show" : "hidden"}
-            className="h-full w-[380px] overflow-y-auto px-6 py-8"
+            className={`h-full overflow-y-auto px-6 pb-8 ${isMobile ? "w-screen pt-24" : "w-[380px] pt-8"}`}
           >
             {tuner}
           </motion.div>
