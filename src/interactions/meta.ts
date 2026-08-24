@@ -80,7 +80,7 @@ export const interactionsMeta: InteractionMeta[] = [
     date: "2026-08-24",
     title: "Shader Button",
     description:
-      "A button whose thick border is a live WebGL fragment shader: kaleidoscopic textile patterns morph and flow around the band in warm gold, copper, and hot pink. Hovering accelerates the flow and blooms the halo; pressing compresses the button. Falls back to a CSS gradient without WebGL.",
+      "A pill button whose icon sits inside a live WebGL shader ring: kaleidoscopic textile patterns morph and flow around the well in warm gold, copper, and hot pink. Hovering accelerates the flow and blooms the halo; pressing compresses the button. Falls back to a CSS gradient without WebGL.",
     hint: "Hover it. Press it.",
     dependencies: [],
     file: "shader-button.tsx",

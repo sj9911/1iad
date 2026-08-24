@@ -193,12 +193,14 @@ void main() {
 `;
 
 export function ShaderButton({
-  children = "Generate",
-  thickness = 8,
+  children = "Home",
+  icon,
+  thickness = 3,
   symmetry = 8,
   onClick,
 }: {
   children?: React.ReactNode;
+  icon?: React.ReactNode;
   thickness?: number;
   symmetry?: number;
   onClick?: () => void;
@@ -290,35 +292,42 @@ export function ShaderButton({
       onClick={onClick}
       onPointerEnter={() => (speedTarget.current = 1.6)}
       onPointerLeave={() => (speedTarget.current = 0.5)}
-      className="sb-root group relative select-none rounded-2xl px-9 py-4 text-lg font-semibold text-neutral-900 outline-none transition-transform duration-150 focus-visible:ring-2 focus-visible:ring-[#e6802e] focus-visible:ring-offset-4 active:scale-[0.96] dark:text-neutral-50"
-      style={{ "--t": `${thickness}px` } as React.CSSProperties}
+      className="sb-root group relative flex select-none items-center gap-5 rounded-full border border-black/10 bg-white p-2 pr-9 text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-transform duration-150 focus-visible:ring-2 focus-visible:ring-[#e6802e] focus-visible:ring-offset-4 active:scale-[0.97] dark:border-white/10 dark:bg-[#1a1a1c] dark:text-neutral-50 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
     >
       <style>{CSS}</style>
-      {/* soft halo behind the button; blooms on hover */}
-      <span
-        aria-hidden="true"
-        className="sb-paint absolute -inset-1 rounded-[20px] opacity-40 blur-lg transition-opacity duration-300 group-hover:opacity-75"
-      />
-      {/* CSS conic band — visible only if WebGL is unavailable */}
-      <span
-        aria-hidden="true"
-        className="sb-paint sb-ring absolute inset-0 rounded-[inherit]"
-      />
-      {/* the shader: fills the button; the solid face occludes the middle,
-          so only the border band shows. (A CSS ring mask on the canvas is
-          unreliable — Chromium mask-composite vs. composited layers.) */}
-      <canvas
-        ref={canvasRef}
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full overflow-hidden rounded-[inherit]"
-      />
-      {/* button face */}
-      <span
-        aria-hidden="true"
-        className="absolute rounded-[11px] bg-white dark:bg-neutral-900"
-        style={{ inset: thickness }}
-      />
-      <span className="relative">{children}</span>
+      {/* the icon well: the shader shows as a thin prismatic ring around it */}
+      <span aria-hidden="true" className="relative size-14 shrink-0 rounded-full">
+        {/* soft halo behind the ring; blooms on hover */}
+        <span className="sb-paint absolute -inset-1.5 rounded-full opacity-45 blur-md transition-opacity duration-300 group-hover:opacity-90" />
+        {/* CSS conic ring — visible only if WebGL is unavailable */}
+        <span
+          className="sb-paint sb-ring absolute inset-0 rounded-full"
+          style={{ "--t": `${thickness}px` } as React.CSSProperties}
+        />
+        {/* the shader: fills the circle; the embossed face occludes the
+            middle, so only the ring shows. (A CSS ring mask on the canvas
+            is unreliable — Chromium mask-composite vs. composited layers.) */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 h-full w-full overflow-hidden rounded-full"
+        />
+        {/* embossed face */}
+        <span
+          className="absolute rounded-full bg-gradient-to-b from-neutral-100 to-neutral-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),inset_0_-2px_4px_rgba(0,0,0,0.15)] dark:from-[#2e2e30] dark:to-[#151517] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.10),inset_0_-2px_5px_rgba(0,0,0,0.6)]"
+          style={{ inset: thickness }}
+        />
+        {/* the icon, softly embossed */}
+        <span className="absolute inset-0 flex items-center justify-center text-neutral-600 [filter:drop-shadow(0_1px_1px_rgba(255,255,255,0.6))] dark:text-neutral-100 dark:[filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.7))]">
+          {icon ?? (
+            <svg viewBox="0 0 24 24" className="size-6 fill-current">
+              <path d="M11.3 3.3a1 1 0 0 1 1.4 0l7.6 7.2a.7.7 0 0 1-.48 1.2H18.4v7.05a1.25 1.25 0 0 1-1.25 1.25H14.2v-4.9a.9.9 0 0 0-.9-.9h-2.6a.9.9 0 0 0-.9.9v4.9H6.85A1.25 1.25 0 0 1 5.6 18.75V11.7H4.18a.7.7 0 0 1-.48-1.2Z" />
+            </svg>
+          )}
+        </span>
+      </span>
+      <span className="relative text-xl font-semibold tracking-tight">
+        {children}
+      </span>
     </button>
   );
 }
