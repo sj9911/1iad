@@ -295,7 +295,7 @@ export function FloatingNav({
           actions) is wider than the viewport; this becomes a horizontally
           scrollable safety net so every control stays reachable rather than
           clipping off both edges. Inert (no scroll) whenever content fits. */}
-      <div className="pointer-events-auto relative max-w-full overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="pointer-events-auto relative max-w-full overflow-x-auto overscroll-x-contain sm:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 
       <div className="relative">
         {/* LayoutGroup: the dock is a sibling of the pill's AnimatePresence and

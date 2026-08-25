@@ -68,10 +68,10 @@ function Row({
 }) {
   return (
     <div className="grid grid-cols-[104px_1fr] gap-x-8 border-t border-hairline py-7">
-      <dt className="pt-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+      <h3 className="pt-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
         {label}
-      </dt>
-      <dd className="min-w-0">{children}</dd>
+      </h3>
+      <div className="min-w-0">{children}</div>
     </div>
   );
 }
@@ -207,7 +207,7 @@ export function DayShell({
             </p>
           </motion.header>
 
-          <dl>
+          <div>
             <motion.div variants={rise}>
               <Row label="Feels like">
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -321,7 +321,7 @@ export function DayShell({
                 </div>
               </Row>
             </motion.div>
-          </dl>
+          </div>
         </motion.div>
       </motion.aside>
 

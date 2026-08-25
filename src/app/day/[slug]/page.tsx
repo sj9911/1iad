@@ -137,6 +137,12 @@ export default async function DayPage({
           </span>
         </Link>
         <h1 className="sr-only">{item.title}</h1>
+        {/* the full write-up only exists inside the (aria-hidden when closed)
+            sidebar drawer — duplicate the answer here, sr-only, so screen
+            readers and non-JS crawlers get it without opening the drawer */}
+        <p className="sr-only">
+          {item.description} Install: {install}
+        </p>
 
         {item.StageComponent ? <item.StageComponent /> : <item.Component />}
       </section>
