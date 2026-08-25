@@ -40,6 +40,7 @@ This drops one file into `components/1iad/` and installs whatever it depends on.
 | 04 | Apple Intelligence Glow | [1iad.com/day/intelligence-glow](https://1iad.com/day/intelligence-glow) | `npx shadcn@latest add https://1iad.com/r/intelligence-glow` |
 | 05 | Proximity Grid | [1iad.com/day/proximity-grid](https://1iad.com/day/proximity-grid) | `npx shadcn@latest add https://1iad.com/r/proximity-grid` |
 | 06 | Shader Button | [1iad.com/day/shader-button](https://1iad.com/day/shader-button) | `npx shadcn@latest add https://1iad.com/r/shader-button` |
+| 07 | Vinyl Player | [1iad.com/day/vinyl-player](https://1iad.com/day/vinyl-player) | `npx shadcn@latest add https://1iad.com/r/vinyl-player` |
 
 The full, always-current list is also machine-readable at [1iad.com/llms.txt](https://1iad.com/llms.txt) (source included at [1iad.com/llms-full.txt](https://1iad.com/llms-full.txt)).
 

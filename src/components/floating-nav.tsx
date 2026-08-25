@@ -321,14 +321,14 @@ export function FloatingNav({
                   ? { duration: 0 }
                   : { duration: 0.8, ease: "easeInOut" },
               }}
-              className="relative z-0 rounded-2xl border border-hairline p-1.5"
+              className="relative z-0"
             >
-              <GlassLayers />
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 rounded-2xl bg-linear-to-t from-surface/20 to-surface/75"
-              />
-              <BadgeButton badges={badges} onClick={badgesClick} />
+              {/* Use the exact same glass shell as the action dock. Keeping
+                  this as a shared primitive prevents the logo badge drifting
+                  in tint, border, padding, or blur from its neighbour. */}
+              <GlassPill>
+                <BadgeButton badges={badges} onClick={badgesClick} />
+              </GlassPill>
             </motion.div>
           )}
         </AnimatePresence>

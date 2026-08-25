@@ -33,6 +33,7 @@ import {
   type NavBadges,
   type NavDay,
 } from "./floating-nav";
+import { useTunerPrompt } from "./tuner-prompt";
 
 const TAG_ICONS: Record<string, Icon> = {
   Drag: IconHandMove,
@@ -93,6 +94,7 @@ export function DayShell({
   const [open, setOpen] = React.useState(false);
   const [tuneOpen, setTuneOpen] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
+  const tunerPrompt = useTunerPrompt();
   const copyTimer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
   const reduced = useReducedMotion();
   // 40vw (sidebar) and a fixed 380px (tuner) are desktop-only widths — on a
@@ -123,7 +125,7 @@ export function DayShell({
   };
 
   function copyPrompt() {
-    navigator.clipboard.writeText(day.prompt).catch(() => {});
+    navigator.clipboard.writeText(tunerPrompt?.prompt ?? day.prompt).catch(() => {});
     tick();
     setCopied(true);
     clearTimeout(copyTimer.current);
@@ -356,7 +358,7 @@ export function DayShell({
         stars={stars}
         badges={badges}
         alwaysBadges
-        day={day}
+        day={{ ...day, prompt: tunerPrompt?.prompt ?? day.prompt }}
         dayOpen={open}
         onDayOpenChange={setOpen}
         tuneOpen={tuneOpen}

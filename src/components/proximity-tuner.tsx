@@ -18,6 +18,7 @@ import {
 } from "@tabler/icons-react";
 import { DialRow, rise, TunerHeader } from "./tuner-controls";
 import { ProximityGrid } from "@/interactions/proximity-grid";
+import { TunerCopyPromptButton, useTunerPrompt } from "./tuner-prompt";
 
 type Knobs = {
   cols: number;
@@ -74,8 +75,15 @@ const ROWS = [
 
 export function ProximityTunerPanel() {
   const ctx = React.useContext(Ctx);
+  const tunerPrompt = useTunerPrompt();
+  const knobs = ctx?.knobs ?? DEFAULTS;
+
+  React.useEffect(() => {
+    tunerPrompt?.setPrompt(`You are editing my React 19 + Tailwind v4 app. Add the 1IAD \"Proximity Grid\" interaction, then apply the exact settings I chose.\n\n1. Install it:\nnpx shadcn@latest add https://1iad.com/r/proximity-grid\n\n2. Render it with these props:\n\n<ProximityGrid\n${Object.entries(knobs).map(([key, value]) => `  ${key}={${value}}`).join("\n")}\n/>\n\nKeep the interaction responsive, accessible, and compatible with the existing project. Make the code changes directly and tell me which files changed.`);
+  }, [knobs, tunerPrompt]);
+
   if (!ctx) return null;
-  const { knobs, setKnobs } = ctx;
+  const { setKnobs } = ctx;
 
   return (
     <div>
@@ -100,6 +108,9 @@ export function ProximityTunerPanel() {
             onChange={(v) => setKnobs((k) => ({ ...k, [key]: v }))}
           />
         ))}
+        <div className="pt-4">
+          <TunerCopyPromptButton />
+        </div>
       </motion.div>
     </div>
   );

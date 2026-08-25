@@ -6,8 +6,10 @@ import { IconGrid } from "./icon-grid";
 import { IntelligenceGlow } from "./intelligence-glow";
 import { ProximityGrid } from "./proximity-grid";
 import { ShaderButton } from "./shader-button";
+import { VinylPlayer } from "./vinyl-player";
 import { GlowStageTuned } from "@/components/glow-tuner";
 import { ProximityStageTuned } from "@/components/proximity-tuner";
+import { VinylStageTuned } from "@/components/vinyl-tuner";
 
 const components: Record<string, ComponentType> = {
   "elastic-slider": ElasticSlider,
@@ -19,6 +21,7 @@ const components: Record<string, ComponentType> = {
   "intelligence-glow": IntelligenceGlow,
   "proximity-grid": ProximityGrid,
   "shader-button": ShaderButton,
+  "vinyl-player": VinylPlayer,
 };
 
 // day-page stage overrides: components that take over the whole dotted stage
@@ -29,6 +32,7 @@ const stageComponents: Record<string, ComponentType> = {
   // reads tuned layers from GlowTunerProvider when the day page mounts one
   "intelligence-glow": GlowStageTuned,
   "proximity-grid": ProximityStageTuned,
+  "vinyl-player": VinylStageTuned,
 };
 
 // gallery-card overrides: full-bleed like the stage, but scaled for the card
@@ -44,6 +48,9 @@ const cardComponents: Record<string, ComponentType> = {
     return (
       <ProximityGrid className="absolute inset-0 bg-background" cols={11} rows={7} spacing={26} dot={4} influence={120} magnet={9} />
     );
+  },
+  "vinyl-player": function VinylPlayerCard() {
+    return <VinylPlayer className="w-[62%] max-w-[288px]" />;
   },
 };
 

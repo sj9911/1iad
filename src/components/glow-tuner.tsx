@@ -29,6 +29,7 @@ import {
   GLOW_LAYERS,
   type GlowLayer,
 } from "@/interactions/intelligence-glow";
+import { TunerCopyPromptButton, useTunerPrompt } from "./tuner-prompt";
 
 type TunerCtx = {
   layers: GlowLayer[];
@@ -52,13 +53,10 @@ export function GlowStageTuned() {
 
 export function GlowTunerPanel() {
   const ctx = React.useContext(Ctx);
+  const tunerPrompt = useTunerPrompt();
   const [copied, setCopied] = React.useState(false);
   const copyTimer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
-  if (!ctx) return null;
-  const { layers, setLayers } = ctx;
-
-  const set = (i: number, patch: Partial<GlowLayer>) =>
-    setLayers((ls) => ls.map((l, j) => (j === i ? { ...l, ...patch } : l)));
+  const layers = ctx?.layers ?? GLOW_LAYERS;
 
   const code = `export const GLOW_LAYERS: GlowLayer[] = [\n${layers
     .map(
@@ -66,6 +64,15 @@ export function GlowTunerPanel() {
         `  { t: ${l.t}, b: ${l.b}, o: ${l.o}, breathe: ${l.breathe}, delay: "${l.delay}" },`,
     )
     .join("\n")}\n];`;
+
+  React.useEffect(() => {
+    tunerPrompt?.setPrompt(`You are editing my React 19 + Tailwind v4 app. Add the 1IAD \"Intelligence Glow\" interaction, then apply the exact settings I chose.\n\n1. Install it:\nnpx shadcn@latest add https://1iad.com/r/intelligence-glow\n\n2. In the component, replace the default layers with:\n\n${code}\n\nKeep the interaction responsive, accessible, and compatible with the existing project. Make the code changes directly and tell me which files changed.`);
+  }, [code, tunerPrompt]);
+
+  if (!ctx) return null;
+  const { setLayers } = ctx;
+  const set = (i: number, patch: Partial<GlowLayer>) =>
+    setLayers((ls) => ls.map((l, j) => (j === i ? { ...l, ...patch } : l)));
 
   function copy() {
     navigator.clipboard.writeText(code).catch(() => {});
@@ -185,6 +192,9 @@ export function GlowTunerPanel() {
           </AnimatePresence>
           {copied ? "Copied" : "Copy values"}
         </motion.button>
+        <div className="mt-3">
+          <TunerCopyPromptButton />
+        </div>
       </motion.div>
     </div>
   );

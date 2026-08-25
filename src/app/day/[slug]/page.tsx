@@ -12,6 +12,8 @@ import {
   ProximityTunerPanel,
   ProximityTunerProvider,
 } from "@/components/proximity-tuner";
+import { VinylTunerPanel, VinylTunerProvider } from "@/components/vinyl-tuner";
+import { TunerPromptProvider } from "@/components/tuner-prompt";
 import { getStars } from "@/lib/stars";
 import { getNavBadges } from "@/lib/badges";
 import { SITE_URL } from "@/interactions/meta";
@@ -70,6 +72,7 @@ export default async function DayPage({
   > = {
     "intelligence-glow": { Provider: GlowTunerProvider, panel: <GlowTunerPanel /> },
     "proximity-grid": { Provider: ProximityTunerProvider, panel: <ProximityTunerPanel /> },
+    "vinyl-player": { Provider: VinylTunerProvider, panel: <VinylTunerPanel /> },
   };
   const tuner = tuners[slug];
 
@@ -155,7 +158,7 @@ export default async function DayPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(codeLd) }}
       />
-      {tuner ? <tuner.Provider>{shell}</tuner.Provider> : shell}
+      {tuner ? <TunerPromptProvider><tuner.Provider>{shell}</tuner.Provider></TunerPromptProvider> : shell}
     </main>
   );
 }

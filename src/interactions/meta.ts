@@ -86,6 +86,18 @@ export const interactionsMeta: InteractionMeta[] = [
     file: "shader-button.tsx",
     tags: ["Hover", "Tap", "Glow"],
   },
+  {
+    slug: "vinyl-player",
+    day: 7,
+    date: "2026-08-25",
+    title: "Vinyl Player",
+    description:
+      "A tactile record player for React: tap to bring the motor up to speed, watch the needle drop and follow the groove, then grab the vinyl to scratch it forwards or backwards with matching audio.",
+    hint: "Tap to play. Grab the vinyl and scratch it.",
+    dependencies: [],
+    file: "vinyl-player.tsx",
+    tags: ["Tap", "Drag", "Sound"],
+  },
 ];
 
 export const SITE_URL =
