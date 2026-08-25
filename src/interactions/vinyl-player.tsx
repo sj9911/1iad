@@ -22,8 +22,13 @@ const ARM_TAU = 260;
 const CX = 472;
 const CY = 485.5;
 
+// CC0 performance of Beethoven's Bagatelle No. 25 (Für Elise), hosted by
+// Wikimedia Commons. The cover is Beethoven's public-domain autograph sketch
+// for the piece, rather than a third-party album sleeve.
 const DEFAULT_TRACK =
-  "https://archive.org/download/DWK315/02_-_Anitek_-_So_Far.mp3";
+  "https://upload.wikimedia.org/wikipedia/commons/7/7b/FurElise.ogg";
+const DEFAULT_ARTWORK =
+  "https://upload.wikimedia.org/wikipedia/commons/c/c3/Beethoven_BH_116_Detail.jpg";
 const DEFAULT_SVG = "/tmp/vinyl-ref.svg";
 
 export type VinylVariant = "full" | "bare" | "glass";
@@ -107,7 +112,7 @@ export function VinylPlayer({
   // Artwork is intentionally injected after the chassis SVG loads so a user
   // can try an image URL without replacing the component's source asset.
   React.useEffect(() => {
-    if (artworkUrl) host.current?.querySelector("image")?.setAttribute("href", artworkUrl);
+    host.current?.querySelector("image")?.setAttribute("href", artworkUrl || DEFAULT_ARTWORK);
   }, [artworkUrl, svg]);
 
   React.useEffect(() => {
