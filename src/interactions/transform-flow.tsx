@@ -18,6 +18,7 @@ export type TransformFlowProps = {
   accent?: string;
   assetSize?: number;
   routeOffset?: number;
+  contrast?: "default" | "high";
   showGuides?: boolean;
   sound?: boolean;
   interactive?: boolean;
@@ -78,6 +79,7 @@ export function TransformFlow({
   accent = "#002fff",
   assetSize = 56,
   routeOffset = 0,
+  contrast = "default",
   showGuides = true,
   sound = true,
   interactive = true,
@@ -204,14 +206,15 @@ export function TransformFlow({
 
   const paths = pathStyle === "curved" ? { input: INPUT_PATHS, output: OUTPUT_PATHS } : { input: LINEAR_INPUT, output: LINEAR_OUTPUT };
   const viewBoxHeight = panelViewBoxHeight(aspectRatio);
-  const stageStyle = { transform: centered ? `translate(${charge.x}px, -50%)` : `translate(${charge.x}px, ${charge.y}px)`, aspectRatio, "--transform-accent": accent } as React.CSSProperties & { "--transform-accent": string };
+  const highContrast = contrast === "high";
+  const stageStyle = { transform: centered ? `translate(${charge.x}px, -50%)` : `translate(${charge.x}px, ${charge.y}px)`, aspectRatio, "--transform-accent": accent, "--transform-guide": highContrast ? "rgba(31, 41, 55, 0.2)" : "var(--hairline-solid)", "--transform-stroke": highContrast ? "rgba(31, 41, 55, 0.22)" : "var(--hairline-solid)", "--transform-card": highContrast ? "#ffffff" : "var(--surface)" } as React.CSSProperties & Record<"--transform-accent" | "--transform-guide" | "--transform-stroke" | "--transform-card", string>;
 
-  return <div className={`relative w-full overflow-hidden rounded-2xl border border-hairline bg-surface shadow-[0_24px_72px_rgba(0,0,0,.1)] will-change-transform ${className}`} style={stageStyle}>
+  return <div className={`relative w-full overflow-hidden rounded-2xl border border-[var(--transform-stroke)] shadow-[0_24px_72px_rgba(0,0,0,.1)] will-change-transform ${highContrast ? "bg-[#f0f2f6]" : "bg-surface"} ${className}`} style={stageStyle}>
     <div className="grid h-full grid-cols-2">
-      <TransformPanel side="input" assets={inputAssets} paths={paths.input} duration={duration} assetSize={assetSize} routeOffset={routeOffset} viewBoxHeight={viewBoxHeight} showGuides={showGuides} registerSvg={registerSvg} />
-      <TransformPanel side="output" assets={outputAssets} paths={paths.output} duration={duration} assetSize={assetSize} routeOffset={routeOffset} viewBoxHeight={viewBoxHeight} showGuides={showGuides} registerSvg={registerSvg} />
+      <TransformPanel side="input" assets={inputAssets} paths={paths.input} duration={duration} assetSize={assetSize} routeOffset={routeOffset} viewBoxHeight={viewBoxHeight} highContrast={highContrast} showGuides={showGuides} registerSvg={registerSvg} />
+      <TransformPanel side="output" assets={outputAssets} paths={paths.output} duration={duration} assetSize={assetSize} routeOffset={routeOffset} viewBoxHeight={viewBoxHeight} highContrast={highContrast} showGuides={showGuides} registerSvg={registerSvg} />
     </div>
-    <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 z-30 w-px -translate-x-1/2 bg-[var(--transform-accent)]" style={{ opacity: 0.12 + charge.glow * 0.88, boxShadow: `0 0 ${8 + charge.glow * 62}px color-mix(in srgb, var(--transform-accent) ${18 + charge.glow * 78}%, transparent)` }} />
+    <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 z-30 w-px -translate-x-1/2 bg-[var(--transform-accent)]" style={{ opacity: (highContrast ? 0.3 : 0.12) + charge.glow * 0.88, boxShadow: `0 0 ${8 + charge.glow * 62}px color-mix(in srgb, var(--transform-accent) ${18 + charge.glow * 78}%, transparent)` }} />
     <CentreGlow intensity={charge.glow} />
     <ChargeParticles intensity={charge.speed} count={particleCount} />
     {interactive && <button type="button" aria-label="Hold to accelerate the transform flow" className={`absolute inset-0 z-40 touch-none focus:outline-none ${charge.holding ? "cursor-grabbing" : "cursor-grab"}`} onPointerDown={begin} onPointerUp={release} onPointerCancel={release} onPointerMove={hint} onPointerEnter={hint} onPointerLeave={() => setPointer((value) => ({ ...value, visible: false }))} />}
@@ -219,13 +222,13 @@ export function TransformFlow({
   </div>;
 }
 
-function TransformPanel({ side, assets, paths, duration, assetSize, routeOffset, viewBoxHeight, showGuides, registerSvg }: { side: "input" | "output"; assets: string[]; paths: string[]; duration: number; assetSize: number; routeOffset: number; viewBoxHeight: number; showGuides: boolean; registerSvg: (node: SVGSVGElement | null) => void }) {
+function TransformPanel({ side, assets, paths, duration, assetSize, routeOffset, viewBoxHeight, highContrast, showGuides, registerSvg }: { side: "input" | "output"; assets: string[]; paths: string[]; duration: number; assetSize: number; routeOffset: number; viewBoxHeight: number; highContrast: boolean; showGuides: boolean; registerSvg: (node: SVGSVGElement | null) => void }) {
   const viewBoxTop = (440 - viewBoxHeight) / 2;
-  return <div className={`relative overflow-hidden ${side === "input" ? "bg-surface" : "bg-black/[0.018] dark:bg-white/[0.025]"}`}>
-    <div className="absolute inset-x-0 top-0 z-10 border-b border-hairline bg-surface/65 px-4 py-3 backdrop-blur-sm"><span className="font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-muted">{side === "input" ? "Input" : "Output"}</span></div>
+  return <div className={`relative overflow-hidden ${highContrast ? side === "input" ? "bg-white" : "bg-[#f7f8fb]" : side === "input" ? "bg-surface" : "bg-black/[0.018] dark:bg-white/[0.025]"}`}>
+    <div className="absolute inset-x-0 top-0 z-10 border-b border-[var(--transform-stroke)] bg-surface/75 px-4 py-3 backdrop-blur-sm"><span className={`font-mono text-[9px] font-semibold uppercase tracking-[0.18em] ${highContrast ? "text-[#555d6d]" : "text-muted"}`}>{side === "input" ? "Input" : "Output"}</span></div>
     <svg ref={registerSvg} className="absolute inset-0 size-full" viewBox={`0 ${viewBoxTop} 640 ${viewBoxHeight}`} preserveAspectRatio="xMidYMid meet" aria-label={`${side} animated transformation paths`}>
       <g transform={`translate(0 ${routeOffset})`}>
-        {showGuides ? ([0, 1, 2] as const).map((lane) => <path key={lane} d={paths[lane]} fill="none" stroke="var(--hairline-solid)" strokeWidth="1.25" strokeDasharray="4 7" />) : null}
+        {showGuides ? ([0, 1, 2] as const).map((lane) => <path key={lane} d={paths[lane]} fill="none" stroke="var(--transform-guide)" strokeWidth="1.5" strokeDasharray="4 7" />) : null}
         {showGuides ? ([0, 1, 2] as const).flatMap((lane) => [0, 1, 2].map((index) => <RouteDot key={`${lane}-${index}`} lane={lane} index={index} path={paths[lane]} />)) : null}
         {assets.slice(0, 6).map((asset, index) => <FlowAsset key={`${asset}-${index}`} asset={asset} tint={TINTS[index]} lane={(index % 3) as 0 | 1 | 2} cycle={Math.floor(index / 3)} side={side} path={paths[index % 3]} duration={duration} assetSize={assetSize} />)}
       </g>
@@ -234,7 +237,7 @@ function TransformPanel({ side, assets, paths, duration, assetSize, routeOffset,
 }
 
 function RouteDot({ lane, index, path }: { lane: 0 | 1 | 2; index: number; path: string }) {
-  return <circle r="2.5" fill="var(--hairline-solid)" opacity="0.8"><animateMotion dur="10.2s" begin={`${-(index * 3.4 + lane * 0.85)}s`} repeatCount="indefinite" path={path} /></circle>;
+  return <circle r="2.5" fill="var(--transform-guide)" opacity="0.9"><animateMotion dur="10.2s" begin={`${-(index * 3.4 + lane * 0.85)}s`} repeatCount="indefinite" path={path} /></circle>;
 }
 
 function FlowAsset({ asset, tint, lane, cycle, side, path, duration, assetSize }: { asset: string; tint: string; lane: 0 | 1 | 2; cycle: number; side: "input" | "output"; path: string; duration: number; assetSize: number }) {
@@ -245,7 +248,7 @@ function FlowAsset({ asset, tint, lane, cycle, side, path, duration, assetSize }
     <set attributeName="visibility" to="visible" begin={delay} fill="freeze" />
     <g>
       <animateMotion dur={`${duration}s`} begin={delay} repeatCount="indefinite" calcMode="linear" keyPoints={`0;${seamPoint};1`} keyTimes="0;0.5;1" path={path} />
-      <rect x={-assetSize / 2} y={-assetSize / 2} width={assetSize} height={assetSize} rx={assetSize * 0.285} fill="var(--surface)" stroke="var(--hairline-solid)" />
+      <rect x={-assetSize / 2} y={-assetSize / 2} width={assetSize} height={assetSize} rx={assetSize * 0.285} fill="var(--transform-card)" stroke="var(--transform-stroke)" />
       <g transform={`scale(${assetSize / 56})`}><AssetMark value={asset} tint={tint} /></g>
     </g>
   </g>;
