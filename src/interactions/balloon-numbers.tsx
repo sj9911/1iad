@@ -17,6 +17,7 @@ export type BalloonNumbersProps = {
   stringColor?: string;
   aspectRatio?: string;
   showBackdrop?: boolean;
+  fill?: boolean;
   interactive?: boolean;
 };
 
@@ -59,6 +60,7 @@ export function BalloonNumbers({
   stringColor = "#69501f",
   aspectRatio = "32 / 14.3",
   showBackdrop = true,
+  fill = false,
   interactive = true,
 }: BalloonNumbersProps) {
   const stageRef = React.useRef<HTMLDivElement | null>(null);
@@ -264,7 +266,9 @@ export function BalloonNumbers({
     <div
       ref={stageRef}
       className={`relative w-[min(92%,900px)] overflow-hidden rounded-2xl border border-hairline bg-[linear-gradient(180deg,#fffdf8_0%,#f7f5f0_100%)] shadow-[0_24px_72px_rgba(90,72,31,.12)] dark:bg-[linear-gradient(180deg,#1c1b19_0%,#12110f_100%)] ${className}`}
-      style={{ aspectRatio }}
+      style={fill
+        ? { position: "absolute", inset: 0, width: "100%", height: "100%", aspectRatio: "auto" }
+        : { aspectRatio }}
       onPointerMove={movePointer}
       onPointerLeave={() => { pointer.current = null; }}
       aria-label={`Floating balloon number ${safeDigits}`}

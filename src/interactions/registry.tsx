@@ -64,7 +64,7 @@ const cardComponents: Record<string, ComponentType> = {
     return <div className="absolute inset-0 flex items-center px-8"><TransformFlow className="w-full rounded-none border-0 shadow-none" aspectRatio="32 / 14.3" assetSize={72} duration={15} particleCount={0} sound={false} contrast="high" interactive /></div>;
   },
   "balloon-numbers": function BalloonNumbersCard() {
-    return <div className="absolute inset-0"><BalloonNumbers value="2026" balloonSize={84} threadLength={142.5} clusterSpacing={1.04} repelRadius={155} aspectRatio="auto" showBackdrop={false} className="absolute inset-0 !h-full !w-full rounded-none border-0 !bg-none shadow-none" /></div>;
+    return <div className="absolute inset-0"><BalloonNumbers value="2026" balloonSize={84} threadLength={142.5} clusterSpacing={1.04} repelRadius={155} fill showBackdrop={false} className="rounded-none border-0 !bg-none shadow-none" /></div>;
   },
 };
 
