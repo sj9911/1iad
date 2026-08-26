@@ -14,6 +14,7 @@ import {
 } from "@/components/proximity-tuner";
 import { VinylTunerPanel, VinylTunerProvider } from "@/components/vinyl-tuner";
 import { TransformFlowTunerPanel, TransformFlowTunerProvider } from "@/components/transform-flow-tuner";
+import { BalloonNumbersTunerPanel, BalloonNumbersTunerProvider } from "@/components/balloon-numbers-tuner";
 import { TunerPromptProvider } from "@/components/tuner-prompt";
 import { getStars } from "@/lib/stars";
 import { getNavBadges } from "@/lib/badges";
@@ -75,6 +76,7 @@ export default async function DayPage({
     "proximity-grid": { Provider: ProximityTunerProvider, panel: <ProximityTunerPanel /> },
     "vinyl-player": { Provider: VinylTunerProvider, panel: <VinylTunerPanel /> },
     "transform-flow": { Provider: TransformFlowTunerProvider, panel: <TransformFlowTunerPanel /> },
+    "balloon-numbers": { Provider: BalloonNumbersTunerProvider, panel: <BalloonNumbersTunerPanel /> },
   };
   const tuner = tuners[slug];
 
@@ -109,6 +111,13 @@ export default async function DayPage({
           install,
           tags: item.tags,
           dependencies: item.dependencies,
+          details: item.slug === "balloon-numbers"
+            ? [
+                "Type up to 12 digits. Every digit becomes a separate foil balloon.",
+                "The strings stay fixed-length, with centred anchors spaced evenly along the floor.",
+                "The air is calm between brief gusts, and motion respects your reduced-motion preference.",
+              ]
+            : undefined,
         }}
       >
       {/* The stage — record this section as-is */}

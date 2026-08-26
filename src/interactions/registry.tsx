@@ -8,10 +8,12 @@ import { ProximityGrid } from "./proximity-grid";
 import { ShaderButton } from "./shader-button";
 import { VinylPlayer } from "./vinyl-player";
 import { TransformFlow } from "./transform-flow";
+import { BalloonNumbers } from "./balloon-numbers";
 import { GlowStageTuned } from "@/components/glow-tuner";
 import { ProximityStageTuned } from "@/components/proximity-tuner";
 import { VinylStageTuned } from "@/components/vinyl-tuner";
 import { TransformFlowStageTuned } from "@/components/transform-flow-tuner";
+import { BalloonNumbersStageTuned } from "@/components/balloon-numbers-tuner";
 
 const components: Record<string, ComponentType> = {
   "elastic-slider": ElasticSlider,
@@ -25,6 +27,7 @@ const components: Record<string, ComponentType> = {
   "shader-button": ShaderButton,
   "vinyl-player": VinylPlayer,
   "transform-flow": TransformFlow,
+  "balloon-numbers": BalloonNumbers,
 };
 
 // day-page stage overrides: components that take over the whole dotted stage
@@ -37,6 +40,7 @@ const stageComponents: Record<string, ComponentType> = {
   "proximity-grid": ProximityStageTuned,
   "vinyl-player": VinylStageTuned,
   "transform-flow": TransformFlowStageTuned,
+  "balloon-numbers": BalloonNumbersStageTuned,
 };
 
 // gallery-card overrides: full-bleed like the stage, but scaled for the card
@@ -58,6 +62,9 @@ const cardComponents: Record<string, ComponentType> = {
   },
   "transform-flow": function TransformFlowCard() {
     return <div className="absolute inset-0 flex items-center px-8"><TransformFlow className="w-full rounded-none border-0 shadow-none" aspectRatio="32 / 14.3" assetSize={72} duration={15} particleCount={0} sound={false} contrast="high" interactive /></div>;
+  },
+  "balloon-numbers": function BalloonNumbersCard() {
+    return <div className="absolute inset-0"><BalloonNumbers value="2026" balloonSize={84} threadLength={142.5} clusterSpacing={1.04} repelRadius={155} aspectRatio="auto" showBackdrop={false} className="absolute inset-0 !h-full !w-full rounded-none border-0 !bg-none shadow-none" /></div>;
   },
 };
 

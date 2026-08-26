@@ -19,6 +19,14 @@ export async function GET(
     path.join(process.cwd(), "src/interactions", item.file),
     "utf-8",
   );
+  const assetFiles = await Promise.all(
+    (item.assets ?? []).map(async (asset) => ({
+      path: `public/${asset}`,
+      type: "registry:file",
+      target: `~/public/${asset}`,
+      content: await fs.readFile(path.join(process.cwd(), "public", asset), "utf-8"),
+    })),
+  );
 
   return Response.json({
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
@@ -33,6 +41,7 @@ export async function GET(
         type: "registry:component",
         content,
       },
+      ...assetFiles,
     ],
   });
 }

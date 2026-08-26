@@ -10,6 +10,7 @@ export type InteractionMeta = {
   hint: string; // one-line "how to play" shown on the stage
   dependencies: string[];
   file: string; // path under src/interactions/
+  assets?: string[]; // paths under public/ bundled by the registry endpoint
   tags: string[]; // interaction verbs shown in the day sidebar
 };
 
@@ -109,6 +110,19 @@ export const interactionsMeta: InteractionMeta[] = [
     dependencies: [],
     file: "transform-flow.tsx",
     tags: ["Hold", "Transform", "Sound"],
+  },
+  {
+    slug: "balloon-numbers",
+    day: 9,
+    date: "2026-08-27",
+    title: "Balloon Numbers",
+    description:
+      "Turn any number into a small bouquet of foil balloons. Each digit floats on a fixed-length tether, drifts in occasional gusts, softly collides with its neighbours, and gets out of the cursor’s way.",
+    hint: "Move through the bouquet. Type any number in the tuner.",
+    dependencies: [],
+    file: "balloon-numbers.tsx",
+    assets: Array.from({ length: 10 }, (_, digit) => `balloon-numbers/${digit}.svg`),
+    tags: ["Hover", "Wind", "Spring"],
   },
 ];
 

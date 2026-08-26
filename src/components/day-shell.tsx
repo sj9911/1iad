@@ -24,6 +24,7 @@ import {
   IconPointer,
   IconSparkles,
   IconVolume,
+  IconWind,
   type Icon,
 } from "@tabler/icons-react";
 import {
@@ -45,6 +46,7 @@ const TAG_ICONS: Record<string, Icon> = {
   Glow: IconNorthStar,
   Hover: IconPointer,
   Magnet: IconMagnet,
+  Wind: IconWind,
 };
 
 const DEP_NAMES: Record<string, string> = {
@@ -276,11 +278,11 @@ export function DayShell({
             <motion.div variants={rise}>
               <Row label="Good to know">
                 <ul className="max-w-md space-y-3 text-base leading-relaxed">
-                  {[
+                  {(day.details ?? [
                     "No config. Nothing to set up beyond Tailwind.",
                     "Respects prefers-reduced-motion out of the box.",
                     "Sound and haptics only fire after a user gesture.",
-                  ].map((point) => (
+                  ]).map((point) => (
                     <li key={point} className="flex gap-3">
                       <span aria-hidden="true" className="font-semibold text-[var(--oiad-blue)]">
                         /

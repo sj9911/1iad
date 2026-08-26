@@ -176,6 +176,7 @@ export type NavDay = {
   install: string;
   tags: string[];
   dependencies: string[];
+  details?: string[];
 };
 
 // shared glass shell for every container in the nav row
