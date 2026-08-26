@@ -110,18 +110,6 @@ export const interactionsMeta: InteractionMeta[] = [
     file: "transform-flow.tsx",
     tags: ["Hold", "Transform", "Sound"],
   },
-  {
-    slug: "balloon-numbers",
-    day: 9,
-    date: "2026-08-27",
-    title: "Balloon Numbers",
-    description:
-      "A number made of floating gold balloons. Move your cursor to part the group, then watch the digits bump, drift, and catch the occasional change in wind.",
-    hint: "Move your cursor through the balloons. They make room.",
-    dependencies: [],
-    file: "balloon-numbers.tsx",
-    tags: ["Hover", "Physics", "Wind"],
-  },
 ];
 
 export const SITE_URL =
