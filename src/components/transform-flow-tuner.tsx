@@ -42,7 +42,7 @@ export function TransformFlowTunerProvider({ children }: { children: React.React
 
 export function TransformFlowStageTuned() {
   const settings = React.useContext(Ctx)?.settings ?? DEFAULTS;
-  return <TransformFlow className="w-[min(82vw,384px)]" {...settings} />;
+  return <div className="w-[min(92vw,1152px)]"><TransformFlow {...settings} /></div>;
 }
 
 function AssetField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
