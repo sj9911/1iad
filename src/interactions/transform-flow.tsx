@@ -268,8 +268,7 @@ function FlowAsset({ asset, tint, lane, cycle, side, path, duration, assetSize }
   const pair = cycle * 3 + lane;
   const delay = `${pair * (duration / 6)}s`;
   const seamPoint = lane === 1 ? (side === "input" ? "0.5" : "0.470588") : (side === "input" ? "0.511" : "0.461");
-  return <g visibility="hidden">
-    <set attributeName="visibility" to="visible" begin={delay} fill="freeze" />
+  return <g>
     <g>
       <animateMotion dur={`${duration}s`} begin={delay} repeatCount="indefinite" calcMode="linear" keyPoints={`0;${seamPoint};1`} keyTimes="0;0.5;1" path={path} />
       <rect x={-assetSize / 2} y={-assetSize / 2} width={assetSize} height={assetSize} rx={assetSize * 0.285} fill="var(--transform-card)" stroke="var(--transform-stroke)" />
