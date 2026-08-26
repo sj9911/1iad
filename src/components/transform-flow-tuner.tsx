@@ -15,6 +15,7 @@ type Settings = {
   particleCount: number;
   chargeDuration: number;
   maxSpeed: number;
+  accent: string;
   showGuides: boolean;
   sound: boolean;
 };
@@ -27,6 +28,7 @@ const DEFAULTS: Settings = {
   particleCount: 24,
   chargeDuration: 10,
   maxSpeed: 33,
+  accent: "#002fff",
   showGuides: true,
   sound: true,
 };
@@ -40,11 +42,15 @@ export function TransformFlowTunerProvider({ children }: { children: React.React
 
 export function TransformFlowStageTuned() {
   const settings = React.useContext(Ctx)?.settings ?? DEFAULTS;
-  return <TransformFlow className="w-[min(92vw,1040px)]" {...settings} />;
+  return <TransformFlow className="w-[min(86vw,780px)]" {...settings} />;
 }
 
 function AssetField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   return <label className="block"><span className="mb-1.5 block font-mono text-[9px] uppercase tracking-[0.13em] text-muted">{label}</span><input value={value} onChange={(event) => onChange(event.target.value)} className="h-9 w-full rounded-lg border border-hairline bg-black/[0.04] px-2.5 text-center font-mono text-sm outline-none focus:border-[var(--oiad-blue)] dark:bg-white/[0.07]" /></label>;
+}
+
+function AccentField({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  return <label className="flex h-11 items-center justify-between rounded-xl bg-black/[0.04] px-3.5 dark:bg-white/[0.07]"><span className="text-sm font-medium">Accent colour</span><span className="flex items-center gap-2"><input type="text" value={value} onChange={(event) => onChange(event.target.value)} className="w-20 bg-transparent text-right font-mono text-[12px] uppercase outline-none" aria-label="Accent colour hex value" /><input type="color" value={value} onChange={(event) => onChange(event.target.value)} className="size-6 cursor-pointer rounded border-0 bg-transparent p-0" aria-label="Choose accent colour" /></span></label>;
 }
 
 export function TransformFlowTunerPanel() {
@@ -53,7 +59,7 @@ export function TransformFlowTunerPanel() {
   const settings = ctx?.settings ?? DEFAULTS;
 
   React.useEffect(() => {
-    tunerPrompt?.setPrompt(`You are editing my React 19 + Tailwind v4 app. Add the 1IAD "Transform Flow" interaction, then apply the exact settings I chose.\n\n1. Install it:\nnpx shadcn@latest add https://1iad.com/r/transform-flow\n\n2. Render it like this:\n\n<TransformFlow\n  inputAssets={${JSON.stringify(settings.inputAssets)}}\n  outputAssets={${JSON.stringify(settings.outputAssets)}}\n  pathStyle="${settings.pathStyle}"\n  duration={${settings.duration}}\n  particleCount={${settings.particleCount}}\n  chargeDuration={${settings.chargeDuration}}\n  maxSpeed={${settings.maxSpeed}}\n  showGuides={${settings.showGuides}}\n  sound={${settings.sound}}\n/>\n\nImage URLs can replace any mark. Keep it responsive, accessible, and compatible with the existing project. Make the code changes directly and tell me which files changed.`);
+    tunerPrompt?.setPrompt(`You are editing my React 19 + Tailwind v4 app. Add the 1IAD "Transform Flow" interaction, then apply the exact settings I chose.\n\n1. Install it:\nnpx shadcn@latest add https://1iad.com/r/transform-flow\n\n2. Render it like this:\n\n<TransformFlow\n  inputAssets={${JSON.stringify(settings.inputAssets)}}\n  outputAssets={${JSON.stringify(settings.outputAssets)}}\n  pathStyle="${settings.pathStyle}"\n  duration={${settings.duration}}\n  particleCount={${settings.particleCount}}\n  chargeDuration={${settings.chargeDuration}}\n  maxSpeed={${settings.maxSpeed}}\n  accent="${settings.accent}"\n  showGuides={${settings.showGuides}}\n  sound={${settings.sound}}\n/>\n\nImage URLs can replace any mark. Keep it responsive, accessible, and compatible with the existing project. Make the code changes directly and tell me which files changed.`);
   }, [settings, tunerPrompt]);
 
   if (!ctx) return null;
@@ -74,6 +80,7 @@ export function TransformFlowTunerPanel() {
       <DialRow icon={IconSparkles} label="Particle field" value={settings.particleCount} min={0} max={52} step={1} onChange={(value) => set("particleCount", value)} />
       <DialRow icon={IconWand} label="Screen bloom" value={settings.chargeDuration} min={3} max={16} step={0.5} format={(value) => `${value.toFixed(1)}s`} onChange={(value) => set("chargeDuration", value)} />
       <DialRow icon={IconBolt} label="Max speed" value={settings.maxSpeed} min={4} max={48} step={1} format={(value) => `${value}×`} onChange={(value) => set("maxSpeed", value)} />
+      <AccentField value={settings.accent} onChange={(value) => set("accent", value)} />
       <SegmentedRow icon={IconImageInPicture} label="Route guides" id="transform-guides" on={settings.showGuides} onChange={(value) => set("showGuides", value)} />
       <SegmentedRow icon={IconVolume} label="Sound" id="transform-sound" on={settings.sound} onChange={(value) => set("sound", value)} />
     </motion.section>

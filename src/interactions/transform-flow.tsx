@@ -13,6 +13,7 @@ export type TransformFlowProps = {
   particleCount?: number;
   chargeDuration?: number;
   maxSpeed?: number;
+  accent?: string;
   showGuides?: boolean;
   sound?: boolean;
   interactive?: boolean;
@@ -61,6 +62,7 @@ export function TransformFlow({
   particleCount = 24,
   chargeDuration = 10,
   maxSpeed = 33,
+  accent = "#002fff",
   showGuides = true,
   sound = true,
   interactive = true,
@@ -186,14 +188,14 @@ export function TransformFlow({
   }
 
   const paths = pathStyle === "curved" ? { input: INPUT_PATHS, output: OUTPUT_PATHS } : { input: LINEAR_INPUT, output: LINEAR_OUTPUT };
-  const stageStyle = { transform: `translate(${charge.x}px, ${charge.y}px)` };
+  const stageStyle = { transform: `translate(${charge.x}px, ${charge.y}px)`, "--transform-accent": accent } as React.CSSProperties & { "--transform-accent": string };
 
   return <div className={`relative aspect-[32/11] w-full overflow-hidden rounded-2xl border border-hairline bg-surface shadow-[0_24px_72px_rgba(0,0,0,.1)] will-change-transform ${className}`} style={stageStyle}>
     <div className="grid h-full grid-cols-2">
       <TransformPanel side="input" assets={inputAssets} paths={paths.input} duration={duration} showGuides={showGuides} registerSvg={registerSvg} />
       <TransformPanel side="output" assets={outputAssets} paths={paths.output} duration={duration} showGuides={showGuides} registerSvg={registerSvg} />
     </div>
-    <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 z-30 w-px -translate-x-1/2 bg-[var(--oiad-blue)]" style={{ opacity: 0.12 + charge.glow * 0.88, boxShadow: `0 0 ${8 + charge.glow * 62}px color-mix(in srgb, var(--oiad-blue) ${18 + charge.glow * 78}%, transparent)` }} />
+    <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 z-30 w-px -translate-x-1/2 bg-[var(--transform-accent)]" style={{ opacity: 0.12 + charge.glow * 0.88, boxShadow: `0 0 ${8 + charge.glow * 62}px color-mix(in srgb, var(--transform-accent) ${18 + charge.glow * 78}%, transparent)` }} />
     <CentreGlow intensity={charge.glow} />
     <ChargeParticles intensity={charge.speed} count={particleCount} />
     {interactive && <button type="button" aria-label="Hold to accelerate the transform flow" className={`absolute inset-0 z-40 touch-none focus:outline-none ${charge.holding ? "cursor-grabbing" : "cursor-grab"}`} onPointerDown={begin} onPointerUp={release} onPointerCancel={release} onPointerMove={hint} onPointerEnter={hint} onPointerLeave={() => setPointer((value) => ({ ...value, visible: false }))} />}
@@ -203,7 +205,7 @@ export function TransformFlow({
 
 function TransformPanel({ side, assets, paths, duration, showGuides, registerSvg }: { side: "input" | "output"; assets: string[]; paths: string[]; duration: number; showGuides: boolean; registerSvg: (node: SVGSVGElement | null) => void }) {
   return <div className={`relative overflow-hidden ${side === "input" ? "bg-surface" : "bg-black/[0.018] dark:bg-white/[0.025]"}`}>
-    <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between border-b border-hairline bg-surface/65 px-4 py-3 backdrop-blur-sm"><span className="font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-muted">{side === "input" ? "Input" : "Output"}</span><span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--oiad-blue)]">06 pairs</span></div>
+    <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between border-b border-hairline bg-surface/65 px-4 py-3 backdrop-blur-sm"><span className="font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-muted">{side === "input" ? "Input" : "Output"}</span><span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--transform-accent)]">06 pairs</span></div>
     <svg ref={registerSvg} className="absolute inset-0 size-full" viewBox="0 0 640 440" preserveAspectRatio="xMidYMid meet" aria-label={`${side} animated transformation paths`}>
       {showGuides ? ([0, 1, 2] as const).map((lane) => <path key={lane} d={paths[lane]} fill="none" stroke="var(--hairline-solid)" strokeWidth="1.25" strokeDasharray="4 7" />) : null}
       {showGuides ? ([0, 1, 2] as const).flatMap((lane) => [0, 1, 2].map((index) => <RouteDot key={`${lane}-${index}`} lane={lane} index={index} path={paths[lane]} />)) : null}
@@ -231,7 +233,7 @@ function FlowAsset({ asset, tint, lane, cycle, side, path, duration }: { asset: 
 }
 
 function CentreGlow({ intensity }: { intensity: number }) {
-  return <svg aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 size-full" viewBox="0 0 1280 440" preserveAspectRatio="none"><defs><radialGradient id="transform-centre-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stopColor="var(--oiad-blue)" stopOpacity="0.42" /><stop offset="0.42" stopColor="var(--oiad-blue)" stopOpacity="0.16" /><stop offset="1" stopColor="var(--oiad-blue)" stopOpacity="0" /></radialGradient></defs><ellipse cx="640" cy="220" rx={35 + intensity * 620} ry={72 + intensity * 330} fill="url(#transform-centre-glow)" opacity={Math.min(1, intensity * 1.2)} /></svg>;
+  return <svg aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 size-full" viewBox="0 0 1280 440" preserveAspectRatio="none"><defs><radialGradient id="transform-centre-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stopColor="var(--transform-accent)" stopOpacity="0.42" /><stop offset="0.42" stopColor="var(--transform-accent)" stopOpacity="0.16" /><stop offset="1" stopColor="var(--transform-accent)" stopOpacity="0" /></radialGradient></defs><ellipse cx="640" cy="220" rx={35 + intensity * 620} ry={72 + intensity * 330} fill="url(#transform-centre-glow)" opacity={Math.min(1, intensity * 1.2)} /></svg>;
 }
 
 function ChargeParticles({ intensity, count }: { intensity: number; count: number }) {
@@ -247,7 +249,7 @@ function ChargeParticles({ intensity, count }: { intensity: number; count: numbe
       const radius = 0.7 + seededUnit(seed + 4) * 1.8;
       const travel = 0.72 + seededUnit(seed + 5) * 0.42;
       const begin = `${-(seededUnit(seed + 6) * 0.72)}s`;
-      return <circle key={index} r={radius} fill="var(--oiad-blue)"><animateMotion dur={`${travel}s`} begin={begin} repeatCount="indefinite" path={`M640 ${y} Q${controlX} ${y + (seededUnit(seed + 7) - 0.5) * 34} ${endX} ${endY}`} /><animate attributeName="opacity" dur={`${travel}s`} begin={begin} repeatCount="indefinite" values="0;0.9;0" keyTimes="0;0.12;1" /></circle>;
+      return <circle key={index} r={radius} fill="var(--transform-accent)"><animateMotion dur={`${travel}s`} begin={begin} repeatCount="indefinite" path={`M640 ${y} Q${controlX} ${y + (seededUnit(seed + 7) - 0.5) * 34} ${endX} ${endY}`} /><animate attributeName="opacity" dur={`${travel}s`} begin={begin} repeatCount="indefinite" values="0;0.9;0" keyTimes="0;0.12;1" /></circle>;
     })}
   </svg>;
 }
