@@ -227,10 +227,30 @@ export function TransformFlow({
 }
 
 function TransformPanel({ side, assets, paths, duration, assetSize, routeOffset, viewBoxHeight, boxColor, highContrast, showGuides, registerSvg }: { side: "input" | "output"; assets: string[]; paths: string[]; duration: number; assetSize: number; routeOffset: number; viewBoxHeight: number; boxColor: string; highContrast: boolean; showGuides: boolean; registerSvg: (node: SVGSVGElement | null) => void }) {
-  const viewBoxTop = (440 - viewBoxHeight) / 2;
-  return <div className={`relative overflow-hidden ${highContrast ? side === "input" ? "bg-white" : "bg-[#f7f8fb]" : side === "input" ? "bg-surface" : "bg-black/[0.018] dark:bg-white/[0.025]"}`} style={{ "--transform-card": boxColor } as React.CSSProperties & { "--transform-card": string }}>
-    <div className="absolute inset-x-0 top-0 z-10 border-b border-[var(--transform-stroke)] bg-surface/75 px-4 py-3 backdrop-blur-sm"><span className={`font-mono text-[9px] font-semibold uppercase tracking-[0.18em] ${highContrast ? "text-[#555d6d]" : "text-muted"}`}>{side === "input" ? "Input" : "Output"}</span></div>
-    <svg ref={registerSvg} className="absolute inset-0 size-full" viewBox={`0 ${viewBoxTop} 640 ${viewBoxHeight}`} preserveAspectRatio="xMidYMid meet" aria-label={`${side} animated transformation paths`}>
+  const svgRef = React.useRef<SVGSVGElement | null>(null);
+  const [flowViewBoxHeight, setFlowViewBoxHeight] = React.useState(viewBoxHeight);
+  const setSvgRef = React.useCallback((node: SVGSVGElement | null) => {
+    svgRef.current = node;
+    registerSvg(node);
+  }, [registerSvg]);
+
+  React.useEffect(() => {
+    const node = svgRef.current;
+    if (!node) return;
+    const updateViewBox = () => {
+      const { width, height } = node.getBoundingClientRect();
+      if (width > 0 && height > 0) setFlowViewBoxHeight((640 * height) / width);
+    };
+    updateViewBox();
+    const observer = new ResizeObserver(updateViewBox);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  const viewBoxTop = 220 - flowViewBoxHeight / 2;
+  return <div className={`relative flex min-h-0 flex-col overflow-hidden ${highContrast ? side === "input" ? "bg-white" : "bg-[#f7f8fb]" : side === "input" ? "bg-surface" : "bg-black/[0.018] dark:bg-white/[0.025]"}`} style={{ "--transform-card": boxColor } as React.CSSProperties & { "--transform-card": string }}>
+    <div className="z-10 shrink-0 border-b border-[var(--transform-stroke)] bg-surface/75 px-4 py-3 backdrop-blur-sm"><span className={`font-mono text-[9px] font-semibold uppercase tracking-[0.18em] ${highContrast ? "text-[#555d6d]" : "text-muted"}`}>{side === "input" ? "Input" : "Output"}</span></div>
+    <svg ref={setSvgRef} className="min-h-0 w-full flex-1" viewBox={`0 ${viewBoxTop} 640 ${flowViewBoxHeight}`} preserveAspectRatio="xMidYMid meet" aria-label={`${side} animated transformation paths`}>
       <g transform={`translate(0 ${routeOffset})`}>
         {showGuides ? ([0, 1, 2] as const).map((lane) => <path key={lane} d={paths[lane]} fill="none" stroke="var(--transform-guide)" strokeWidth="1.5" strokeDasharray="4 7" />) : null}
         {showGuides ? ([0, 1, 2] as const).flatMap((lane) => [0, 1, 2].map((index) => <RouteDot key={`${lane}-${index}`} lane={lane} index={index} path={paths[lane]} />)) : null}

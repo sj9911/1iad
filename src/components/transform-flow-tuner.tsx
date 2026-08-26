@@ -46,7 +46,7 @@ export function TransformFlowTunerProvider({ children }: { children: React.React
 
 export function TransformFlowStageTuned() {
   const settings = React.useContext(Ctx)?.settings ?? DEFAULTS;
-  return <div className="w-[min(92vw,900px)]"><TransformFlow {...settings} aspectRatio="32 / 14.3" routeOffset={70} /></div>;
+  return <div className="w-[min(92vw,900px)]"><TransformFlow {...settings} aspectRatio="32 / 14.3" /></div>;
 }
 
 function AssetField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
