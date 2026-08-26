@@ -7,9 +7,11 @@ import { IntelligenceGlow } from "./intelligence-glow";
 import { ProximityGrid } from "./proximity-grid";
 import { ShaderButton } from "./shader-button";
 import { VinylPlayer } from "./vinyl-player";
+import { TransformFlow } from "./transform-flow";
 import { GlowStageTuned } from "@/components/glow-tuner";
 import { ProximityStageTuned } from "@/components/proximity-tuner";
 import { VinylStageTuned } from "@/components/vinyl-tuner";
+import { TransformFlowStageTuned } from "@/components/transform-flow-tuner";
 
 const components: Record<string, ComponentType> = {
   "elastic-slider": ElasticSlider,
@@ -22,6 +24,7 @@ const components: Record<string, ComponentType> = {
   "proximity-grid": ProximityGrid,
   "shader-button": ShaderButton,
   "vinyl-player": VinylPlayer,
+  "transform-flow": TransformFlow,
 };
 
 // day-page stage overrides: components that take over the whole dotted stage
@@ -33,6 +36,7 @@ const stageComponents: Record<string, ComponentType> = {
   "intelligence-glow": GlowStageTuned,
   "proximity-grid": ProximityStageTuned,
   "vinyl-player": VinylStageTuned,
+  "transform-flow": TransformFlowStageTuned,
 };
 
 // gallery-card overrides: full-bleed like the stage, but scaled for the card
@@ -51,6 +55,9 @@ const cardComponents: Record<string, ComponentType> = {
   },
   "vinyl-player": function VinylPlayerCard() {
     return <VinylPlayer className="w-[62%] max-w-[288px]" />;
+  },
+  "transform-flow": function TransformFlowCard() {
+    return <TransformFlow className="absolute inset-0 rounded-none border-0 shadow-none" duration={15} particleCount={0} sound={false} interactive={false} />;
   },
 };
 

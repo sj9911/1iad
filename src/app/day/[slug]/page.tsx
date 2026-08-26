@@ -13,6 +13,7 @@ import {
   ProximityTunerProvider,
 } from "@/components/proximity-tuner";
 import { VinylTunerPanel, VinylTunerProvider } from "@/components/vinyl-tuner";
+import { TransformFlowTunerPanel, TransformFlowTunerProvider } from "@/components/transform-flow-tuner";
 import { TunerPromptProvider } from "@/components/tuner-prompt";
 import { getStars } from "@/lib/stars";
 import { getNavBadges } from "@/lib/badges";
@@ -73,6 +74,7 @@ export default async function DayPage({
     "intelligence-glow": { Provider: GlowTunerProvider, panel: <GlowTunerPanel /> },
     "proximity-grid": { Provider: ProximityTunerProvider, panel: <ProximityTunerPanel /> },
     "vinyl-player": { Provider: VinylTunerProvider, panel: <VinylTunerPanel /> },
+    "transform-flow": { Provider: TransformFlowTunerProvider, panel: <TransformFlowTunerPanel /> },
   };
   const tuner = tuners[slug];
 

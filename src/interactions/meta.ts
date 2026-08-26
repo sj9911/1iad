@@ -98,6 +98,18 @@ export const interactionsMeta: InteractionMeta[] = [
     file: "vinyl-player.tsx",
     tags: ["Tap", "Drag", "Sound"],
   },
+  {
+    slug: "transform-flow",
+    day: 8,
+    date: "2026-08-26",
+    title: "Transform Flow",
+    description:
+      "A paired signal handoff for React: six inputs travel through a shared seam and emerge as their matching outputs. Hold anywhere to progressively accelerate time, ignite a horizontal particle field, and charge a full-screen bloom.",
+    hint: "Hold anywhere. Time accelerates.",
+    dependencies: [],
+    file: "transform-flow.tsx",
+    tags: ["Hold", "Transform", "Sound"],
+  },
 ];
 
 export const SITE_URL =
