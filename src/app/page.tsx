@@ -166,7 +166,7 @@ export default async function V2() {
               className="group oiad-card self-start rounded-2xl border border-hairline bg-surface p-2.5"
             >
               {/* interaction window */}
-              <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-background px-10">
+              <div className={`relative flex items-center justify-center overflow-hidden rounded-xl bg-background px-10 ${slug === "transform-flow" ? "aspect-[40/39]" : "aspect-[4/3]"}`}>
                 {CardComponent ? (
                   <CardComponent />
                 ) : StageComponent ? (
