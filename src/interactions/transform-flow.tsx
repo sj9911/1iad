@@ -6,6 +6,8 @@ export type TransformPathStyle = "curved" | "linear";
 
 export type TransformFlowProps = {
   className?: string;
+  aspectRatio?: string;
+  centered?: boolean;
   inputAssets?: string[];
   outputAssets?: string[];
   pathStyle?: TransformPathStyle;
@@ -55,6 +57,8 @@ function AssetMark({ value, tint }: { value: string; tint: string }) {
 
 export function TransformFlow({
   className = "",
+  aspectRatio = "32 / 11",
+  centered = false,
   inputAssets = DEFAULT_INPUT_ASSETS,
   outputAssets = DEFAULT_OUTPUT_ASSETS,
   pathStyle = "curved",
@@ -188,9 +192,9 @@ export function TransformFlow({
   }
 
   const paths = pathStyle === "curved" ? { input: INPUT_PATHS, output: OUTPUT_PATHS } : { input: LINEAR_INPUT, output: LINEAR_OUTPUT };
-  const stageStyle = { transform: `translate(${charge.x}px, ${charge.y}px)`, "--transform-accent": accent } as React.CSSProperties & { "--transform-accent": string };
+  const stageStyle = { transform: centered ? `translate(${charge.x}px, calc(-50% + ${charge.y}px))` : `translate(${charge.x}px, ${charge.y}px)`, aspectRatio, "--transform-accent": accent } as React.CSSProperties & { "--transform-accent": string };
 
-  return <div className={`relative aspect-[32/11] w-full overflow-hidden rounded-2xl border border-hairline bg-surface shadow-[0_24px_72px_rgba(0,0,0,.1)] will-change-transform ${className}`} style={stageStyle}>
+  return <div className={`relative w-full overflow-hidden rounded-2xl border border-hairline bg-surface shadow-[0_24px_72px_rgba(0,0,0,.1)] will-change-transform ${className}`} style={stageStyle}>
     <div className="grid h-full grid-cols-2">
       <TransformPanel side="input" assets={inputAssets} paths={paths.input} duration={duration} showGuides={showGuides} registerSvg={registerSvg} />
       <TransformPanel side="output" assets={outputAssets} paths={paths.output} duration={duration} showGuides={showGuides} registerSvg={registerSvg} />
