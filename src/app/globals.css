@@ -190,6 +190,16 @@ html {
   z-index: 0;
   transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
+
+@media (max-width: 639px) {
+  .oiad-hero-headline {
+    font-size: 13.2cqw !important;
+  }
+
+  .oiad-hero-copy {
+    font-size: 2.5cqw !important;
+  }
+}
 .oiad-card::after {
   content: "";
   position: absolute;

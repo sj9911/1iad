@@ -38,7 +38,7 @@ async function readPiece(name: string): Promise<Piece> {
 }
 
 const HEADLINE =
-  "font-bricolage absolute uppercase leading-none tracking-[-0.01em]";
+  "oiad-hero-headline font-bricolage absolute uppercase leading-none tracking-[-0.01em]";
 // variable axes maxed out: full width, heaviest weight, largest optical size
 const HEADLINE_STYLE = {
   fontVariationSettings: '"wght" 800, "wdth" 100, "opsz" 96',
@@ -75,7 +75,7 @@ export default async function V2() {
         stars={stars}
         badges={{ viewBox: p["top-icon"].viewBox, inner: p["top-icon"].inner }}
       />
-      <header className="relative border-b border-hairline px-6 pb-24 pt-16">
+      <header className="relative border-b border-hairline px-4 pb-12 pt-12 sm:px-6 sm:pb-24 sm:pt-16">
         <div
           aria-hidden="true"
           className="absolute inset-0"
@@ -139,7 +139,7 @@ export default async function V2() {
             <Letters text="Interaction" base={0.7} />
           </span>
           <p
-            className="font-bricolage oiad-rise absolute font-bold uppercase leading-[1.3]"
+            className="oiad-hero-copy font-bricolage oiad-rise absolute font-bold uppercase leading-[1.3]"
             style={{ left: "6.4%", top: "73.5%", fontSize: "2.2cqw", animationDelay: "1.4s" }}
           >
             A growing collection of
@@ -156,17 +156,17 @@ export default async function V2() {
         <span aria-hidden="true" className="absolute left-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
         <span aria-hidden="true" className="absolute right-[-5.4px] top-[-5.4px] z-10 size-[11.8px] rounded-[2.5px] border border-[var(--hairline-solid)] bg-background" />
 
-        <div className="grid gap-6 p-6 sm:grid-cols-2">
+        <div className="grid gap-4 p-4 sm:gap-6 sm:p-6 sm:grid-cols-2">
           {interactions
             .slice()
             .reverse()
             .map(({ slug, day, title, Component, StageComponent, CardComponent }) => (
             <div
               key={slug}
-              className="group oiad-card self-start rounded-2xl border border-hairline bg-surface p-2.5"
+              className="group oiad-card self-start rounded-2xl border border-hairline bg-surface p-2 sm:p-2.5"
             >
               {/* interaction window */}
-              <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-background px-10">
+              <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-xl bg-background px-6 sm:aspect-[4/3] sm:px-10">
                 {CardComponent ? (
                   <CardComponent />
                 ) : StageComponent ? (
@@ -177,7 +177,7 @@ export default async function V2() {
               </div>
               {/* text and cta: number for balance, arrow on hover */}
               <div className="font-bricolage flex items-center justify-between px-2 pb-1 pt-3">
-                <span className="text-base font-semibold">{title}</span>
+                <span className="text-[15px] font-semibold sm:text-base">{title}</span>
                 <Link
                   href={`/day/${slug}`}
                   aria-label={`Open ${title}`}
@@ -200,9 +200,9 @@ export default async function V2() {
             </div>
           ))}
           {/* tomorrow's slot */}
-          <div className="rounded-2xl border border-hairline bg-surface p-2.5">
+          <div className="rounded-2xl border border-hairline bg-surface p-2 sm:p-2.5">
             <div
-              className="font-bricolage flex aspect-[4/3] items-center justify-center rounded-xl bg-background"
+              className="font-bricolage flex aspect-video items-center justify-center rounded-xl bg-background sm:aspect-[4/3]"
               style={{
                 backgroundImage:
                   "radial-gradient(circle, var(--dot) 1.25px, transparent 1.25px)",
@@ -214,7 +214,7 @@ export default async function V2() {
               </p>
             </div>
             <div className="font-bricolage flex items-center justify-between px-2 pb-1 pt-3">
-              <span className="text-base font-semibold text-muted">Tomorrow</span>
+              <span className="text-[15px] font-semibold text-muted sm:text-base">Tomorrow</span>
               <span className="text-base font-semibold tabular-nums text-muted">
                 {String(interactions.length + 1).padStart(3, "0")}
               </span>
