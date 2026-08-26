@@ -57,7 +57,7 @@ const cardComponents: Record<string, ComponentType> = {
     return <VinylPlayer className="w-[62%] max-w-[288px]" />;
   },
   "transform-flow": function TransformFlowCard() {
-    return <div className="absolute inset-0 flex items-center px-8"><TransformFlow className="w-full rounded-none border-0 shadow-none" aspectRatio="32 / 14.3" assetSize={72} duration={15} particleCount={0} sound={false} interactive /></div>;
+    return <div className="absolute inset-0 flex items-center px-8"><TransformFlow className="w-full rounded-none border-0 shadow-none" aspectRatio="32 / 14.3" assetSize={72} routeOffset={70} duration={15} particleCount={0} sound={false} interactive /></div>;
   },
 };
 
