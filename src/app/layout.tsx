@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
+import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/interactions/meta";
 import "./globals.css";
 
@@ -64,6 +66,12 @@ export default function RootLayout({
           }}
         />
         {children}
+        <Script
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          strategy="afterInteractive"
+          data-cf-beacon='{"token":"790b70302d6d4345a17ad6f48a4404de"}'
+        />
+        <Analytics />
       </body>
     </html>
   );
