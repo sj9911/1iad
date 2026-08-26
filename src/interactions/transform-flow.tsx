@@ -89,6 +89,7 @@ export function TransformFlow({
   interactive = true,
 }: TransformFlowProps) {
   const svgPanels = React.useRef(new Set<SVGSVGElement>());
+  const assetGroups = React.useRef(new Map<SVGGElement, number>());
   const timeline = React.useRef(0);
   const lastFrame = React.useRef<number | null>(null);
   const holding = React.useRef(false);
@@ -105,6 +106,12 @@ export function TransformFlow({
     svgPanels.current.add(node);
     node.pauseAnimations();
     node.setCurrentTime(timeline.current);
+  }, []);
+
+  const registerAsset = React.useCallback((node: SVGGElement | null, delay: number) => {
+    if (!node) return;
+    assetGroups.current.set(node, delay);
+    node.style.visibility = timeline.current >= delay ? "visible" : "hidden";
   }, []);
 
   const stopSound = React.useCallback(() => {
@@ -133,6 +140,9 @@ export function TransformFlow({
       currentSpeed.current += (targetSpeed - currentSpeed.current) * easing;
       timeline.current += elapsed * currentSpeed.current;
       svgPanels.current.forEach((svg) => svg.setCurrentTime(timeline.current));
+      assetGroups.current.forEach((delay, group) => {
+        group.style.visibility = timeline.current >= delay ? "visible" : "hidden";
+      });
       if (holding.current) {
         const shake = 0.35 + speedProgress * speedProgress * 3.4;
         setCharge({ speed: speedProgress, glow: glowProgress, x: Math.sin(time * 0.047) * shake, y: Math.cos(time * 0.071) * shake * 0.65, holding: true });
@@ -215,8 +225,8 @@ export function TransformFlow({
 
   return <div className={`relative w-full overflow-hidden rounded-2xl border border-[var(--transform-stroke)] shadow-[0_24px_72px_rgba(0,0,0,.1)] will-change-transform ${highContrast ? "bg-[#f0f2f6]" : "bg-surface"} ${className}`} style={stageStyle}>
     <div className="grid h-full grid-cols-2">
-      <TransformPanel side="input" assets={inputAssets} paths={paths.input} duration={duration} assetSize={assetSize} routeOffset={routeOffset} viewBoxHeight={viewBoxHeight} boxColor={inputBoxColor} highContrast={highContrast} showGuides={showGuides} registerSvg={registerSvg} />
-      <TransformPanel side="output" assets={outputAssets} paths={paths.output} duration={duration} assetSize={assetSize} routeOffset={routeOffset} viewBoxHeight={viewBoxHeight} boxColor={outputBoxColor} highContrast={highContrast} showGuides={showGuides} registerSvg={registerSvg} />
+      <TransformPanel side="input" assets={inputAssets} paths={paths.input} duration={duration} assetSize={assetSize} routeOffset={routeOffset} viewBoxHeight={viewBoxHeight} boxColor={inputBoxColor} highContrast={highContrast} showGuides={showGuides} registerSvg={registerSvg} registerAsset={registerAsset} />
+      <TransformPanel side="output" assets={outputAssets} paths={paths.output} duration={duration} assetSize={assetSize} routeOffset={routeOffset} viewBoxHeight={viewBoxHeight} boxColor={outputBoxColor} highContrast={highContrast} showGuides={showGuides} registerSvg={registerSvg} registerAsset={registerAsset} />
     </div>
     <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 z-30 w-px -translate-x-1/2 bg-[var(--transform-accent)]" style={{ opacity: (highContrast ? 0.3 : 0.12) + charge.glow * 0.88, boxShadow: `0 0 ${8 + charge.glow * 62}px color-mix(in srgb, var(--transform-accent) ${18 + charge.glow * 78}%, transparent)` }} />
     <CentreGlow intensity={charge.glow} />
@@ -226,7 +236,7 @@ export function TransformFlow({
   </div>;
 }
 
-function TransformPanel({ side, assets, paths, duration, assetSize, routeOffset, viewBoxHeight, boxColor, highContrast, showGuides, registerSvg }: { side: "input" | "output"; assets: string[]; paths: string[]; duration: number; assetSize: number; routeOffset: number; viewBoxHeight: number; boxColor: string; highContrast: boolean; showGuides: boolean; registerSvg: (node: SVGSVGElement | null) => void }) {
+function TransformPanel({ side, assets, paths, duration, assetSize, routeOffset, viewBoxHeight, boxColor, highContrast, showGuides, registerSvg, registerAsset }: { side: "input" | "output"; assets: string[]; paths: string[]; duration: number; assetSize: number; routeOffset: number; viewBoxHeight: number; boxColor: string; highContrast: boolean; showGuides: boolean; registerSvg: (node: SVGSVGElement | null) => void; registerAsset: (node: SVGGElement | null, delay: number) => void }) {
   const svgRef = React.useRef<SVGSVGElement | null>(null);
   const [flowViewBoxHeight, setFlowViewBoxHeight] = React.useState(viewBoxHeight);
   const setSvgRef = React.useCallback((node: SVGSVGElement | null) => {
@@ -254,7 +264,7 @@ function TransformPanel({ side, assets, paths, duration, assetSize, routeOffset,
       <g transform={`translate(0 ${routeOffset})`}>
         {showGuides ? ([0, 1, 2] as const).map((lane) => <path key={lane} d={paths[lane]} fill="none" stroke="var(--transform-guide)" strokeWidth="1.5" strokeDasharray="4 7" />) : null}
         {showGuides ? ([0, 1, 2] as const).flatMap((lane) => [0, 1, 2].map((index) => <RouteDot key={`${lane}-${index}`} lane={lane} index={index} path={paths[lane]} />)) : null}
-        {assets.slice(0, 6).map((asset, index) => <FlowAsset key={`${asset}-${index}`} asset={asset} tint={TINTS[index]} lane={(index % 3) as 0 | 1 | 2} cycle={Math.floor(index / 3)} side={side} path={paths[index % 3]} duration={duration} assetSize={assetSize} />)}
+        {assets.slice(0, 6).map((asset, index) => <FlowAsset key={`${asset}-${index}`} asset={asset} tint={TINTS[index]} lane={(index % 3) as 0 | 1 | 2} cycle={Math.floor(index / 3)} side={side} path={paths[index % 3]} duration={duration} assetSize={assetSize} registerAsset={registerAsset} />)}
       </g>
     </svg>
   </div>;
@@ -264,11 +274,12 @@ function RouteDot({ lane, index, path }: { lane: 0 | 1 | 2; index: number; path:
   return <circle r="2.5" fill="var(--transform-guide)" opacity="0.9"><animateMotion dur="10.2s" begin={`${-(index * 3.4 + lane * 0.85)}s`} repeatCount="indefinite" path={path} /></circle>;
 }
 
-function FlowAsset({ asset, tint, lane, cycle, side, path, duration, assetSize }: { asset: string; tint: string; lane: 0 | 1 | 2; cycle: number; side: "input" | "output"; path: string; duration: number; assetSize: number }) {
+function FlowAsset({ asset, tint, lane, cycle, side, path, duration, assetSize, registerAsset }: { asset: string; tint: string; lane: 0 | 1 | 2; cycle: number; side: "input" | "output"; path: string; duration: number; assetSize: number; registerAsset: (node: SVGGElement | null, delay: number) => void }) {
   const pair = cycle * 3 + lane;
-  const delay = `${pair * (duration / 6)}s`;
+  const delaySeconds = pair * (duration / 6);
+  const delay = `${delaySeconds}s`;
   const seamPoint = lane === 1 ? (side === "input" ? "0.5" : "0.470588") : (side === "input" ? "0.511" : "0.461");
-  return <g>
+  return <g ref={(node) => registerAsset(node, delaySeconds)} visibility="hidden">
     <g>
       <animateMotion dur={`${duration}s`} begin={delay} repeatCount="indefinite" calcMode="linear" keyPoints={`0;${seamPoint};1`} keyTimes="0;0.5;1" path={path} />
       <rect x={-assetSize / 2} y={-assetSize / 2} width={assetSize} height={assetSize} rx={assetSize * 0.285} fill="var(--transform-card)" stroke="var(--transform-stroke)" />
