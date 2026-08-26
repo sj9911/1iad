@@ -104,8 +104,8 @@ export const interactionsMeta: InteractionMeta[] = [
     date: "2026-08-26",
     title: "Transform Flow",
     description:
-      "A paired signal handoff for React: six inputs travel through a shared seam and emerge as their matching outputs. Hold anywhere to progressively accelerate time, ignite a horizontal particle field, and charge a full-screen bloom.",
-    hint: "Hold anywhere. Time accelerates.",
+      "Six inputs cross a shared seam and emerge as their paired outputs. Hold anywhere to speed up the flow, wake the particle field, and build a full-screen bloom.",
+    hint: "Hold anywhere to accelerate the handoff. Keep holding to charge the bloom.",
     dependencies: [],
     file: "transform-flow.tsx",
     tags: ["Hold", "Transform", "Sound"],
