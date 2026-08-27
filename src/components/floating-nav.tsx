@@ -57,6 +57,9 @@ export function tick() {
 }
 
 const SPRING = { type: "spring", stiffness: 400, damping: 26 } as const;
+// The dock moves as one calm, lightweight object when its neighbouring badge
+// appears or leaves. Keep this gentler than the tactile button interactions.
+const DOCK_SPRING = { type: "spring", stiffness: 260, damping: 30, mass: 0.72 } as const;
 
 // gradual blur without mask-image (masked backdrop-filter is broken in
 // Chromium): stacked top-anchored strips whose blurs compound upward,
@@ -188,7 +191,7 @@ function GlassPill({
   className?: string;
 }) {
   return (
-    <div className={`relative rounded-2xl border border-hairline p-1.5 ${className}`}>
+    <div className={`relative rounded-2xl border border-hairline bg-surface/80 p-1.5 ${className}`}>
       <GlassLayers />
       <span
         aria-hidden="true"
@@ -403,8 +406,8 @@ export function FloatingNav({
 
         <motion.div
           layout
-          transition={MORPH}
-          className="relative z-10 flex items-center gap-1 rounded-2xl border border-hairline p-1.5"
+          transition={DOCK_SPRING}
+          className="relative z-10 flex items-center gap-1 rounded-2xl border border-hairline bg-surface/80 p-1.5 will-change-transform"
         >
           <GlassLayers />
           <span
