@@ -268,7 +268,15 @@ export function BalloonNumbers({
       className={`relative w-[min(92%,900px)] overflow-hidden rounded-2xl border border-hairline bg-[linear-gradient(180deg,#fffdf8_0%,#f7f5f0_100%)] shadow-[0_24px_72px_rgba(90,72,31,.12)] dark:bg-[linear-gradient(180deg,#1c1b19_0%,#12110f_100%)] ${className}`}
       style={fill
         ? { position: "absolute", inset: 0, width: "100%", height: "100%", aspectRatio: "auto" }
-        : { aspectRatio }}
+        : {
+            // Keep the standalone/day-page stage sized even when it is a
+            // flex child. The arbitrary Tailwind min() width can otherwise
+            // resolve to its border width in some production layouts.
+            width: "min(92%, 900px)",
+            maxWidth: "900px",
+            flexShrink: 0,
+            aspectRatio,
+          }}
       onPointerMove={movePointer}
       onPointerLeave={() => { pointer.current = null; }}
       aria-label={`Floating balloon number ${safeDigits}`}
