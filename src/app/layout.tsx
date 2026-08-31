@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque } from "next/font/google";
+import { Bricolage_Grotesque, Roboto_Flex } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/interactions/meta";
@@ -8,6 +8,14 @@ import "./globals.css";
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-bricolage",
+  axes: ["opsz", "wdth"],
+});
+
+// Text Lift needs a true width + weight variable font. Keep it scoped through
+// a CSS variable so the rest of 1IAD retains its Bricolage typography.
+const textLift = Roboto_Flex({
+  subsets: ["latin"],
+  variable: "--font-text-lift",
   axes: ["opsz", "wdth"],
 });
 
@@ -55,7 +63,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${bricolage.variable} antialiased`}>
+      <body className={`${bricolage.variable} ${textLift.variable} antialiased`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_LD) }}

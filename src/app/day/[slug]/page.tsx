@@ -15,6 +15,7 @@ import {
 import { VinylTunerPanel, VinylTunerProvider } from "@/components/vinyl-tuner";
 import { TransformFlowTunerPanel, TransformFlowTunerProvider } from "@/components/transform-flow-tuner";
 import { BalloonNumbersTunerPanel, BalloonNumbersTunerProvider } from "@/components/balloon-numbers-tuner";
+import { TextLiftTunerPanel, TextLiftTunerProvider } from "@/components/text-lift-tuner";
 import { TunerPromptProvider } from "@/components/tuner-prompt";
 import { getStars } from "@/lib/stars";
 import { getNavBadges } from "@/lib/badges";
@@ -77,6 +78,7 @@ export default async function DayPage({
     "vinyl-player": { Provider: VinylTunerProvider, panel: <VinylTunerPanel /> },
     "transform-flow": { Provider: TransformFlowTunerProvider, panel: <TransformFlowTunerPanel /> },
     "balloon-numbers": { Provider: BalloonNumbersTunerProvider, panel: <BalloonNumbersTunerPanel /> },
+    "text-lift": { Provider: TextLiftTunerProvider, panel: <TextLiftTunerPanel /> },
   };
   const tuner = tuners[slug];
 
@@ -117,7 +119,13 @@ export default async function DayPage({
                 "The strings stay fixed-length, with centred anchors spaced evenly along the floor.",
                 "The air is calm between brief gusts, and motion respects your reduced-motion preference.",
               ]
-            : undefined,
+            : item.slug === "text-lift"
+              ? [
+                  "At rest, every character shares one clean baseline.",
+                  "The effect follows cursor proximity, so the word stays readable even at its most expressive.",
+                  "Turn cursor response off for a still typographic lockup. Reduced-motion users see that calmer version automatically.",
+                ]
+              : undefined,
         }}
       >
       {/* The stage — record this section as-is */}

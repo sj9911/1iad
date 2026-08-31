@@ -124,6 +124,18 @@ export const interactionsMeta: InteractionMeta[] = [
     assets: Array.from({ length: 10 }, (_, digit) => `balloon-numbers/${digit}.svg`),
     tags: ["Hover", "Wind", "Spring"],
   },
+  {
+    slug: "text-lift",
+    day: 10,
+    date: "2026-08-28",
+    title: "Text Lift",
+    description:
+      "A word that stays still until your cursor moves through it. Nearby letters lift, gain weight, narrow a little, then settle back onto one baseline.",
+    hint: "Move through the word. The type follows your cursor.",
+    dependencies: ["motion"],
+    file: "text-lift.tsx",
+    tags: ["Hover", "Spring"],
+  },
 ];
 
 export const SITE_URL =
