@@ -16,6 +16,8 @@ import { VinylTunerPanel, VinylTunerProvider } from "@/components/vinyl-tuner";
 import { TransformFlowTunerPanel, TransformFlowTunerProvider } from "@/components/transform-flow-tuner";
 import { BalloonNumbersTunerPanel, BalloonNumbersTunerProvider } from "@/components/balloon-numbers-tuner";
 import { TextLiftTunerPanel, TextLiftTunerProvider } from "@/components/text-lift-tuner";
+import { WindChimesTunerPanel, WindChimesTunerProvider } from "@/components/wind-chimes-tuner";
+import { ScratchRevealTunerPanel, ScratchRevealTunerProvider } from "@/components/scratch-reveal-tuner";
 import { TunerPromptProvider } from "@/components/tuner-prompt";
 import { getStars } from "@/lib/stars";
 import { getNavBadges } from "@/lib/badges";
@@ -79,6 +81,8 @@ export default async function DayPage({
     "transform-flow": { Provider: TransformFlowTunerProvider, panel: <TransformFlowTunerPanel /> },
     "balloon-numbers": { Provider: BalloonNumbersTunerProvider, panel: <BalloonNumbersTunerPanel /> },
     "text-lift": { Provider: TextLiftTunerProvider, panel: <TextLiftTunerPanel /> },
+    "wind-chimes": { Provider: WindChimesTunerProvider, panel: <WindChimesTunerPanel /> },
+    "scratch-reveal": { Provider: ScratchRevealTunerProvider, panel: <ScratchRevealTunerPanel /> },
   };
   const tuner = tuners[slug];
 
@@ -123,8 +127,20 @@ export default async function DayPage({
               ? [
                   "At rest, every character shares one clean baseline.",
                   "The effect follows cursor proximity, so the word stays readable even at its most expressive.",
-                  "Turn cursor response off for a still typographic lockup. Reduced-motion users see that calmer version automatically.",
-                ]
+                "Turn cursor response off for a still typographic lockup. Reduced-motion users see that calmer version automatically.",
+              ]
+              : item.slug === "wind-chimes"
+                ? [
+                    "Drag a tube to put real intent into the sway; the calm movement is only there between touches.",
+                    "Aurora, coral, and silver palettes retain the same hanging construction.",
+                    "Sound is optional and only starts after an intentional interaction.",
+                  ]
+                : item.slug === "scratch-reveal"
+                  ? [
+                      "The coating is a real canvas layer, so the reveal follows the exact scratch path.",
+                      "Tune the hidden reward, code, accent, brush width, and coating without rewriting the component.",
+                      "Turn off hover tilt for a steadier, more utilitarian card treatment.",
+                    ]
               : undefined,
         }}
       >

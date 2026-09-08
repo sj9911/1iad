@@ -136,6 +136,30 @@ export const interactionsMeta: InteractionMeta[] = [
     file: "text-lift.tsx",
     tags: ["Hover", "Spring"],
   },
+  {
+    slug: "wind-chimes",
+    day: 11,
+    date: "2026-09-08",
+    title: "Wind Chimes",
+    description:
+      "A hanging chime set with coloured tubes that settle into a quiet drift, answer a cursor with an inner glow, and ring when you pull them through the air.",
+    hint: "Drag a tube, then let the air take it.",
+    dependencies: [],
+    file: "wind-chimes.tsx",
+    tags: ["Drag", "Wind", "Sound"],
+  },
+  {
+    slug: "scratch-reveal",
+    day: 12,
+    date: "2026-09-08",
+    title: "Scratch Reveal",
+    description:
+      "A real canvas scratch card for credits, offers, prizes, or any moment that deserves a little friction before the reveal.",
+    hint: "Scratch the surface to uncover what is waiting.",
+    dependencies: [],
+    file: "scratch-reveal.tsx",
+    tags: ["Drag", "Reveal", "Glow"],
+  },
 ];
 
 export const SITE_URL =

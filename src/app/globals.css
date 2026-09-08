@@ -53,6 +53,17 @@ html {
   font-family: var(--font-bricolage), system-ui, sans-serif;
 }
 
+/* Production uses the original playground chime SVG; keep its hover light
+   scoped to the component instead of carrying the playground styles sitewide. */
+.oiad-chimes .pg-chime-inner-glow { opacity: 0; transition: opacity 200ms cubic-bezier(.23,1,.32,1); }
+.oiad-chimes .pg-chime-colour:hover .pg-chime-inner-glow,
+.oiad-chimes .pg-chime-colour:active .pg-chime-inner-glow,
+.oiad-chimes .pg-chime-colour:focus-visible .pg-chime-inner-glow { opacity: .95; }
+.oiad-chimes .pg-chime-colour,
+.oiad-chimes .pg-chime-colour:focus,
+.oiad-chimes .pg-chime-colour:focus-visible { outline: none; }
+.oiad-chimes .oiad-chimes-no-glow .pg-chime-inner-glow { opacity: 0 !important; }
+
 /* lub-dub: two quick pulses, then a long rest for the remainder of the cycle */
 @keyframes oiad-heartbeat {
   0% { transform: scale(1); }

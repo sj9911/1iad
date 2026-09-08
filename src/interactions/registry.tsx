@@ -10,12 +10,16 @@ import { VinylPlayer } from "./vinyl-player";
 import { TransformFlow } from "./transform-flow";
 import { BalloonNumbers } from "./balloon-numbers";
 import { TextLift } from "./text-lift";
+import { WindChimes } from "./wind-chimes";
+import { ScratchReveal } from "./scratch-reveal";
 import { GlowStageTuned } from "@/components/glow-tuner";
 import { ProximityStageTuned } from "@/components/proximity-tuner";
 import { VinylStageTuned } from "@/components/vinyl-tuner";
 import { TransformFlowStageTuned } from "@/components/transform-flow-tuner";
 import { BalloonNumbersStageTuned } from "@/components/balloon-numbers-tuner";
 import { TextLiftStageTuned } from "@/components/text-lift-tuner";
+import { WindChimesStageTuned } from "@/components/wind-chimes-tuner";
+import { ScratchRevealStageTuned } from "@/components/scratch-reveal-tuner";
 
 const components: Record<string, ComponentType> = {
   "elastic-slider": ElasticSlider,
@@ -31,6 +35,8 @@ const components: Record<string, ComponentType> = {
   "transform-flow": TransformFlow,
   "balloon-numbers": BalloonNumbers,
   "text-lift": TextLift,
+  "wind-chimes": WindChimes,
+  "scratch-reveal": ScratchReveal,
 };
 
 // day-page stage overrides: components that take over the whole dotted stage
@@ -45,6 +51,8 @@ const stageComponents: Record<string, ComponentType> = {
   "transform-flow": TransformFlowStageTuned,
   "balloon-numbers": BalloonNumbersStageTuned,
   "text-lift": TextLiftStageTuned,
+  "wind-chimes": WindChimesStageTuned,
+  "scratch-reveal": ScratchRevealStageTuned,
 };
 
 // gallery-card overrides: full-bleed like the stage, but scaled for the card
@@ -71,7 +79,13 @@ const cardComponents: Record<string, ComponentType> = {
     return <div className="absolute inset-0"><BalloonNumbers value="2026" balloonSize={84} threadLength={142.5} clusterSpacing={1.04} repelRadius={155} fill showBackdrop={false} className="rounded-none border-0 !bg-none shadow-none" /></div>;
   },
   "text-lift": function TextLiftCard() {
-    return <div className="absolute inset-0"><TextLift text="TOUCH" fontSize={72} lift={12} fill className="rounded-none border-0 shadow-none" /></div>;
+    return <TextLift text="TOUCH" fontSize={72} lift={12} fill showGuide={false} className="rounded-none border-0 shadow-none" />;
+  },
+  "wind-chimes": function WindChimesCard() {
+    return <WindChimes fill palette="aurora" breeze={0.65} tubeLength={0.72} glow interactive sound={false} className="rounded-none border-0 bg-transparent shadow-none" />;
+  },
+  "scratch-reveal": function ScratchRevealCard() {
+    return <div className="absolute inset-0 p-8 sm:p-10"><div className="relative h-full w-full"><ScratchReveal fill reward="$299" label="FOR YOU" code="MAKE299" brushSize={38} tilt={false} className="rounded-[13px] shadow-none" /></div></div>;
   },
 };
 

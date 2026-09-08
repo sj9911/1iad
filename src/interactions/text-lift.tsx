@@ -18,6 +18,7 @@ export type TextLiftProps = {
   interactive?: boolean;
   aspectRatio?: string;
   fill?: boolean;
+  showGuide?: boolean;
 };
 
 function cleanText(value: string) {
@@ -39,6 +40,7 @@ export function TextLift({
   interactive = true,
   aspectRatio = "32 / 14.3",
   fill = false,
+  showGuide = true,
 }: TextLiftProps) {
   const reduced = useReducedMotion();
   const [pointer, setPointer] = React.useState<number | null>(null);
@@ -49,8 +51,23 @@ export function TextLift({
     <div
       className={`relative grid place-items-center overflow-hidden rounded-2xl border border-hairline bg-[radial-gradient(ellipse_at_50%_48%,#eff0f5,transparent_64%)] shadow-[0_24px_72px_rgba(0,0,0,.08)] dark:bg-[radial-gradient(ellipse_at_50%_48%,#242428,transparent_64%)] ${className}`}
       style={fill
-        ? { position: "absolute", inset: 0, width: "100%", height: "100%", aspectRatio: "auto" }
-        : { width: "min(92%, 900px)", maxWidth: "900px", flexShrink: 0, aspectRatio }}
+        ? {
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            aspectRatio: "auto",
+            display: "grid",
+            placeItems: "center",
+          }
+        : {
+            width: "min(92%, 900px)",
+            maxWidth: "900px",
+            flexShrink: 0,
+            aspectRatio,
+            display: "grid",
+            placeItems: "center",
+          }}
       onPointerMove={(event) => {
         if (!interactive || reduced) return;
         const bounds = event.currentTarget.getBoundingClientRect();
@@ -59,7 +76,11 @@ export function TextLift({
       onPointerLeave={() => setPointer(null)}
       aria-label={`Text lift: ${word}`}
     >
-      <div className="relative flex max-w-[92%] select-none items-baseline justify-center whitespace-pre" aria-hidden="true">
+      <div
+        className="relative flex max-w-[92%] select-none whitespace-pre"
+        style={{ alignItems: "baseline", justifyContent: "center" }}
+        aria-hidden="true"
+      >
         {letters.map((letter, index) => {
           const position = (index + 0.5) / letters.length;
           const proximity = pointer === null ? 0 : Math.max(0, 1 - Math.abs(pointer - position) * focus);
@@ -94,7 +115,15 @@ export function TextLift({
           );
         })}
       </div>
-      <span aria-hidden="true" className="absolute bottom-5 font-mono text-[10px] uppercase tracking-[.2em] text-muted">move across the word</span>
+      {showGuide && (
+        <span
+          aria-hidden="true"
+          className="absolute font-mono text-[10px] uppercase tracking-[.2em] text-muted"
+          style={{ bottom: "1.25rem", left: "1.25rem" }}
+        >
+          move across the word
+        </span>
+      )}
     </div>
   );
 }
