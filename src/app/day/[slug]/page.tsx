@@ -18,6 +18,7 @@ import { BalloonNumbersTunerPanel, BalloonNumbersTunerProvider } from "@/compone
 import { TextLiftTunerPanel, TextLiftTunerProvider } from "@/components/text-lift-tuner";
 import { WindChimesTunerPanel, WindChimesTunerProvider } from "@/components/wind-chimes-tuner";
 import { ScratchRevealTunerPanel, ScratchRevealTunerProvider } from "@/components/scratch-reveal-tuner";
+import { OrbTunerPanel, OrbTunerProvider } from "@/components/orb-tuner";
 import { TunerPromptProvider } from "@/components/tuner-prompt";
 import { getStars } from "@/lib/stars";
 import { getNavBadges } from "@/lib/badges";
@@ -83,6 +84,7 @@ export default async function DayPage({
     "text-lift": { Provider: TextLiftTunerProvider, panel: <TextLiftTunerPanel /> },
     "wind-chimes": { Provider: WindChimesTunerProvider, panel: <WindChimesTunerPanel /> },
     "scratch-reveal": { Provider: ScratchRevealTunerProvider, panel: <ScratchRevealTunerPanel /> },
+    "presence-orb": { Provider: OrbTunerProvider, panel: <OrbTunerPanel /> },
   };
   const tuner = tuners[slug];
 
@@ -140,6 +142,12 @@ export default async function DayPage({
                       "The coating is a real canvas layer, so the reveal follows the exact scratch path.",
                       "Tune the hidden reward, code, accent, brush width, and coating without rewriting the component.",
                       "Turn off hover tilt for a steadier, more utilitarian card treatment.",
+                    ]
+                : item.slug === "presence-orb"
+                  ? [
+                      "Four original Three.js shader materials share the same responsive glass shell.",
+                      "Tap the orb to cycle resting, listening, and speaking; each state has its own energy choreography.",
+                      "The tuner exposes material, colourway, size, motion, reflection, refraction, diffraction, and softness.",
                     ]
               : undefined,
         }}

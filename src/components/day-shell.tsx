@@ -362,9 +362,15 @@ export function DayShell({
         alwaysBadges
         day={{ ...day, prompt: tunerPrompt?.prompt ?? day.prompt }}
         dayOpen={open}
-        onDayOpenChange={setOpen}
+        onDayOpenChange={(next) => {
+          if (next && isMobile) setTuneOpen(false);
+          setOpen(next);
+        }}
         tuneOpen={tuneOpen}
-        onTuneOpenChange={tuner ? setTuneOpen : undefined}
+        onTuneOpenChange={tuner ? (next) => {
+          if (next && isMobile) setOpen(false);
+          setTuneOpen(next);
+        } : undefined}
       />
     </div>
   );

@@ -163,10 +163,10 @@ export default async function V2() {
             .map(({ slug, day, title, Component, StageComponent, CardComponent }) => (
             <div
               key={slug}
-              className="group oiad-card self-start rounded-2xl border border-hairline bg-surface p-2 sm:p-2.5"
+              className={`group oiad-card relative self-start rounded-2xl border border-hairline bg-surface p-2 sm:p-2.5 ${slug === "smooth-dropdown" ? "z-10" : ""}`}
             >
               {/* interaction window */}
-              <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-xl bg-background px-6 sm:aspect-[4/3] sm:px-10">
+              <div className={`relative flex aspect-video items-center justify-center rounded-xl bg-background px-6 sm:aspect-[4/3] sm:px-10 ${slug === "smooth-dropdown" ? "overflow-visible" : "overflow-hidden"}`}>
                 {CardComponent ? (
                   <CardComponent />
                 ) : StageComponent ? (

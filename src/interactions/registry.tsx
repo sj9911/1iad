@@ -12,6 +12,29 @@ import { BalloonNumbers } from "./balloon-numbers";
 import { TextLift } from "./text-lift";
 import { WindChimes } from "./wind-chimes";
 import { ScratchReveal } from "./scratch-reveal";
+import { OrbCardPreview, OrbStageTuned } from "@/components/orb-tuner";
+import {
+  ArcadePixelInteraction,
+  ConfidentialFolderInteraction,
+  DiaRevealInteraction,
+  DropdownInteraction,
+  DynamicGalleryInteraction,
+  FigmaCommentInteraction,
+  IconCloudInteraction,
+  LedBoardInteraction,
+  MorphSurfaceInteraction,
+  PersonaInteraction,
+  PromptBoxInteraction,
+  ScanDocumentInteraction,
+  ScrubberInteraction,
+  SetTimerInteraction,
+  ShimmerInteraction,
+  SmoothDropdownInteraction,
+  StackedOutlineInteraction,
+  TextFlipInteraction,
+  ThemeSwitchInteraction,
+  WheelCarouselInteraction,
+} from "./catch-up-interactions";
 import { GlowStageTuned } from "@/components/glow-tuner";
 import { ProximityStageTuned } from "@/components/proximity-tuner";
 import { VinylStageTuned } from "@/components/vinyl-tuner";
@@ -37,6 +60,27 @@ const components: Record<string, ComponentType> = {
   "text-lift": TextLift,
   "wind-chimes": WindChimes,
   "scratch-reveal": ScratchReveal,
+  "presence-orb": OrbStageTuned,
+  "icon-cloud": IconCloudInteraction,
+  "dia-reveal": DiaRevealInteraction,
+  "text-3d-flip": TextFlipInteraction,
+  "living-dropdown": DropdownInteraction,
+  "led-board": LedBoardInteraction,
+  "arcade-pixel": ArcadePixelInteraction,
+  "precision-scrubber": ScrubberInteraction,
+  "morph-surface": MorphSurfaceInteraction,
+  "future-comment": FigmaCommentInteraction,
+  "confidential-folder": ConfidentialFolderInteraction,
+  "dynamic-grid-gallery": DynamicGalleryInteraction,
+  "prompt-box": PromptBoxInteraction,
+  "scan-idea": ScanDocumentInteraction,
+  "focus-sprint": SetTimerInteraction,
+  "smooth-dropdown": SmoothDropdownInteraction,
+  "stacked-outline": StackedOutlineInteraction,
+  "physical-theme-switch": ThemeSwitchInteraction,
+  "wheel-carousel": WheelCarouselInteraction,
+  "living-persona": PersonaInteraction,
+  "shimmer-thought": ShimmerInteraction,
 };
 
 // day-page stage overrides: components that take over the whole dotted stage
@@ -53,10 +97,12 @@ const stageComponents: Record<string, ComponentType> = {
   "text-lift": TextLiftStageTuned,
   "wind-chimes": WindChimesStageTuned,
   "scratch-reveal": ScratchRevealStageTuned,
+  "presence-orb": OrbStageTuned,
 };
 
 // gallery-card overrides: full-bleed like the stage, but scaled for the card
 const cardComponents: Record<string, ComponentType> = {
+  "presence-orb": OrbCardPreview,
   "infinite-icon-grid": function IconGridCard() {
     return <IconGrid className="absolute inset-0" cell={88} iconSize={60} />;
   },
